@@ -1,0 +1,60 @@
+[
+  {
+    "id": 1,
+    "date": "2026-04-10",
+    "title": "第一期 Skill Demo会：数据报告 & 样式工作台",
+    "status": "completed",
+    "skills": [
+      {
+        "skillId": "datong-report",
+        "presenter": "jx",
+        "summary": "从零搭建Beacon埋点→自动报告的完整链路，展示了无研发自闭环的可能性"
+      },
+      {
+        "skillId": "formhub-demo",
+        "presenter": "一一",
+        "summary": "联盟样式一站式工作台的产品形态和落地效果"
+      }
+    ],
+    "replayUrl": "https://meeting.tencent.com/replay/xxx1",
+    "promotionText": "第一期Skill Demo会来了！看看联盟同学怎么用AI工具提效——大同数据报告+样式工作台，不用写代码也能做产品。"
+  },
+  {
+    "id": 2,
+    "date": "2026-05-08",
+    "title": "第二期 Skill Demo会：创意生成 & 出价优化",
+    "status": "completed",
+    "skills": [
+      {
+        "skillId": "ad-creative-gen",
+        "presenter": "小林",
+        "summary": "输入产品卖点自动生成10套文案，A/B测试点击率提升23%"
+      },
+      {
+        "skillId": "bid-optimizer",
+        "presenter": "阿杰",
+        "summary": "历史数据训练的出价模型，实验组ROAS提升15%"
+      }
+    ],
+    "replayUrl": "https://meeting.tencent.com/replay/xxx2",
+    "promotionText": "第二期来了！广告素材生成+智能出价，看AI怎么帮运营和研发提效。本期亮点：创意文案点击率+23%，出价ROAS+15%。"
+  },
+  {
+    "id": 3,
+    "date": "2026-05-29",
+    "title": "第三期 Skill Demo会：受众洞察 & 屏蔽诊断",
+    "status": "upcoming",
+    "skills": [
+      {
+        "skillId": "audience-insight",
+        "presenter": "堂伟",
+        "summary": "用户画像聚类+行为序列分析，一键生成受众洞察报告"
+      },
+      {
+        "skillId": "shield-diagnose",
+        "presenter": "jx",
+        "summary": "屏蔽诊断报告产品化：从数据到决策的闭环"
+      }
+    ]
+  }
+]

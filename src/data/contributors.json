@@ -1,0 +1,56 @@
+[
+  {
+    "id": "jx",
+    "name": "jx",
+    "team": "联盟广告-产品",
+    "role": "产品",
+    "skills": ["datong-report", "shield-diagnose", "formhub-demo"],
+    "totalInvokes": 3347,
+    "contributionScore": 92
+  },
+  {
+    "id": "tangwei",
+    "name": "堂伟",
+    "team": "联盟广告-产品",
+    "role": "产品",
+    "skills": ["datong-report", "audience-insight"],
+    "totalInvokes": 1679,
+    "contributionScore": 75
+  },
+  {
+    "id": "xiaolin",
+    "name": "小林",
+    "team": "联盟广告-运营",
+    "role": "运营",
+    "skills": ["ad-creative-gen", "bid-optimizer"],
+    "totalInvokes": 1479,
+    "contributionScore": 70
+  },
+  {
+    "id": "ajie",
+    "name": "阿杰",
+    "team": "联盟广告-研发",
+    "role": "研发",
+    "skills": ["bid-optimizer", "ad-creative-gen"],
+    "totalInvokes": 1479,
+    "contributionScore": 68
+  },
+  {
+    "id": "yiyi",
+    "name": "一一",
+    "team": "联盟广告-产品",
+    "role": "产品",
+    "skills": ["formhub-demo"],
+    "totalInvokes": 2100,
+    "contributionScore": 88
+  },
+  {
+    "id": "xiaozhao",
+    "name": "小赵",
+    "team": "联盟广告-合规",
+    "role": "产品",
+    "skills": ["policy-checker"],
+    "totalInvokes": 0,
+    "contributionScore": 30
+  }
+]

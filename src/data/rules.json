@@ -1,0 +1,42 @@
+{
+  "admission": {
+    "description": "Skill上架需要经过标准化流程审核，确保质量和可维护性",
+    "steps": [
+      { "step": 1, "title": "提交申请", "description": "在skillhub提交skill基本信息：名称、描述、owner、预期受众" },
+      { "step": 2, "title": "技术评审", "description": "确认skill具备标准埋点（Beacon track.sh）、错误处理、文档说明" },
+      { "step": 3, "title": "Demo展示", "description": "在Demo会进行现场演示，收集反馈" },
+      { "step": 4, "title": "试运行", "description": "灰度上线1周，监控调用量和完成率" },
+      { "step": 5, "title": "正式上架", "description": "通过试运行后正式对全员开放" }
+    ]
+  },
+  "scoring": {
+    "description": "Skill评分基于多维度加权计算，反映实际使用价值",
+    "dimensions": [
+      { "dimension": "调用量", "weight": 0.3, "description": "近30天总调用次数，反映需求热度" },
+      { "dimension": "完成率", "weight": 0.25, "description": "任务完成率，反映skill质量" },
+      { "dimension": "活跃用户数", "weight": 0.2, "description": "近30天使用人数，反映覆盖广度" },
+      { "dimension": "用户满意度", "weight": 0.15, "description": "用户评分（1-5星），反映体验质量" },
+      { "dimension": "维护活跃度", "weight": 0.1, "description": "最近更新时间和更新频率，反映可持续性" }
+    ]
+  },
+  "elimination": {
+    "description": "为保持生态健康，不活跃的skill将被标记废弃",
+    "conditions": [
+      "连续30天调用量为0",
+      "完成率低于50%且无改善趋势",
+      "Owner离职且无人接手维护",
+      "被3个以上用户投诉且未修复"
+    ]
+  },
+  "incentive": {
+    "description": "通过积分体系激励贡献者持续产出高质量skill",
+    "rules": [
+      "新skill上架：+50分",
+      "skill被他人调用：每100次+10分",
+      "Demo会演示：+30分",
+      "帮助他人skill上架（贡献者）：+20分",
+      "月度最佳skill：+100分",
+      "修复他人反馈的bug：+15分"
+    ]
+  }
+}
