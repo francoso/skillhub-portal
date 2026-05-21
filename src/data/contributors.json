@@ -9,33 +9,6 @@
     "contributionScore": 92
   },
   {
-    "id": "tangwei",
-    "name": "堂伟",
-    "team": "联盟广告-产品",
-    "role": "产品",
-    "skills": ["datong-report", "audience-insight"],
-    "totalInvokes": 1679,
-    "contributionScore": 75
-  },
-  {
-    "id": "xiaolin",
-    "name": "小林",
-    "team": "联盟广告-运营",
-    "role": "运营",
-    "skills": ["ad-creative-gen", "bid-optimizer"],
-    "totalInvokes": 1479,
-    "contributionScore": 70
-  },
-  {
-    "id": "ajie",
-    "name": "阿杰",
-    "team": "联盟广告-研发",
-    "role": "研发",
-    "skills": ["bid-optimizer", "ad-creative-gen"],
-    "totalInvokes": 1479,
-    "contributionScore": 68
-  },
-  {
     "id": "yiyi",
     "name": "一一",
     "team": "联盟广告-产品",
@@ -45,12 +18,48 @@
     "contributionScore": 88
   },
   {
-    "id": "xiaozhao",
-    "name": "小赵",
-    "team": "联盟广告-合规",
+    "id": "tangwei",
+    "name": "堂伟",
+    "team": "联盟广告-产品",
     "role": "产品",
-    "skills": ["policy-checker"],
+    "skills": ["datong-report", "union-warmth"],
+    "totalInvokes": 1767,
+    "contributionScore": 75
+  },
+  {
+    "id": "liufan",
+    "name": "刘凡",
+    "team": "联盟广告-研发",
+    "role": "研发",
+    "skills": ["liufan-skill-scaffold"],
+    "totalInvokes": 310,
+    "contributionScore": 60
+  },
+  {
+    "id": "zhaojie",
+    "name": "赵姐",
+    "team": "联盟广告-BD",
+    "role": "商务",
+    "skills": ["vendor-visit"],
+    "totalInvokes": 380,
+    "contributionScore": 55
+  },
+  {
+    "id": "xinxin",
+    "name": "昕昕",
+    "team": "联盟广告-运营",
+    "role": "运营",
+    "skills": ["game-budget-monitor"],
     "totalInvokes": 0,
     "contributionScore": 30
+  },
+  {
+    "id": "kenge",
+    "name": "ken哥",
+    "team": "联盟广告-BD",
+    "role": "商务",
+    "skills": ["vendor-visit"],
+    "totalInvokes": 380,
+    "contributionScore": 50
   }
 ]

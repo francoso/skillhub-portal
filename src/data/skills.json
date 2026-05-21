@@ -2,14 +2,13 @@
   {
     "id": "datong-report",
     "name": "大同数据报告",
-    "description": "基于Beacon埋点数据自动生成联盟广告投放效果报告，支持多维度筛选和趋势分析",
+    "description": "基于Beacon埋点数据自动生成联盟广告投放效果报告，支持多维度筛选和趋势分析。无研发自闭环的标杆案例。",
     "owner": "jx",
     "contributors": ["jx", "堂伟"],
     "category": "数据分析",
     "status": "active",
     "createdAt": "2025-12-01",
     "updatedAt": "2026-05-15",
-    "repoUrl": "https://github.com/example/datong-report",
     "demoSessionId": 1,
     "metrics": {
       "_source": "mock_beacon",
@@ -21,103 +20,9 @@
     "score": 85
   },
   {
-    "id": "ad-creative-gen",
-    "name": "广告素材生成",
-    "description": "基于产品信息和目标人群自动生成广告创意文案和配图建议",
-    "owner": "小林",
-    "contributors": ["小林", "阿杰"],
-    "category": "内容生成",
-    "status": "active",
-    "createdAt": "2026-01-15",
-    "updatedAt": "2026-05-10",
-    "demoSessionId": 2,
-    "metrics": {
-      "_source": "mock_beacon",
-      "invokeCount": 856,
-      "completionRate": 0.88,
-      "activeUsers": 12,
-      "lastSyncAt": "2026-05-20"
-    },
-    "score": 78
-  },
-  {
-    "id": "shield-diagnose",
-    "name": "屏蔽诊断报告",
-    "description": "自动分析广告屏蔽原因，生成诊断报告并给出优化建议",
-    "owner": "jx",
-    "contributors": ["jx", "jiaqi", "储哥"],
-    "category": "诊断工具",
-    "status": "developing",
-    "createdAt": "2026-04-01",
-    "updatedAt": "2026-05-21",
-    "metrics": {
-      "_source": "manual",
-      "invokeCount": 0,
-      "completionRate": 0,
-      "activeUsers": 0
-    }
-  },
-  {
-    "id": "bid-optimizer",
-    "name": "出价优化助手",
-    "description": "基于历史数据和竞价环境，智能推荐最优出价策略",
-    "owner": "阿杰",
-    "contributors": ["阿杰", "小林"],
-    "category": "策略优化",
-    "status": "active",
-    "createdAt": "2026-02-20",
-    "updatedAt": "2026-05-08",
-    "demoSessionId": 2,
-    "metrics": {
-      "_source": "mock_beacon",
-      "invokeCount": 623,
-      "completionRate": 0.85,
-      "activeUsers": 8,
-      "lastSyncAt": "2026-05-20"
-    },
-    "score": 72
-  },
-  {
-    "id": "audience-insight",
-    "name": "受众洞察分析",
-    "description": "基于用户画像和行为数据，生成目标受众洞察报告",
-    "owner": "堂伟",
-    "contributors": ["堂伟"],
-    "category": "数据分析",
-    "status": "active",
-    "createdAt": "2026-03-10",
-    "updatedAt": "2026-05-12",
-    "demoSessionId": 3,
-    "metrics": {
-      "_source": "mock_beacon",
-      "invokeCount": 432,
-      "completionRate": 0.90,
-      "activeUsers": 6,
-      "lastSyncAt": "2026-05-20"
-    },
-    "score": 68
-  },
-  {
-    "id": "policy-checker",
-    "name": "广告合规检查",
-    "description": "自动检查广告素材是否符合平台政策和法规要求",
-    "owner": "小赵",
-    "contributors": ["小赵", "法务团队"],
-    "category": "合规工具",
-    "status": "developing",
-    "createdAt": "2026-04-20",
-    "updatedAt": "2026-05-18",
-    "metrics": {
-      "_source": "manual",
-      "invokeCount": 0,
-      "completionRate": 0,
-      "activeUsers": 0
-    }
-  },
-  {
     "id": "formhub-demo",
-    "name": "表单样式工作台",
-    "description": "联盟样式一站式工作台，集成AI对话入口+标签页模块+工作流引擎",
+    "name": "联盟样式一站式工作台",
+    "description": "联盟样式一站式工作台，集成AI对话入口+标签页模块+工作流引擎，覆盖全景总览/生产/规则配置/洞察归因/问题排查等模块",
     "owner": "一一",
     "contributors": ["一一", "jx"],
     "category": "效率工具",
@@ -134,5 +39,100 @@
       "lastSyncAt": "2026-05-20"
     },
     "score": 92
+  },
+  {
+    "id": "shield-diagnose",
+    "name": "屏蔽诊断报告",
+    "description": "自动分析广告屏蔽原因，基于jiaqi现有数据输出重新定义报告形式，生成诊断报告并给出优化建议。产品化设计中。",
+    "owner": "jx",
+    "contributors": ["jx", "jiaqi", "储哥"],
+    "category": "诊断工具",
+    "status": "developing",
+    "createdAt": "2026-04-01",
+    "updatedAt": "2026-05-21",
+    "metrics": {
+      "_source": "manual",
+      "invokeCount": 0,
+      "completionRate": 0,
+      "activeUsers": 0
+    }
+  },
+  {
+    "id": "union-warmth",
+    "name": "联盟送温暖需求大使",
+    "description": "面向联盟客户的需求管理skill，自动收集整理客户反馈和需求，提升服务响应效率",
+    "owner": "堂伟",
+    "contributors": ["堂伟"],
+    "category": "客户服务",
+    "status": "active",
+    "createdAt": "2026-03-15",
+    "updatedAt": "2026-05-21",
+    "repoUrl": "https://t5pgokp3-281530b0ba438e0c1f1d836a93b57314e267f2e8.preview.with.woa.com/",
+    "demoSessionId": 3,
+    "metrics": {
+      "_source": "mock_beacon",
+      "invokeCount": 520,
+      "completionRate": 0.88,
+      "activeUsers": 8,
+      "lastSyncAt": "2026-05-20"
+    },
+    "score": 72
+  },
+  {
+    "id": "vendor-visit",
+    "name": "厂商拜访材料",
+    "description": "自动生成厂商拜访前的背景材料、数据摘要和沟通建议，提升BD拜访效率",
+    "owner": "赵姐",
+    "contributors": ["赵姐", "ken哥"],
+    "category": "商务工具",
+    "status": "active",
+    "createdAt": "2026-04-10",
+    "updatedAt": "2026-05-21",
+    "demoSessionId": 3,
+    "metrics": {
+      "_source": "mock_beacon",
+      "invokeCount": 380,
+      "completionRate": 0.85,
+      "activeUsers": 6,
+      "lastSyncAt": "2026-05-20"
+    },
+    "score": 65
+  },
+  {
+    "id": "game-budget-monitor",
+    "name": "小游戏预算监控日报",
+    "description": "联盟小游戏赛道预算消耗自动监控，每日生成日报推送异常预警",
+    "owner": "昕昕",
+    "contributors": ["昕昕"],
+    "category": "数据分析",
+    "status": "developing",
+    "createdAt": "2026-05-01",
+    "updatedAt": "2026-05-21",
+    "demoSessionId": 3,
+    "metrics": {
+      "_source": "manual",
+      "invokeCount": 0,
+      "completionRate": 0,
+      "activeUsers": 0
+    }
+  },
+  {
+    "id": "liufan-skill-scaffold",
+    "name": "Skill标准脚手架",
+    "description": "研发侧skill标准包模板，提供统一的skill开发、测试、发布脚手架，降低skill制作门槛",
+    "owner": "刘凡",
+    "contributors": ["刘凡"],
+    "category": "开发工具",
+    "status": "active",
+    "createdAt": "2026-03-01",
+    "updatedAt": "2026-05-10",
+    "metrics": {
+      "_source": "mock_beacon",
+      "invokeCount": 310,
+      "completionRate": 0.90,
+      "activeUsers": 5,
+      "lastSyncAt": "2026-05-20"
+    },
+    "score": 60
   }
 ]

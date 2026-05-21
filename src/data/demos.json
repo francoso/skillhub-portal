@@ -22,38 +22,43 @@
   {
     "id": 2,
     "date": "2026-05-08",
-    "title": "第二期 Skill Demo会：创意生成 & 出价优化",
+    "title": "第二期 Skill Demo会：脚手架 & 诊断方案",
     "status": "completed",
     "skills": [
       {
-        "skillId": "ad-creative-gen",
-        "presenter": "小林",
-        "summary": "输入产品卖点自动生成10套文案，A/B测试点击率提升23%"
-      },
-      {
-        "skillId": "bid-optimizer",
-        "presenter": "阿杰",
-        "summary": "历史数据训练的出价模型，实验组ROAS提升15%"
-      }
-    ],
-    "replayUrl": "https://meeting.tencent.com/replay/xxx2",
-    "promotionText": "第二期来了！广告素材生成+智能出价，看AI怎么帮运营和研发提效。本期亮点：创意文案点击率+23%，出价ROAS+15%。"
-  },
-  {
-    "id": 3,
-    "date": "2026-05-29",
-    "title": "第三期 Skill Demo会：受众洞察 & 屏蔽诊断",
-    "status": "upcoming",
-    "skills": [
-      {
-        "skillId": "audience-insight",
-        "presenter": "堂伟",
-        "summary": "用户画像聚类+行为序列分析，一键生成受众洞察报告"
+        "skillId": "liufan-skill-scaffold",
+        "presenter": "刘凡",
+        "summary": "研发侧skill标准包模板，统一开发测试发布流程，降低制作门槛"
       },
       {
         "skillId": "shield-diagnose",
         "presenter": "jx",
-        "summary": "屏蔽诊断报告产品化：从数据到决策的闭环"
+        "summary": "屏蔽诊断报告的产品化思路分享，从数据能力到产品形态的设计逻辑"
+      }
+    ],
+    "replayUrl": "https://meeting.tencent.com/replay/xxx2",
+    "promotionText": "第二期来了！研发+产品两条路径做skill，看看联盟怎么让每个人都能参与AI提效。"
+  },
+  {
+    "id": 3,
+    "date": "2026-05-29",
+    "title": "第三期 Skill Demo会：送温暖 & 厂商拜访 & 预算监控",
+    "status": "upcoming",
+    "skills": [
+      {
+        "skillId": "union-warmth",
+        "presenter": "堂伟",
+        "summary": "联盟送温暖需求大使skill演示"
+      },
+      {
+        "skillId": "vendor-visit",
+        "presenter": "赵姐",
+        "summary": "厂商拜访材料自动生成skill，ken哥协作"
+      },
+      {
+        "skillId": "game-budget-monitor",
+        "presenter": "昕昕",
+        "summary": "联盟小游戏预算监控日报skill"
       }
     ]
   }
