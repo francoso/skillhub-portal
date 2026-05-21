@@ -10,6 +10,17 @@ export default function DashboardPage() {
   const skills = getSkills();
   const demos = getDemos();
 
+  // 计算本周 vs 上周环比
+  const dailyTrend = metrics.dailyTrend;
+  const thisWeek = dailyTrend.slice(-7);
+  const lastWeek = dailyTrend.slice(-14, -7);
+  const thisWeekTotal = thisWeek.reduce((sum, d) => sum + d.invokes, 0);
+  const lastWeekTotal = lastWeek.reduce((sum, d) => sum + d.invokes, 0);
+  const weekOverWeekChange =
+    lastWeekTotal > 0
+      ? Math.round(((thisWeekTotal - lastWeekTotal) / lastWeekTotal) * 100)
+      : 0;
+
   // 最近动态
   const recentActivities = [
     ...skills
@@ -53,7 +64,11 @@ export default function DashboardPage() {
           title="本月调用量"
           value={stats.monthlyInvokes.toLocaleString()}
           icon="invokes"
-          subtitle="mock数据"
+          subtitle={`本周 ${thisWeekTotal} | 上周 ${lastWeekTotal}`}
+          trend={{
+            value: Math.abs(weekOverWeekChange),
+            isPositive: weekOverWeekChange >= 0,
+          }}
         />
         <KpiCard title="活跃Skill" value={stats.activeSkills} icon="active" />
       </div>

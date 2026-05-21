@@ -1,11 +1,17 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Puzzle, Users, Zap, Activity } from "lucide-react";
 
+interface TrendIndicator {
+  value: number;
+  isPositive: boolean;
+}
+
 interface KpiCardProps {
   title: string;
   value: string | number;
   icon: "skills" | "contributors" | "invokes" | "active";
   subtitle?: string;
+  trend?: TrendIndicator;
 }
 
 const iconMap = {
@@ -22,7 +28,7 @@ const colorMap = {
   active: "text-green-600 bg-green-50",
 };
 
-export function KpiCard({ title, value, icon, subtitle }: KpiCardProps) {
+export function KpiCard({ title, value, icon, subtitle, trend }: KpiCardProps) {
   const Icon = iconMap[icon];
   const color = colorMap[icon];
 
@@ -32,7 +38,19 @@ export function KpiCard({ title, value, icon, subtitle }: KpiCardProps) {
         <div className="flex items-center justify-between">
           <div>
             <p className="text-sm text-gray-500">{title}</p>
-            <p className="text-2xl font-bold mt-1">{value}</p>
+            <div className="flex items-baseline gap-2 mt-1">
+              <p className="text-2xl font-bold">{value}</p>
+              {trend && (
+                <span
+                  className={`text-xs font-medium ${
+                    trend.isPositive ? "text-green-600" : "text-red-500"
+                  }`}
+                >
+                  {trend.isPositive ? "↑" : "↓"}
+                  {Math.abs(trend.value)}%
+                </span>
+              )}
+            </div>
             {subtitle && (
               <p className="text-xs text-gray-400 mt-1">{subtitle}</p>
             )}
