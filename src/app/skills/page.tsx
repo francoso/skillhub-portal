@@ -7,7 +7,7 @@ import type { SkillStage } from "@/lib/data";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
-import { Search, ShieldCheck, Clock } from "lucide-react";
+import { Search, ShieldCheck, Clock, Download } from "lucide-react";
 import type { Skill } from "@/lib/types";
 
 const statusLabels: Record<Skill["status"], string> = {
@@ -257,10 +257,17 @@ export default function SkillsPage() {
                       {skill.metrics.invokeCount > 0 && (
                         <span>{skill.metrics.invokeCount} 次</span>
                       )}
-                      {skill.score && (
-                        <span className="font-medium text-gray-600">
-                          {skill.score}分
-                        </span>
+                      {skill.downloadUrl && (
+                        <a
+                          href={skill.downloadUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          onClick={(e) => e.stopPropagation()}
+                          className="inline-flex items-center gap-1 px-2 py-1 rounded bg-blue-600 text-white hover:bg-blue-700 transition-colors text-xs font-medium"
+                        >
+                          <Download className="w-3 h-3" />
+                          试用
+                        </a>
                       )}
                     </div>
                   </div>

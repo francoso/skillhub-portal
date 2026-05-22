@@ -6,7 +6,11 @@
     "description": "基于历史数据和季节性模型预测联盟广告流量趋势，辅助预算分配和投放节奏规划。支持按行业/位置/时段维度预估。",
     "owner": "朋哥",
     "team": "联盟产品",
-    "contributors": ["朋哥", "jx", "腾飞"],
+    "contributors": [
+      "朋哥",
+      "jx",
+      "腾飞"
+    ],
     "category": "数据分析",
     "status": "active",
     "createdAt": "2025-11-15",
@@ -22,7 +26,8 @@
     "score": 82,
     "certified": true,
     "certifiedAt": "2026-04-30",
-    "certificationRoundId": "round-2026-04"
+    "certificationRoundId": "round-2026-04",
+    "downloadUrl": "https://knot.woa.com/skill/traffic-forecast/download"
   },
   {
     "id": "ad-competition-queue",
@@ -31,7 +36,10 @@
     "description": "实时分析广告竞争队列状态，识别出价竞争热度和排队深度，帮助运营优化投放策略和变现效率。",
     "owner": "ken哥",
     "team": "联盟运营",
-    "contributors": ["ken哥", "赵姐"],
+    "contributors": [
+      "ken哥",
+      "赵姐"
+    ],
     "category": "数据分析",
     "status": "active",
     "createdAt": "2026-01-10",
@@ -47,7 +55,8 @@
     "score": 75,
     "certified": true,
     "certifiedAt": "2026-04-30",
-    "certificationRoundId": "round-2026-04"
+    "certificationRoundId": "round-2026-04",
+    "downloadUrl": "https://knot.woa.com/skill/ad-competition-queue/download"
   },
   {
     "id": "ai-mentor",
@@ -56,7 +65,10 @@
     "description": "基于联盟知识库的AI新人导师，快速回答联盟业务、流程、工具等常见问题，加速新人融入团队。",
     "owner": "jx",
     "team": "联盟产品",
-    "contributors": ["jx", "一一"],
+    "contributors": [
+      "jx",
+      "一一"
+    ],
     "category": "效率工具",
     "status": "active",
     "createdAt": "2026-02-01",
@@ -71,7 +83,8 @@
     "score": 88,
     "certified": true,
     "certifiedAt": "2026-04-30",
-    "certificationRoundId": "round-2026-04"
+    "certificationRoundId": "round-2026-04",
+    "downloadUrl": "https://knot.woa.com/skill/ai-mentor/download"
   },
   {
     "id": "datong-report",
@@ -80,7 +93,10 @@
     "description": "基于Beacon埋点数据自动生成联盟广告投放效果报告，支持多维度筛选和趋势分析。无研发自闭环的标杆案例。",
     "owner": "jx",
     "team": "联盟产品",
-    "contributors": ["jx", "堂伟"],
+    "contributors": [
+      "jx",
+      "堂伟"
+    ],
     "category": "数据分析",
     "status": "active",
     "createdAt": "2025-12-01",
@@ -93,7 +109,8 @@
       "activeUsers": 18,
       "lastSyncAt": "2026-05-20"
     },
-    "score": 85
+    "score": 85,
+    "downloadUrl": "https://knot.woa.com/skill/datong-report/download"
   },
   {
     "id": "formhub-demo",
@@ -102,7 +119,10 @@
     "description": "联盟样式一站式工作台，集成AI对话入口+标签页模块+工作流引擎，覆盖全景总览/生产/规则配置/洞察归因/问题排查等模块",
     "owner": "一一",
     "team": "联盟产品",
-    "contributors": ["一一", "jx"],
+    "contributors": [
+      "一一",
+      "jx"
+    ],
     "category": "效率工具",
     "status": "active",
     "createdAt": "2026-01-01",
@@ -116,7 +136,8 @@
       "activeUsers": 25,
       "lastSyncAt": "2026-05-20"
     },
-    "score": 92
+    "score": 92,
+    "downloadUrl": "https://knot.woa.com/skill/formhub-demo/download"
   },
   {
     "id": "shield-diagnose",
@@ -125,7 +146,11 @@
     "description": "自动分析广告屏蔽原因，基于jiaqi现有数据输出重新定义报告形式，生成诊断报告并给出优化建议。产品化设计中。",
     "owner": "jx",
     "team": "联盟产品",
-    "contributors": ["jx", "jiaqi", "储哥"],
+    "contributors": [
+      "jx",
+      "jiaqi",
+      "储哥"
+    ],
     "category": "诊断工具",
     "status": "developing",
     "createdAt": "2026-04-01",
@@ -135,7 +160,8 @@
       "invokeCount": 0,
       "completionRate": 0,
       "activeUsers": 0
-    }
+    },
+    "downloadUrl": "https://knot.woa.com/skill/shield-diagnose/download"
   },
   {
     "id": "union-warmth",
@@ -144,7 +170,9 @@
     "description": "面向联盟客户的需求管理skill，自动收集整理客户反馈和需求，提升服务响应效率",
     "owner": "堂伟",
     "team": "联盟运营",
-    "contributors": ["堂伟"],
+    "contributors": [
+      "堂伟"
+    ],
     "category": "客户服务",
     "status": "active",
     "createdAt": "2026-03-15",
@@ -158,7 +186,8 @@
       "activeUsers": 8,
       "lastSyncAt": "2026-05-20"
     },
-    "score": 72
+    "score": 72,
+    "downloadUrl": "https://knot.woa.com/skill/union-warmth/download"
   },
   {
     "id": "vendor-visit",
@@ -167,7 +196,10 @@
     "description": "自动生成厂商拜访前的背景材料、数据摘要和沟通建议，提升BD拜访效率",
     "owner": "赵姐",
     "team": "联盟商务",
-    "contributors": ["赵姐", "ken哥"],
+    "contributors": [
+      "赵姐",
+      "ken哥"
+    ],
     "category": "商务工具",
     "status": "active",
     "createdAt": "2026-04-10",
@@ -180,7 +212,8 @@
       "activeUsers": 6,
       "lastSyncAt": "2026-05-20"
     },
-    "score": 65
+    "score": 65,
+    "downloadUrl": "https://knot.woa.com/skill/vendor-visit/download"
   },
   {
     "id": "game-budget-monitor",
@@ -189,7 +222,9 @@
     "description": "联盟小游戏赛道预算消耗自动监控，每日生成日报推送异常预警",
     "owner": "昕昕",
     "team": "联盟运营",
-    "contributors": ["昕昕"],
+    "contributors": [
+      "昕昕"
+    ],
     "category": "数据分析",
     "status": "developing",
     "createdAt": "2026-05-01",
@@ -200,7 +235,8 @@
       "invokeCount": 0,
       "completionRate": 0,
       "activeUsers": 0
-    }
+    },
+    "downloadUrl": "https://knot.woa.com/skill/game-budget-monitor/download"
   },
   {
     "id": "liufan-skill-scaffold",
@@ -209,7 +245,9 @@
     "description": "研发侧skill标准包模板，提供统一的skill开发、测试、发布脚手架，降低skill制作门槛",
     "owner": "刘凡",
     "team": "联盟研发",
-    "contributors": ["刘凡"],
+    "contributors": [
+      "刘凡"
+    ],
     "category": "开发工具",
     "status": "active",
     "createdAt": "2026-03-01",
@@ -217,11 +255,12 @@
     "metrics": {
       "_source": "mock_beacon",
       "invokeCount": 310,
-      "completionRate": 0.90,
+      "completionRate": 0.9,
       "activeUsers": 5,
       "lastSyncAt": "2026-05-20"
     },
-    "score": 60
+    "score": 60,
+    "downloadUrl": "https://knot.woa.com/skill/liufan-skill-scaffold/download"
   },
   {
     "id": "template-review",
@@ -230,7 +269,10 @@
     "description": "自动审核广告素材模板的合规性和效果预估，支持图文/视频多种格式。基于联盟审核规则库做实时校验。",
     "owner": "储哥",
     "team": "联盟运营",
-    "contributors": ["储哥", "小李"],
+    "contributors": [
+      "储哥",
+      "小李"
+    ],
     "category": "内容审核",
     "status": "active",
     "createdAt": "2026-03-15",
@@ -244,7 +286,8 @@
       "activeUsers": 12,
       "lastSyncAt": "2026-05-20"
     },
-    "score": 72
+    "score": 72,
+    "downloadUrl": "https://knot.woa.com/skill/template-review/download"
   },
   {
     "id": "market-insight",
@@ -253,7 +296,10 @@
     "description": "聚合行业报告和竞品数据，生成联盟广告市场分析摘要。支持按行业/地域/时间维度筛选，辅助投放策略决策。",
     "owner": "jiaqi",
     "team": "联盟策略",
-    "contributors": ["jiaqi", "腾飞"],
+    "contributors": [
+      "jiaqi",
+      "腾飞"
+    ],
     "category": "数据分析",
     "status": "active",
     "createdAt": "2026-02-20",
@@ -267,7 +313,8 @@
       "activeUsers": 9,
       "lastSyncAt": "2026-05-20"
     },
-    "score": 68
+    "score": 68,
+    "downloadUrl": "https://knot.woa.com/skill/market-insight/download"
   },
   {
     "id": "budget-diagnose",
@@ -276,7 +323,10 @@
     "description": "对联盟广告主的预算消耗异常进行自动诊断，定位消耗过快/过慢的根因，给出调整建议。",
     "owner": "朋哥",
     "team": "联盟产品",
-    "contributors": ["朋哥", "jx"],
+    "contributors": [
+      "朋哥",
+      "jx"
+    ],
     "category": "诊断工具",
     "status": "active",
     "createdAt": "2026-04-01",
@@ -290,6 +340,7 @@
       "activeUsers": 7,
       "lastSyncAt": "2026-05-20"
     },
-    "score": 65
+    "score": 65,
+    "downloadUrl": "https://knot.woa.com/skill/budget-diagnose/download"
   }
 ]

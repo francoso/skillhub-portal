@@ -22,6 +22,7 @@ export interface Skill {
   repoUrl?: string;
   demoUrl?: string;
   docUrl?: string;
+  downloadUrl?: string;
   demoSessionId?: number;
   metrics: SkillMetrics;
   score?: number;

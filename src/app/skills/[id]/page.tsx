@@ -6,7 +6,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { ArrowLeft, ExternalLink, Users, Activity, Calendar, ShieldCheck, Check } from "lucide-react";
+import { ArrowLeft, ExternalLink, Users, Activity, Calendar, ShieldCheck, Check, Download } from "lucide-react";
 import { SkillRadarChart } from "@/components/charts/radar-chart";
 import type { Skill } from "@/lib/types";
 
@@ -229,6 +229,19 @@ export default async function SkillDetailPage({
           </div>
         )}
       </div>
+
+      {/* Download / Try Button */}
+      {skill.downloadUrl && (
+        <a
+          href={skill.downloadUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center justify-center gap-2 w-full py-3 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition-colors font-medium"
+        >
+          <Download className="w-4 h-4" />
+          试用 / 下载此 Skill
+        </a>
+      )}
 
       {/* Growth Path */}
       <GrowthPath stage={stage} skill={skill} />
