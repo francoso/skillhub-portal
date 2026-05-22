@@ -1,0 +1,44 @@
+[
+  {
+    "id": "first-contribute",
+    "title": "首次参与",
+    "condition": "作为 contributor 参与 1 个 skill",
+    "category": "create"
+  },
+  {
+    "id": "first-skill",
+    "title": "第一个 Skill 上线",
+    "condition": "拥有 1 个自己 owner 的 skill 上线",
+    "category": "create"
+  },
+  {
+    "id": "first-active-users",
+    "title": "服务 10 人",
+    "condition": "累计被 10 位以上同事使用过",
+    "category": "impact"
+  },
+  {
+    "id": "invoke-1000",
+    "title": "千次调用",
+    "condition": "单个 Skill 累计调用量突破 1000 次",
+    "category": "impact"
+  },
+  {
+    "id": "weekly-4",
+    "title": "连续活跃 4 周",
+    "condition": "连续 4 周有更新或维护记录",
+    "category": "consistency"
+  },
+  {
+    "id": "demo-presenter",
+    "title": "Demo 展示",
+    "condition": "在 Demo 会上展示过 Skill",
+    "category": "community"
+  },
+  {
+    "id": "help-others",
+    "title": "帮助他人上架",
+    "condition": "协助其他同事完成 Skill 上架",
+    "category": "community"
+  }
+]

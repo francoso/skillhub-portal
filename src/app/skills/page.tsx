@@ -2,11 +2,12 @@
 
 import { useState, useMemo } from "react";
 import Link from "next/link";
-import { getSkills } from "@/lib/data";
+import { getSkills, getSkillStage } from "@/lib/data";
+import type { SkillStage } from "@/lib/data";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
-import { Search } from "lucide-react";
+import { Search, ShieldCheck, Clock } from "lucide-react";
 import type { Skill } from "@/lib/types";
 
 const statusLabels: Record<Skill["status"], string> = {
@@ -21,6 +22,18 @@ const statusColors: Record<Skill["status"], string> = {
   deprecated: "bg-gray-100 text-gray-600",
 };
 
+// 团队颜色映射
+const teamColors: Record<string, string> = {
+  联盟产品: "bg-blue-100 text-blue-700",
+  联盟运营: "bg-orange-100 text-orange-700",
+  联盟商务: "bg-emerald-100 text-emerald-700",
+  联盟研发: "bg-purple-100 text-purple-700",
+};
+
+function getTeamColor(team: string): string {
+  return teamColors[team] || "bg-gray-100 text-gray-600";
+}
+
 type SortKey = "score" | "invokes" | "updatedAt";
 
 const sortLabels: Record<SortKey, string> = {
@@ -28,6 +41,32 @@ const sortLabels: Record<SortKey, string> = {
   invokes: "按调用量",
   updatedAt: "按更新时间",
 };
+
+const stageOrder: Record<SkillStage, number> = {
+  certified: 0,
+  reviewing: 1,
+  personal: 2,
+};
+
+function StageBadge({ stage }: { stage: SkillStage }) {
+  if (stage === "certified") {
+    return (
+      <Badge className="bg-green-100 text-green-700 border-green-200 text-xs gap-1" variant="outline">
+        <ShieldCheck className="w-3 h-3" />
+        联盟认证
+      </Badge>
+    );
+  }
+  if (stage === "reviewing") {
+    return (
+      <Badge className="bg-orange-100 text-orange-700 border-orange-200 text-xs gap-1" variant="outline">
+        <Clock className="w-3 h-3" />
+        评审中
+      </Badge>
+    );
+  }
+  return null;
+}
 
 export default function SkillsPage() {
   const skills = getSkills();
@@ -41,19 +80,34 @@ export default function SkillsPage() {
     [skills]
   );
 
+  // 计算每个分类的数量
+  const categoryCounts = useMemo(() => {
+    const counts: Record<string, number> = {};
+    skills.forEach((s) => {
+      counts[s.category] = (counts[s.category] || 0) + 1;
+    });
+    return counts;
+  }, [skills]);
+
   const filtered = useMemo(() => {
     let result = skills.filter((s) => {
       const matchSearch =
         s.name.toLowerCase().includes(search.toLowerCase()) ||
         s.description.toLowerCase().includes(search.toLowerCase()) ||
-        s.owner.toLowerCase().includes(search.toLowerCase());
+        s.owner.toLowerCase().includes(search.toLowerCase()) ||
+        s.slug.toLowerCase().includes(search.toLowerCase());
       const matchStatus = filterStatus === "all" || s.status === filterStatus;
       const matchCategory =
         filterCategory === "all" || s.category === filterCategory;
       return matchSearch && matchStatus && matchCategory;
     });
 
+    // 先按阶段排序（认证 > 评审中 > 个人），再按选定排序维度
     result = [...result].sort((a, b) => {
+      const stageA = stageOrder[getSkillStage(a.id)];
+      const stageB = stageOrder[getSkillStage(b.id)];
+      if (stageA !== stageB) return stageA - stageB;
+
       switch (sortBy) {
         case "score":
           return (b.score || 0) - (a.score || 0);
@@ -70,11 +124,15 @@ export default function SkillsPage() {
   }, [skills, search, filterStatus, filterCategory, sortBy]);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
+      {/* Page Title — ADesign Style */}
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">Skill目录</h1>
+        <p className="text-xs font-medium text-gray-400 uppercase tracking-widest">
+          SKILL LIBRARY
+        </p>
+        <h1 className="text-2xl font-bold text-gray-900 mt-1">Skill 库</h1>
         <p className="text-sm text-gray-500 mt-1">
-          共 {skills.length} 个Skill，{skills.filter((s) => s.status === "active").length} 个已上线
+          联盟 AI Skill 生态的核心资产，共 {skills.length} 个 Skill
         </p>
       </div>
 
@@ -83,7 +141,7 @@ export default function SkillsPage() {
         <div className="relative flex-1 max-w-sm">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
           <Input
-            placeholder="搜索skill名称、描述、owner..."
+            placeholder="搜索名称、slug、描述、owner..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="pl-9"
@@ -108,7 +166,7 @@ export default function SkillsPage() {
         </div>
       </div>
 
-      {/* Category Filter + Sort */}
+      {/* Category Filter with Counts + Sort */}
       <div className="flex items-center justify-between flex-wrap gap-3">
         <div className="flex gap-2 flex-wrap">
           <button
@@ -119,7 +177,7 @@ export default function SkillsPage() {
                 : "bg-gray-100 text-gray-600 hover:bg-gray-200"
             }`}
           >
-            全部分类
+            全部 {skills.length}
           </button>
           {categories.map((cat) => (
             <button
@@ -131,7 +189,7 @@ export default function SkillsPage() {
                   : "bg-gray-100 text-gray-600 hover:bg-gray-200"
               }`}
             >
-              {cat}
+              {cat} {categoryCounts[cat]}
             </button>
           ))}
         </div>
@@ -154,48 +212,63 @@ export default function SkillsPage() {
       </div>
 
       {/* Skill Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {filtered.map((skill) => (
-          <Link key={skill.id} href={`/skills/${skill.id}`}>
-            <Card className="hover:shadow-md transition-shadow cursor-pointer h-full">
-              <CardContent className="p-5">
-                <div className="flex items-start justify-between mb-3">
-                  <div>
-                    <h3 className="font-semibold text-gray-900">{skill.name}</h3>
-                    <p className="text-xs text-gray-500 mt-0.5">
-                      by {skill.owner}
-                    </p>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+        {filtered.map((skill) => {
+          const stage = getSkillStage(skill.id);
+          return (
+            <Link key={skill.id} href={`/skills/${skill.id}`}>
+              <Card className="hover:shadow-md transition-shadow cursor-pointer h-full border-gray-100">
+                <CardContent className="p-6">
+                  <div className="flex items-start justify-between mb-2">
+                    <div className="flex-1 min-w-0">
+                      <h3 className="font-semibold text-gray-900 text-base">
+                        {skill.name}
+                      </h3>
+                      <p className="text-xs text-gray-400 mt-0.5 font-mono truncate">
+                        {skill.slug}
+                      </p>
+                    </div>
+                    <div className="flex flex-col items-end gap-1 ml-2 shrink-0">
+                      <Badge
+                        className={`text-xs ${statusColors[skill.status]}`}
+                        variant="secondary"
+                      >
+                        {statusLabels[skill.status]}
+                      </Badge>
+                      <StageBadge stage={stage} />
+                    </div>
                   </div>
-                  <Badge
-                    className={`text-xs ${statusColors[skill.status]}`}
-                    variant="secondary"
-                  >
-                    {statusLabels[skill.status]}
-                  </Badge>
-                </div>
-                <p className="text-sm text-gray-600 mb-4 line-clamp-2">
-                  {skill.description}
-                </p>
-                <div className="flex items-center justify-between">
-                  <Badge variant="outline" className="text-xs">
-                    {skill.category}
-                  </Badge>
-                  <div className="flex items-center gap-3 text-xs text-gray-400">
-                    {skill.metrics.invokeCount > 0 && (
-                      <span>{skill.metrics.invokeCount} 次调用</span>
-                    )}
-                    {skill.score && <span>评分 {skill.score}</span>}
-                  </div>
-                </div>
-                {skill.metrics._source !== "manual" && (
-                  <p className="text-[10px] text-gray-300 mt-2">
-                    数据源: {skill.metrics._source}
+                  <p className="text-sm text-gray-600 mb-4 line-clamp-2 leading-relaxed">
+                    {skill.description}
                   </p>
-                )}
-              </CardContent>
-            </Card>
-          </Link>
-        ))}
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <Badge
+                        className={`text-xs ${getTeamColor(skill.team)}`}
+                        variant="secondary"
+                      >
+                        {skill.owner}
+                      </Badge>
+                      <Badge variant="outline" className="text-xs">
+                        {skill.category}
+                      </Badge>
+                    </div>
+                    <div className="flex items-center gap-3 text-xs text-gray-400">
+                      {skill.metrics.invokeCount > 0 && (
+                        <span>{skill.metrics.invokeCount} 次</span>
+                      )}
+                      {skill.score && (
+                        <span className="font-medium text-gray-600">
+                          {skill.score}分
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </Link>
+          );
+        })}
       </div>
 
       {filtered.length === 0 && (

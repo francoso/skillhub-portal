@@ -1,0 +1,37 @@
+[
+  {
+    "id": "act-1",
+    "description": "大同数据报告 本周调用量突破 1200 次",
+    "time": "2026-05-20",
+    "skillId": "datong-report",
+    "type": "invoke_milestone"
+  },
+  {
+    "id": "act-2",
+    "description": "昕昕 提交新 skill：小游戏预算监控日报",
+    "time": "2026-05-19",
+    "skillId": "game-budget-monitor",
+    "type": "new_skill"
+  },
+  {
+    "id": "act-3",
+    "description": "厂商拜访材料 新增 2 位日常使用者",
+    "time": "2026-05-18",
+    "skillId": "vendor-visit",
+    "type": "new_user"
+  },
+  {
+    "id": "act-4",
+    "description": "联盟样式一站式工作台 成为本月最受欢迎 Skill",
+    "time": "2026-05-17",
+    "skillId": "formhub-demo",
+    "type": "popularity"
+  },
+  {
+    "id": "act-5",
+    "description": "联盟送温暖需求大使 完成第 3 次 Demo 展示",
+    "time": "2026-05-16",
+    "skillId": "union-warmth",
+    "type": "invoke_milestone"
+  }
+]

@@ -9,18 +9,25 @@ export interface SkillMetrics {
 
 export interface Skill {
   id: string;
+  slug: string;
   name: string;
   description: string;
   owner: string;
+  team: string;
   contributors: string[];
   category: string;
   status: "developing" | "active" | "deprecated";
   createdAt: string;
   updatedAt: string;
   repoUrl?: string;
+  demoUrl?: string;
+  docUrl?: string;
   demoSessionId?: number;
   metrics: SkillMetrics;
   score?: number;
+  certified?: boolean;
+  certifiedAt?: string;
+  certificationRoundId?: string;
 }
 
 // === Contributor ===
@@ -32,6 +39,35 @@ export interface Contributor {
   skills: string[];
   totalInvokes: number;
   contributionScore: number;
+  // 成长导向扩展
+  stage: "starting" | "active" | "core" | "benchmark";
+  impactUsers: number;
+  weeklyStreak: number;
+  dimensions: {
+    create: number;
+    maintain: number;
+    promote: number;
+    assist: number;
+  };
+  milestones: string[];
+  contributionType: "creator" | "maintainer" | "assistant";
+}
+
+// === Milestone ===
+export interface Milestone {
+  id: string;
+  title: string;
+  condition: string;
+  category: "create" | "impact" | "consistency" | "community";
+}
+
+// === Activity Feed ===
+export interface ActivityEvent {
+  id: string;
+  description: string;
+  time: string;
+  skillId?: string;
+  type: "invoke_milestone" | "new_skill" | "new_user" | "popularity";
 }
 
 // === Demo Session ===
@@ -40,6 +76,8 @@ export interface DemoSkillEntry {
   presenter: string;
   summary: string;
   materialUrl?: string;
+  docUrl?: string;
+  skillUrl?: string;
 }
 
 export interface DemoSession {
@@ -97,4 +135,56 @@ export interface Rules {
     description: string;
     rules: string[];
   };
+}
+
+// === Certification ===
+export interface CertificationRound {
+  id: string;
+  month: string;
+  status: "collecting" | "reviewing" | "completed";
+  skills: string[];
+  publicReviewers: string[];
+  expertReviewers: string[];
+}
+
+export interface Review {
+  id: string;
+  roundId: string;
+  skillId: string;
+  reviewerName: string;
+  reviewerType: "public" | "expert";
+  score: number;
+  comment: string;
+  dimensions?: {
+    normative: number;
+    applicability: number;
+    unionFeature: number;
+    sustainability: number;
+    effectiveness: number;
+  };
+  submittedAt: string;
+}
+
+export interface CertificationResult {
+  skillId: string;
+  roundId: string;
+  passed: boolean;
+  publicScore: number;
+  expertScore: number;
+  publicCount: number;
+  summary: string;
+}
+
+// === Skill Assessment (Upload Analysis) ===
+export interface SkillAssessment {
+  scores: {
+    normative: number;
+    applicability: number;
+    unionFeature: number;
+    sustainability: number;
+    effectiveness: number;
+  };
+  grade: "excellent" | "good" | "needsWork";
+  suggestions: string[];
+  analyzedFiles: string[];
 }

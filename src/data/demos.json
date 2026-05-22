@@ -1,65 +1,84 @@
 [
   {
     "id": 1,
-    "date": "2026-04-10",
-    "title": "第一期 Skill Demo会：数据报告 & 样式工作台",
+    "date": "2026-04-17",
+    "title": "第一期 Skill Demo会：流量预估 & 竞争分析 & AI导师",
     "status": "completed",
     "skills": [
       {
-        "skillId": "datong-report",
-        "presenter": "jx",
-        "summary": "从零搭建Beacon埋点→自动报告的完整链路，展示了无研发自闭环的可能性"
+        "skillId": "traffic-forecast",
+        "presenter": "hongyanhy1i",
+        "summary": "联盟流量预估 Skill 能力分享，预算服务场景落地",
+        "docUrl": "联盟流量预估 skill 能力分享",
+        "skillUrl": "https://knot.woa.com/skills/detail/8688"
       },
       {
-        "skillId": "formhub-demo",
-        "presenter": "一一",
-        "summary": "联盟样式一站式工作台的产品形态和落地效果"
+        "skillId": "ad-competition-queue",
+        "presenter": "towelyang",
+        "summary": "联盟广告竞争队列分析，变现调优场景",
+        "skillUrl": "https://knot.woa.com/skills/detail/6013"
+      },
+      {
+        "skillId": "ai-mentor",
+        "presenter": "maxieli",
+        "summary": "新人AI导师，帮助新同学快速上手联盟业务",
+        "docUrl": "联盟小导师使用指南",
+        "skillUrl": "https://knot.woa.com/skills/detail/19764"
       }
     ],
-    "replayUrl": "https://meeting.tencent.com/replay/xxx1",
-    "promotionText": "第一期Skill Demo会来了！看看联盟同学怎么用AI工具提效——大同数据报告+样式工作台，不用写代码也能做产品。"
+    "replayUrl": null,
+    "promotionText": "第一期Skill Demo会来了！流量预估、竞争队列分析、新人AI导师——三个实战Skill分享，看看联盟同学怎么用AI工具提效。"
   },
   {
     "id": 2,
     "date": "2026-05-08",
-    "title": "第二期 Skill Demo会：脚手架 & 诊断方案",
+    "title": "第二期 Skill Demo会：模板审查 & 市场洞察 & 预算诊断",
     "status": "completed",
     "skills": [
       {
-        "skillId": "liufan-skill-scaffold",
-        "presenter": "刘凡",
-        "summary": "研发侧skill标准包模板，统一开发测试发布流程，降低制作门槛"
+        "skillId": "template-review",
+        "presenter": "aaroncxu",
+        "summary": "模板规则审查 + 模板问题排查，形态样式场景",
+        "docUrl": "联盟形态skill能力介绍",
+        "skillUrl": "https://knot.woa.com/skills/detail/8901"
       },
       {
-        "skillId": "shield-diagnose",
-        "presenter": "jx",
-        "summary": "屏蔽诊断报告的产品化思路分享，从数据能力到产品形态的设计逻辑"
+        "skillId": "market-insight",
+        "presenter": "linusfliu",
+        "summary": "流量市场洞察，市场分析场景落地",
+        "docUrl": "流量市场洞察 Skill 使用指南",
+        "skillUrl": "https://knot.woa.com/skills/detail/16605"
+      },
+      {
+        "skillId": "budget-diagnose",
+        "presenter": "everli",
+        "summary": "预算开口诊断，预算服务场景",
+        "docUrl": "预算开口诊断skill分享",
+        "skillUrl": "https://knot.woa.com/skills/detail/13411"
       }
     ],
-    "replayUrl": "https://meeting.tencent.com/replay/xxx2",
-    "promotionText": "第二期来了！研发+产品两条路径做skill，看看联盟怎么让每个人都能参与AI提效。"
+    "replayUrl": null,
+    "promotionText": "第二期来了！模板审查、市场洞察、预算诊断——三个Skill覆盖形态、分析、预算三大场景，联盟AI提效持续扩展中。"
   },
   {
     "id": 3,
-    "date": "2026-05-29",
-    "title": "第三期 Skill Demo会：送温暖 & 厂商拜访 & 预算监控",
-    "status": "upcoming",
+    "date": "2026-05-22",
+    "title": "第三期 Skill Demo会：厂商拜访 & 小游戏预算日报",
+    "status": "completed",
     "skills": [
       {
-        "skillId": "union-warmth",
-        "presenter": "堂伟",
-        "summary": "联盟送温暖需求大使skill演示"
-      },
-      {
         "skillId": "vendor-visit",
-        "presenter": "赵姐",
-        "summary": "厂商拜访材料自动生成skill，ken哥协作"
+        "presenter": "ymzhao,kenhlzhong",
+        "summary": "厂商拜访材料自动生成（厂商组可直接在adataclaw上下载，其他组需联系kenhlzhong打开访问权限）",
+        "docUrl": "厂拜材料skill介绍"
       },
       {
         "skillId": "game-budget-monitor",
-        "presenter": "昕昕",
-        "summary": "联盟小游戏预算监控日报skill"
+        "presenter": "haleyxli",
+        "summary": "联盟小游戏预算监控日报 Skill 1.0 分享",
+        "docUrl": "联盟小游戏预算监控日报 Skill 1.0 分享"
       }
-    ]
+    ],
+    "promotionText": "第三期！厂商拜访材料+小游戏预算日报，客户服务和预算监控两个新方向的Skill落地。"
   }
 ]
