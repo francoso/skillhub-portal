@@ -1,7 +1,7 @@
 import { getRules } from "@/lib/data";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { CheckCircle, AlertTriangle, ArrowRight, ShieldCheck } from "lucide-react";
+import { AlertTriangle, ArrowRight, ShieldCheck, Upload } from "lucide-react";
 
 export default function RulesPage() {
   const rules = getRules();
@@ -14,80 +14,47 @@ export default function RulesPage() {
         </p>
         <h1 className="text-2xl font-bold text-gray-900 mt-1">机制规则</h1>
         <p className="text-sm text-gray-500 mt-1">
-          Skill 生态的准入、评分、认证、淘汰和激励机制
+          Skill 从上传到认证的完整生命周期，以及生态健康保障机制
         </p>
       </div>
 
-      {/* Admission */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-base flex items-center gap-2">
-            <CheckCircle className="w-4 h-4 text-green-600" />
-            准入机制
-          </CardTitle>
-          <p className="text-sm text-gray-500">{rules.admission.description}</p>
-        </CardHeader>
-        <CardContent>
-          <div className="flex items-center gap-2 flex-wrap">
-            {rules.admission.steps.map((step, idx) => (
-              <div key={step.step} className="flex items-center gap-2">
-                <div className="flex items-center gap-2 px-3 py-2 bg-blue-50 rounded-lg">
-                  <span className="text-xs font-bold text-blue-600">
-                    {step.step}
-                  </span>
-                  <div>
-                    <p className="text-sm font-medium text-gray-800">
-                      {step.title}
-                    </p>
-                    <p className="text-xs text-gray-500">{step.description}</p>
-                  </div>
-                </div>
-                {idx < rules.admission.steps.length - 1 && (
-                  <ArrowRight className="w-4 h-4 text-gray-300" />
-                )}
-              </div>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Certification Process */}
+      {/* Skill Lifecycle — 准入 + 认证合一 */}
       <Card id="certification">
         <CardHeader>
           <CardTitle className="text-base flex items-center gap-2">
             <ShieldCheck className="w-4 h-4 text-green-600" />
-            联盟认证流程
+            Skill 生命周期
           </CardTitle>
           <p className="text-sm text-gray-500">
-            涉及联盟业务场景的 Skill，可申请联盟认证以获得官方推荐和更高可见度
+            从上传到认证的完整路径——上传即可用，认证获推荐
           </p>
         </CardHeader>
         <CardContent className="space-y-6">
           {/* Three Stages */}
           <div>
-            <h3 className="text-sm font-medium text-gray-700 mb-3">Skill 三阶段</h3>
+            <h3 className="text-sm font-medium text-gray-700 mb-3">三个阶段</h3>
             <div className="flex items-center gap-3 flex-wrap">
               <div className="flex items-center gap-2 px-4 py-3 bg-gray-50 rounded-lg border border-gray-200 flex-1 min-w-[180px]">
                 <div className="w-6 h-6 rounded-full bg-gray-200 flex items-center justify-center text-xs font-bold text-gray-600">1</div>
                 <div>
                   <p className="text-sm font-medium text-gray-800">个人 Skill</p>
-                  <p className="text-xs text-gray-500">上传即上线，任何人可用</p>
+                  <p className="text-xs text-gray-500">上传 .skill/.zip 压缩包即上线，全员可用</p>
                 </div>
               </div>
               <ArrowRight className="w-4 h-4 text-gray-300 shrink-0" />
               <div className="flex items-center gap-2 px-4 py-3 bg-orange-50 rounded-lg border border-orange-200 flex-1 min-w-[180px]">
                 <div className="w-6 h-6 rounded-full bg-orange-200 flex items-center justify-center text-xs font-bold text-orange-700">2</div>
                 <div>
-                  <p className="text-sm font-medium text-gray-800">试用 Skill</p>
-                  <p className="text-xs text-gray-500">纳入认证轮次，Demo + 评审中</p>
+                  <p className="text-sm font-medium text-gray-800">评审中</p>
+                  <p className="text-xs text-gray-500">申请认证后纳入月度评审轮次</p>
                 </div>
               </div>
               <ArrowRight className="w-4 h-4 text-gray-300 shrink-0" />
               <div className="flex items-center gap-2 px-4 py-3 bg-green-50 rounded-lg border border-green-200 flex-1 min-w-[180px]">
                 <div className="w-6 h-6 rounded-full bg-green-200 flex items-center justify-center text-xs font-bold text-green-700">3</div>
                 <div>
-                  <p className="text-sm font-medium text-gray-800">联盟认证 Skill</p>
-                  <p className="text-xs text-gray-500">通过认证，获官方标识 + 优先推荐</p>
+                  <p className="text-sm font-medium text-gray-800">联盟认证</p>
+                  <p className="text-xs text-gray-500">通过评审，获官方标识 + 优先推荐</p>
                 </div>
               </div>
             </div>
@@ -95,15 +62,48 @@ export default function RulesPage() {
 
           <Separator />
 
-          {/* Process Flow */}
+          {/* 准入：上传即上线 */}
           <div>
-            <h3 className="text-sm font-medium text-gray-700 mb-3">认证评审流程</h3>
+            <div className="flex items-center gap-2 mb-3">
+              <Upload className="w-4 h-4 text-blue-500" />
+              <h3 className="text-sm font-medium text-gray-700">准入：上传即上线</h3>
+            </div>
+            <div className="p-4 bg-blue-50 rounded-lg border border-blue-100">
+              <p className="text-sm text-gray-700 leading-relaxed">
+                任何联盟成员都可以上传 Skill 压缩包（.skill 或 .zip），上传后自动上线为<strong>个人 Skill</strong>，全员即刻可用。无需审批、无需排期——<strong>先用起来，用得好再走认证</strong>。
+              </p>
+              <div className="mt-3 grid grid-cols-1 md:grid-cols-3 gap-2">
+                {[
+                  { label: "格式要求", value: ".skill 或 .zip 压缩包" },
+                  { label: "上线时间", value: "上传后立即可用" },
+                  { label: "适用范围", value: "全员可搜索、可使用" },
+                ].map((item, idx) => (
+                  <div key={idx} className="text-center p-2 bg-white rounded border border-blue-100">
+                    <p className="text-xs text-gray-500">{item.label}</p>
+                    <p className="text-sm font-medium text-gray-800 mt-0.5">{item.value}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          <Separator />
+
+          {/* 认证评审流程 */}
+          <div>
+            <div className="flex items-center gap-2 mb-3">
+              <ShieldCheck className="w-4 h-4 text-green-500" />
+              <h3 className="text-sm font-medium text-gray-700">认证：月度评审流程</h3>
+            </div>
+            <p className="text-xs text-gray-500 mb-3">
+              涉及联盟业务场景的 Skill，可申请参与月度认证评审。通过后获得联盟官方认证标识和优先推荐位。
+            </p>
             <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
               {[
-                { step: "Demo 会展示", desc: "在月度 Demo 会进行现场演示，展示核心能力和业务价值" },
-                { step: "大众评审", desc: "6-10 名一线用户打分（1-5 分），评估实用性和体验" },
-                { step: "专家评审", desc: "1-3 名领域 PM 从规范性、联盟特色、可持续性等维度评审" },
-                { step: "结果公布", desc: "月底公布认证结果，通过者获得认证标识" },
+                { step: "申请参评", desc: "Owner 主动申请，需 Skill 已上线且有实际用户" },
+                { step: "Demo 会展示", desc: "在月度 Demo 会现场演示核心能力和业务价值" },
+                { step: "大众 + 专家评审", desc: "大众（6-10 人打分）+ 专家 PM（维度评审）" },
+                { step: "结果公布", desc: "月底公布，通过者获得认证标识" },
               ].map((item, idx) => (
                 <div key={idx} className="p-3 bg-blue-50 rounded-lg">
                   <p className="text-xs font-bold text-blue-600 mb-1">Step {idx + 1}</p>
@@ -138,7 +138,7 @@ export default function RulesPage() {
 
           {/* Entry Conditions */}
           <div>
-            <h3 className="text-sm font-medium text-gray-700 mb-2">申请条件</h3>
+            <h3 className="text-sm font-medium text-gray-700 mb-2">申请认证的前提条件</h3>
             <ul className="space-y-1.5">
               {[
                 "Skill 已上线且状态为 active",
