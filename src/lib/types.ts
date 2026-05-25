@@ -180,10 +180,10 @@ export interface CertificationResult {
 export interface SkillAssessment {
   scores: {
     normative: number;
+    usability: number;
     applicability: number;
     unionFeature: number;
-    sustainability: number;
-    effectiveness: number;
+    dataSafety: number;
   };
   grade: "excellent" | "good" | "needsWork";
   suggestions: string[];

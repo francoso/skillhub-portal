@@ -203,19 +203,19 @@ function generateSuggestions(scores: SkillAssessment["scores"]): string[] {
   if (scores.normative < 60) {
     suggestions.push("建议添加 README.md 或 SKILL.md 说明文档，补充使用说明段落");
   }
+  if (scores.usability < 60) {
+    suggestions.push("建议补充使用场景描述、参数说明和示例文件，让使用者能快速上手");
+  }
   if (scores.applicability < 60) {
-    suggestions.push("建议补充使用场景描述和参数说明，添加示例文件");
+    suggestions.push("建议明确适用人群和赛道范围，标注是全员通用还是特定场景");
   }
   if (scores.unionFeature < 60) {
     suggestions.push(
       "建议在描述中体现联盟业务特色（投放/流量/变现等场景），添加赛道分类标记"
     );
   }
-  if (scores.sustainability < 60) {
-    suggestions.push("建议增加版本记录、多人协作标记和代码注释");
-  }
-  if (scores.effectiveness < 60) {
-    suggestions.push("建议添加测试文件、明确输入输出说明和错误处理逻辑");
+  if (scores.dataSafety < 60) {
+    suggestions.push("建议说明数据来源和输出准确性保障，确认无数据泄露风险");
   }
 
   if (suggestions.length === 0) {
@@ -254,10 +254,10 @@ export async function analyzeSkillFiles(
 
   const scores = {
     normative: scoreNormative(fileInfos),
-    applicability: scoreApplicability(fileInfos),
+    usability: scoreApplicability(fileInfos),
+    applicability: scoreSustainability(fileInfos),
     unionFeature: scoreUnionFeature(fileInfos),
-    sustainability: scoreSustainability(fileInfos),
-    effectiveness: scoreEffectiveness(fileInfos),
+    dataSafety: scoreEffectiveness(fileInfos),
   };
 
   const avgScore =

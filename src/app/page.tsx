@@ -54,10 +54,18 @@ const GRADE_MAP: Record<
 
 const DIMENSION_LABELS: Record<string, string> = {
   normative: "规范性",
+  usability: "可用性",
   applicability: "适用范围",
   unionFeature: "联盟特色",
-  sustainability: "可持续性",
-  effectiveness: "使用效果",
+  dataSafety: "数据安全性",
+};
+
+const DIMENSION_TIPS: Record<string, string> = {
+  normative: "是否符合标准 Skill 的编写规范",
+  usability: "能否有效解决业务问题，使用方式是否清晰简单",
+  applicability: "针对联盟全员通用，还是仅限部分人群/赛道",
+  unionFeature: "是否针对联盟广告场景，还是通用能力",
+  dataSafety: "数据来源是否合理，产出是否准确，无泄露风险",
 };
 
 interface ActivityItem {
@@ -213,10 +221,10 @@ export default function HomePage() {
               <Upload className="w-6 h-6 text-blue-600" />
             </div>
             <h2 className="text-lg font-semibold text-gray-900">
-              提交你的 Skill，测品质
+              Skill 规范评测器
             </h2>
             <p className="text-sm text-gray-500 mt-1">
-              拖入文件 → 秒出评估雷达图
+              拖入压缩包 → 五维规范评测
             </p>
             <p className="text-xs text-gray-400 mt-3">
               支持 .skill / .zip 压缩包格式
@@ -279,9 +287,14 @@ export default function HomePage() {
                       key={key}
                       className="flex items-center justify-between"
                     >
-                      <span className="text-sm text-gray-600">
-                        {DIMENSION_LABELS[key]}
-                      </span>
+                      <div className="flex-1 min-w-0">
+                        <span className="text-sm text-gray-600">
+                          {DIMENSION_LABELS[key]}
+                        </span>
+                        <p className="text-xs text-gray-400 truncate">
+                          {DIMENSION_TIPS[key]}
+                        </p>
+                      </div>
                       <div className="flex items-center gap-2">
                         <div className="w-24 h-2 bg-gray-100 rounded-full overflow-hidden">
                           <div
