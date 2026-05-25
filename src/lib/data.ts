@@ -57,7 +57,31 @@ export function getReviews(): Review[] {
 }
 
 export function getCertificationResults(): CertificationResult[] {
-  return certificationsData.results as CertificationResult[];
+  const staticResults = [...(certificationsData.results as CertificationResult[])];
+
+  // 合并 localStorage 中的动态结算结果
+  if (typeof window !== "undefined") {
+    const { getSettledResults } = require("./review-store");
+    const rounds = certificationsData.rounds as CertificationRound[];
+    for (const round of rounds) {
+      const settled = getSettledResults(round.id);
+      if (settled) {
+        // 动态结果覆盖同 roundId+skillId 的静态数据
+        for (const result of settled) {
+          const existIdx = staticResults.findIndex(
+            (r) => r.roundId === result.roundId && r.skillId === result.skillId
+          );
+          if (existIdx >= 0) {
+            staticResults[existIdx] = result;
+          } else {
+            staticResults.push(result);
+          }
+        }
+      }
+    }
+  }
+
+  return staticResults;
 }
 
 export function getReviewsByRound(roundId: string): Review[] {

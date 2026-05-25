@@ -7,6 +7,7 @@
       "skills": ["template-query", "ad-style-capture", "template-rule-check"],
       "publicReviewers": ["员工A", "员工B"],
       "expertReviewers": ["PM-形态", "PM-样式", "PM-规则"],
+      "passThreshold": { "publicMin": 3.5, "expertMin": 3.0 },
       "_expertNote": "每个 Skill 分配 1 位对口专家"
     },
     {
