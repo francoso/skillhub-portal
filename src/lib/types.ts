@@ -30,6 +30,7 @@ export interface Skill {
   certified?: boolean;
   certifiedAt?: string;
   certificationRoundId?: string;
+  readme?: string;
 }
 
 // === Contributor ===

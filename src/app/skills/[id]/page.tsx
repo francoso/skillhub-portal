@@ -5,8 +5,7 @@ import type { SkillStage } from "@/lib/data";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
-import { ArrowLeft, ExternalLink, Users, Activity, Calendar, ShieldCheck, Check, Download } from "lucide-react";
+import { ArrowLeft, ExternalLink, Users, Activity, Calendar, ShieldCheck, Check, Download, FileText } from "lucide-react";
 import { SkillRadarChart } from "@/components/charts/radar-chart";
 import type { Skill } from "@/lib/types";
 
@@ -35,39 +34,50 @@ export function generateStaticParams() {
 }
 
 function getRadarData(skill: Skill) {
-  // 业务视角5维评分 — 每个维度0-100
-  const hasRepo = skill.repoUrl ? 25 : 0;
-  const hasDemo = skill.demoSessionId ? 25 : 0;
-  const hasMetrics = skill.metrics._source !== "manual" ? 30 : 0;
+  // 业务视角5维评分（与首页上传评测一致）— 每个维度0-100
+
+  // 规范性：有repo/demo/文档/README/标准化程度
+  const hasRepo = skill.repoUrl ? 20 : 0;
+  const hasDemo = skill.demoSessionId ? 20 : 0;
+  const hasDoc = skill.docUrl ? 15 : 0;
+  const hasMetrics = skill.metrics._source !== "manual" ? 25 : 0;
   const isActive = skill.status === "active" ? 20 : 0;
-  const standardScore = hasRepo + hasDemo + hasMetrics + isActive;
+  const normative = Math.min(100, hasRepo + hasDemo + hasDoc + hasMetrics + isActive);
 
-  const coverageScore = Math.min(100, (skill.metrics.activeUsers / 25) * 100);
+  // 可用性：完成率 + 活跃用户数 + 有下载链接
+  const completionPart = skill.metrics.completionRate * 50;
+  const userPart = Math.min(30, (skill.metrics.activeUsers / 20) * 30);
+  const downloadPart = skill.downloadUrl ? 20 : 0;
+  const usability = Math.min(100, Math.round(completionPart + userPart + downloadPart));
 
-  const unionKeywords = ["联盟", "广告", "投放", "厂商", "BD", "小游戏", "IAA"];
+  // 适用范围：活跃用户覆盖 + businessType通用性 + 调用量
+  const coverageUsers = Math.min(40, (skill.metrics.activeUsers / 25) * 40);
+  const typeBonus = skill.businessType === "通用" ? 30 : 15;
+  const invokeBonus = Math.min(30, (skill.metrics.invokeCount / 1000) * 30);
+  const applicability = Math.min(100, Math.round(coverageUsers + typeBonus + invokeBonus));
+
+  // 联盟特色：关键词命中 + 业务类型标注 + 联盟认证
+  const unionKeywords = ["联盟", "广告", "投放", "厂商", "BD", "小游戏", "IAA", "变现", "流量"];
   const unionHits = unionKeywords.filter(
     (k) => skill.description.includes(k) || skill.name.includes(k)
   ).length;
-  const unionScore = Math.min(100, unionHits * 25 + (skill.category === "数据分析" ? 20 : 0));
+  const certBonus = skill.certified ? 25 : 0;
+  const bizTypeBonus = skill.businessType ? 15 : 0;
+  const unionFeature = Math.min(100, unionHits * 15 + certBonus + bizTypeBonus);
 
-  const daysSinceUpdate = Math.max(
-    0,
-    (Date.now() - new Date(skill.updatedAt).getTime()) / (1000 * 60 * 60 * 24)
-  );
-  const freshness = Math.max(0, 100 - daysSinceUpdate * 3);
-  const teamDepth = Math.min(40, skill.contributors.length * 20);
-  const sustainScore = Math.min(100, Math.round(freshness * 0.6 + teamDepth));
-
-  const effectScore = Math.round(
-    skill.metrics.completionRate * 60 + (skill.score || 50) * 0.4
-  );
+  // 数据安全性：有埋点数据源 + 非手动 + 有同步时间 + 状态规范
+  const hasBeacon = skill.metrics._source === "mock_beacon" || skill.metrics._source === "beacon_api" ? 40 : 0;
+  const hasSyncTime = skill.metrics.lastSyncAt ? 20 : 0;
+  const statusNorm = skill.status !== "deprecated" ? 20 : 0;
+  const noExternalLeak = skill.repoUrl?.includes("woa.com") || !skill.repoUrl ? 20 : 10;
+  const dataSafety = Math.min(100, hasBeacon + hasSyncTime + statusNorm + noExternalLeak);
 
   return [
-    { dimension: "规范性", value: Math.round(standardScore), fullMark: 100 },
-    { dimension: "适用范围", value: Math.round(coverageScore), fullMark: 100 },
-    { dimension: "联盟特色", value: Math.round(unionScore), fullMark: 100 },
-    { dimension: "可持续性", value: Math.round(sustainScore), fullMark: 100 },
-    { dimension: "使用效果", value: Math.round(effectScore), fullMark: 100 },
+    { dimension: "规范性", value: Math.round(normative), fullMark: 100 },
+    { dimension: "可用性", value: Math.round(usability), fullMark: 100 },
+    { dimension: "适用范围", value: Math.round(applicability), fullMark: 100 },
+    { dimension: "联盟特色", value: Math.round(unionFeature), fullMark: 100 },
+    { dimension: "数据安全性", value: Math.round(dataSafety), fullMark: 100 },
   ];
 }
 
@@ -251,43 +261,6 @@ export default async function SkillDetailPage({
       {/* Growth Path */}
       <GrowthPath stage={stage} skill={skill} />
 
-      {/* Description */}
-      <Card>
-        <CardContent className="p-5">
-          <h2 className="text-sm font-medium text-gray-500 mb-2">描述</h2>
-          <p className="text-gray-700 leading-relaxed">{skill.description}</p>
-        </CardContent>
-      </Card>
-
-      {/* People */}
-      <Card>
-        <CardContent className="p-5 space-y-3">
-          <div className="flex items-center gap-2">
-            <Users className="w-4 h-4 text-gray-400" />
-            <h2 className="text-sm font-medium text-gray-500">团队</h2>
-          </div>
-          <div>
-            <span className="text-xs text-gray-400">Owner</span>
-            <p className="text-gray-900 font-medium">{skill.owner}</p>
-          </div>
-          {skill.contributors.length > 0 && (
-            <>
-              <Separator />
-              <div>
-                <span className="text-xs text-gray-400">Contributors</span>
-                <div className="flex flex-wrap gap-2 mt-1">
-                  {skill.contributors.map((c) => (
-                    <Badge key={c} variant="secondary" className="text-xs">
-                      {c}
-                    </Badge>
-                  ))}
-                </div>
-              </div>
-            </>
-          )}
-        </CardContent>
-      </Card>
-
       {/* Metrics + Radar Chart */}
       <Card>
         <CardContent className="p-5">
@@ -327,6 +300,40 @@ export default async function SkillDetailPage({
                 <SkillRadarChart data={radarData} />
               </div>
             )}
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Description + People (compact) */}
+      <Card>
+        <CardContent className="p-5 space-y-4">
+          <div>
+            <h2 className="text-sm font-medium text-gray-500 mb-2">描述</h2>
+            <p className="text-gray-700 leading-relaxed">{skill.description}</p>
+          </div>
+
+          {/* Compact People/Team row */}
+          <div className="flex items-center gap-4 pt-3 border-t border-gray-100">
+            <Users className="w-4 h-4 text-gray-400 flex-shrink-0" />
+            <div className="flex items-center gap-3 flex-wrap text-sm">
+              <span className="text-gray-500">
+                Owner: <span className="text-gray-900 font-medium">{skill.owner}</span>
+              </span>
+              {skill.contributors.length > 0 && (
+                <>
+                  <span className="text-gray-300">|</span>
+                  <span className="text-gray-500">
+                    Contributors:{" "}
+                    {skill.contributors.map((c, i) => (
+                      <span key={c}>
+                        <span className="text-gray-700">{c}</span>
+                        {i < skill.contributors.length - 1 && ", "}
+                      </span>
+                    ))}
+                  </span>
+                </>
+              )}
+            </div>
           </div>
         </CardContent>
       </Card>
@@ -379,6 +386,21 @@ export default async function SkillDetailPage({
                 </a>
               )}
             </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* README */}
+      {skill.readme && (
+        <Card>
+          <CardContent className="p-5">
+            <div className="flex items-center gap-2 mb-4">
+              <FileText className="w-4 h-4 text-gray-400" />
+              <h2 className="text-sm font-medium text-gray-500">README</h2>
+            </div>
+            <pre className="whitespace-pre-wrap text-sm text-gray-700 leading-relaxed font-sans bg-gray-50 rounded-lg p-4 overflow-x-auto">
+              {skill.readme}
+            </pre>
           </CardContent>
         </Card>
       )}
