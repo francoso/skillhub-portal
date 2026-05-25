@@ -44,10 +44,14 @@ export default function ReviewPage() {
 
   const [settled, setSettled] = useState<boolean>(false);
   const [settledResults, setSettledResults] = useState<CertificationResult[] | null>(null);
+  const [hydrated, setHydrated] = useState(false);
 
   // Hydrate from localStorage on mount
   useEffect(() => {
-    if (!round) return;
+    if (!round) {
+      setHydrated(true);
+      return;
+    }
     const reviewedSkills = getUserReviewedSkills(round.id, CURRENT_USER);
     if (reviewedSkills.size > 0) {
       setReviews((prev) => {
@@ -74,6 +78,7 @@ export default function ReviewPage() {
       setSettled(true);
       setSettledResults(getSettledResults(round.id));
     }
+    setHydrated(true);
   }, [round?.id]);
 
   const allSubmitted =
@@ -134,6 +139,23 @@ export default function ReviewPage() {
         </Link>
         <div className="text-center py-12">
           <p className="text-gray-500">当前没有待评价的任务</p>
+        </div>
+      </div>
+    );
+  }
+
+  // 等 localStorage hydrate 完成再展示内容，避免 flash
+  if (!hydrated) {
+    return (
+      <div className="space-y-6">
+        <Link
+          href="/"
+          className="inline-flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700"
+        >
+          <ArrowLeft className="w-4 h-4" /> 返回首页
+        </Link>
+        <div className="text-center py-12">
+          <p className="text-gray-400 text-sm">加载中...</p>
         </div>
       </div>
     );

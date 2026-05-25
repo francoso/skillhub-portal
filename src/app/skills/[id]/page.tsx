@@ -1,12 +1,13 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { getSkillById, getSkills, getDemos, getSkillStage, getCertificationResults, getFailedResult } from "@/lib/data";
+import { getSkillById, getSkills, getDemos, getSkillStage, getCertificationResults, getFailedResult, getCurrentReviewRound } from "@/lib/data";
 import type { SkillStage } from "@/lib/data";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, ExternalLink, Activity, Calendar, ShieldCheck, Check, Download, FileText } from "lucide-react";
+import { ArrowLeft, ExternalLink, Activity, Calendar, ShieldCheck, Download, FileText } from "lucide-react";
 import { SkillRadarChart } from "@/components/charts/radar-chart";
+import { DynamicSkillStatus } from "@/components/dynamic-skill-status";
 import type { Skill } from "@/lib/types";
 
 const statusLabels: Record<Skill["status"], string> = {
@@ -81,128 +82,6 @@ function getRadarData(skill: Skill) {
   ];
 }
 
-const stageSteps: { key: SkillStage; label: string; step: number }[] = [
-  { key: "personal", label: "已上线", step: 1 },
-  { key: "reviewing", label: "评价中", step: 2 },
-  { key: "certified", label: "联盟认证", step: 3 },
-];
-
-function GrowthPath({ stage, skill }: { stage: SkillStage; skill: Skill }) {
-  const currentStep = stage === "certified" ? 3 : stage === "reviewing" ? 2 : 1;
-  const certResult = stage === "certified"
-    ? getCertificationResults().find(r => r.skillId === skill.id)
-    : undefined;
-  const failedResult = stage === "needs-improvement"
-    ? getFailedResult(skill.id)
-    : undefined;
-
-  return (
-    <Card>
-      <CardContent className="p-5">
-        <div className="flex items-center gap-2 mb-4">
-          <ShieldCheck className="w-4 h-4 text-gray-400" />
-          <h2 className="text-sm font-medium text-gray-500">成长路径</h2>
-        </div>
-
-        {/* Progress Steps */}
-        <div className="flex items-center justify-between mb-4">
-          {stageSteps.map((s, idx) => {
-            const isCompleted = s.step < currentStep;
-            const isCurrent = s.step === currentStep;
-            return (
-              <div key={s.key} className="flex items-center flex-1">
-                <div className="flex flex-col items-center flex-1">
-                  <div
-                    className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
-                      isCompleted
-                        ? "bg-green-100 text-green-700"
-                        : isCurrent
-                        ? "bg-blue-600 text-white"
-                        : "bg-gray-100 text-gray-400"
-                    }`}
-                  >
-                    {isCompleted ? <Check className="w-4 h-4" /> : s.step}
-                  </div>
-                  <span
-                    className={`text-xs mt-1.5 ${
-                      isCurrent ? "text-blue-600 font-medium" : "text-gray-500"
-                    }`}
-                  >
-                    {s.label}
-                  </span>
-                </div>
-                {idx < stageSteps.length - 1 && (
-                  <div
-                    className={`h-0.5 flex-1 mx-2 -mt-5 ${
-                      s.step < currentStep ? "bg-green-300" : "bg-gray-200"
-                    }`}
-                  />
-                )}
-              </div>
-            );
-          })}
-        </div>
-
-        {/* Stage-specific guidance */}
-        <div className="mt-3 p-3 rounded-lg bg-gray-50 text-sm text-gray-600">
-          {stage === "personal" && (
-            <p>
-              涉及联盟业务场景？可{" "}
-              <Link href="/rules#certification" className="text-blue-600 hover:underline">
-                申请参与下月认证评价
-              </Link>
-              ，通过后获得联盟官方认证标识和优先推荐。
-            </p>
-          )}
-          {stage === "needs-improvement" && failedResult && (
-            <div className="space-y-2">
-              <p className="flex items-center gap-1.5">
-                <span className="inline-block w-2 h-2 rounded-full bg-amber-400" />
-                <span className="font-medium text-amber-700">待改进</span>
-                <span className="text-gray-400 text-xs ml-2">
-                  {failedResult.roundId.replace("round-", "")} 轮评价未通过
-                </span>
-              </p>
-              <p className="text-xs text-gray-600 leading-relaxed">
-                {failedResult.feedbackSummary}
-              </p>
-              <p className="text-xs text-gray-500 mt-2 pt-2 border-t border-gray-100">
-                大众评价 {failedResult.publicScore.toFixed(1)} 分（{failedResult.publicCount} 人）· 专家评价 {failedResult.expertScore.toFixed(1)} 分
-              </p>
-              <p className="text-xs text-blue-600 mt-1">
-                改进后可
-                <Link href="/rules#certification" className="underline hover:text-blue-800">
-                  报名下一轮评价
-                </Link>
-                ，不限重试次数。
-              </p>
-            </div>
-          )}
-          {stage === "reviewing" && (
-            <p>本月评价进行中，经过 Demo 展示 + 大众点评官 + 专家评价，结果将在月底公布。</p>
-          )}
-          {stage === "certified" && (
-            <div className="space-y-1">
-              <p className="flex items-center gap-1.5">
-                <ShieldCheck className="w-3.5 h-3.5 text-green-600" />
-                <span className="font-medium text-green-700">已通过联盟认证</span>
-                {skill.certifiedAt && (
-                  <span className="text-gray-400 text-xs ml-2">认证于 {skill.certifiedAt}</span>
-                )}
-              </p>
-              {certResult && (
-                <p className="text-xs text-gray-500 mt-1">
-                  大众评价 {certResult.publicScore.toFixed(1)} 分（{certResult.publicCount} 人）· 专家评价 {certResult.expertScore.toFixed(1)} 分
-                </p>
-              )}
-            </div>
-          )}
-        </div>
-      </CardContent>
-    </Card>
-  );
-}
-
 export default async function SkillDetailPage({
   params,
 }: {
@@ -219,6 +98,13 @@ export default async function SkillDetailPage({
 
   const radarData = getRadarData(skill);
   const stage = getSkillStage(skill.id);
+  const currentRound = getCurrentReviewRound();
+  const certResult = stage === "certified"
+    ? getCertificationResults().find(r => r.skillId === skill.id && r.passed)
+    : undefined;
+  const failedResult = stage === "needs-improvement"
+    ? getFailedResult(skill.id)
+    : undefined;
 
   return (
     <div className="max-w-4xl mx-auto space-y-6">
@@ -292,8 +178,14 @@ export default async function SkillDetailPage({
         </a>
       )}
 
-      {/* Growth Path */}
-      <GrowthPath stage={stage} skill={skill} />
+      {/* Growth Path + Review Feedback (client component for localStorage access) */}
+      <DynamicSkillStatus
+        skillId={skill.id}
+        staticStage={stage}
+        staticCertResult={certResult}
+        staticFailedResult={failedResult}
+        currentRoundId={currentRound?.id}
+      />
 
       {/* Metrics + Radar Chart */}
       <Card>
