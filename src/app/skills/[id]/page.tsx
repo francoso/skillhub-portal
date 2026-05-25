@@ -208,6 +208,11 @@ export default async function SkillDetailPage({
             <Badge variant="outline" className="text-xs">
               {skill.category}
             </Badge>
+            {skill.businessType && (
+              <Badge variant="outline" className="text-xs">
+                {skill.businessType}
+              </Badge>
+            )}
             <Badge
               className={`text-xs ${teamColors[skill.team] || "bg-gray-100 text-gray-600"}`}
               variant="secondary"

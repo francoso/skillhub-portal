@@ -102,7 +102,7 @@ export default function RulesPage() {
               {[
                 { step: "申请参评", desc: "Owner 主动申请，需 Skill 已上线且有实际用户" },
                 { step: "Demo 会展示", desc: "在月度 Demo 会现场演示核心能力和业务价值" },
-                { step: "大众 + 专家评价", desc: "大众点评官（2 名一线用户打分）+ 专家 PM（维度评价）" },
+                { step: "大众 + 专家评价", desc: "大众点评官（2 名一线用户打分）+ 1 位对口专家 PM（维度评价）" },
                 { step: "结果公布", desc: "月底公布，通过者获得认证标识" },
               ].map((item, idx) => (
                 <div key={idx} className="p-3 bg-blue-50 rounded-lg">
@@ -126,7 +126,7 @@ export default function RulesPage() {
               </div>
               <div className="p-3 bg-green-50 rounded-lg border border-green-100">
                 <p className="text-sm font-medium text-green-800">专家评价通过</p>
-                <p className="text-xs text-green-600 mt-1">均分 ≥ 3.0 分，至少 1 位专家评价通过</p>
+                <p className="text-xs text-green-600 mt-1">每个 Skill 由 1 位对口专家评价，均分 ≥ 3.0 分即通过</p>
               </div>
             </div>
             <p className="text-xs text-gray-500 mt-3">

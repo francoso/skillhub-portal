@@ -16,6 +16,7 @@ export interface Skill {
   team: string;
   contributors: string[];
   category: string;
+  businessType?: "分赛道建设" | "厂商流量" | "APP流量" | "通用";
   status: "developing" | "active" | "deprecated";
   createdAt: string;
   updatedAt: string;

@@ -11,7 +11,8 @@
       "jx",
       "腾飞"
     ],
-    "category": "数据分析",
+    "category": "市场分析",
+    "businessType": "通用",
     "status": "active",
     "createdAt": "2025-11-15",
     "updatedAt": "2026-05-18",
@@ -40,7 +41,8 @@
       "ken哥",
       "赵姐"
     ],
-    "category": "数据分析",
+    "category": "变现调优",
+    "businessType": "通用",
     "status": "active",
     "createdAt": "2026-01-10",
     "updatedAt": "2026-05-17",
@@ -69,7 +71,8 @@
       "jx",
       "一一"
     ],
-    "category": "效率工具",
+    "category": "客户服务",
+    "businessType": "通用",
     "status": "active",
     "createdAt": "2026-02-01",
     "updatedAt": "2026-05-20",
@@ -97,7 +100,8 @@
       "jx",
       "堂伟"
     ],
-    "category": "数据分析",
+    "category": "市场分析",
+    "businessType": "通用",
     "status": "active",
     "createdAt": "2025-12-01",
     "updatedAt": "2026-05-15",
@@ -123,7 +127,8 @@
       "一一",
       "jx"
     ],
-    "category": "效率工具",
+    "category": "流量接入",
+    "businessType": "通用",
     "status": "active",
     "createdAt": "2026-01-01",
     "updatedAt": "2026-05-20",
@@ -151,7 +156,8 @@
       "jiaqi",
       "储哥"
     ],
-    "category": "诊断工具",
+    "category": "体验管理",
+    "businessType": "通用",
     "status": "developing",
     "createdAt": "2026-04-01",
     "updatedAt": "2026-05-21",
@@ -174,6 +180,7 @@
       "堂伟"
     ],
     "category": "客户服务",
+    "businessType": "通用",
     "status": "active",
     "createdAt": "2026-03-15",
     "updatedAt": "2026-05-21",
@@ -200,7 +207,8 @@
       "赵姐",
       "ken哥"
     ],
-    "category": "商务工具",
+    "category": "客户服务",
+    "businessType": "厂商流量",
     "status": "active",
     "createdAt": "2026-04-10",
     "updatedAt": "2026-05-21",
@@ -225,7 +233,8 @@
     "contributors": [
       "昕昕"
     ],
-    "category": "数据分析",
+    "category": "变现调优",
+    "businessType": "APP流量",
     "status": "developing",
     "createdAt": "2026-05-01",
     "updatedAt": "2026-05-21",
@@ -248,7 +257,8 @@
     "contributors": [
       "刘凡"
     ],
-    "category": "开发工具",
+    "category": "流量接入",
+    "businessType": "通用",
     "status": "active",
     "createdAt": "2026-03-01",
     "updatedAt": "2026-05-10",
@@ -273,7 +283,8 @@
       "储哥",
       "小李"
     ],
-    "category": "内容审核",
+    "category": "形态样式",
+    "businessType": "通用",
     "status": "active",
     "createdAt": "2026-03-15",
     "updatedAt": "2026-05-18",
@@ -300,7 +311,8 @@
       "jiaqi",
       "腾飞"
     ],
-    "category": "数据分析",
+    "category": "市场分析",
+    "businessType": "通用",
     "status": "active",
     "createdAt": "2026-02-20",
     "updatedAt": "2026-05-16",
@@ -327,7 +339,8 @@
       "朋哥",
       "jx"
     ],
-    "category": "诊断工具",
+    "category": "变现调优",
+    "businessType": "APP流量",
     "status": "active",
     "createdAt": "2026-04-01",
     "updatedAt": "2026-05-19",

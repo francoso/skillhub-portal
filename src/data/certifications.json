@@ -6,7 +6,9 @@
       "status": "reviewing",
       "skills": ["template-review", "market-insight", "budget-diagnose"],
       "publicReviewers": ["员工A", "员工B"],
-      "expertReviewers": ["PM-形态", "PM-预算", "PM-市场"]
+      "expertReviewers": ["PM-形态", "PM-预算", "PM-市场"],
+      "_expertNote": "每个 Skill 分配 1 位对口专家",
+      "_expertNote": "每个 Skill 分配 1 位对口专家"
     },
     {
       "id": "round-2026-04",
@@ -14,7 +16,8 @@
       "status": "completed",
       "skills": ["traffic-forecast", "ad-competition-queue", "ai-mentor"],
       "publicReviewers": ["员工K", "员工L"],
-      "expertReviewers": ["PM-预算", "PM-变现", "PM-平台"]
+      "expertReviewers": ["PM-预算", "PM-变现", "PM-平台"],
+      "_expertNote": "每个 Skill 分配 1 位对口专家"
     }
   ],
   "reviews": [

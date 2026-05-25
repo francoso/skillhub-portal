@@ -10,6 +10,15 @@ import { Input } from "@/components/ui/input";
 import { Search, ShieldCheck, Clock, Download } from "lucide-react";
 import type { Skill } from "@/lib/types";
 
+const workflowCategories = ["市场分析", "流量接入", "形态样式", "变现调优", "体验管理", "客户服务"] as const;
+
+const businessTypeColors: Record<string, string> = {
+  "分赛道建设": "bg-pink-100 text-pink-700",
+  "厂商流量": "bg-emerald-100 text-emerald-700",
+  "APP流量": "bg-cyan-100 text-cyan-700",
+  "通用": "bg-gray-100 text-gray-600",
+};
+
 const statusLabels: Record<Skill["status"], string> = {
   developing: "开发中",
   active: "已上线",
@@ -75,12 +84,7 @@ export default function SkillsPage() {
   const [filterCategory, setFilterCategory] = useState<string>("all");
   const [sortBy, setSortBy] = useState<SortKey>("updatedAt");
 
-  const categories = useMemo(
-    () => [...new Set(skills.map((s) => s.category))],
-    [skills]
-  );
-
-  // 计算每个分类的数量
+  // 计算每个工作流分类的数量
   const categoryCounts = useMemo(() => {
     const counts: Record<string, number> = {};
     skills.forEach((s) => {
@@ -179,7 +183,7 @@ export default function SkillsPage() {
           >
             全部 {skills.length}
           </button>
-          {categories.map((cat) => (
+          {workflowCategories.map((cat) => (
             <button
               key={cat}
               onClick={() => setFilterCategory(cat)}
@@ -189,7 +193,7 @@ export default function SkillsPage() {
                   : "bg-gray-100 text-gray-600 hover:bg-gray-200"
               }`}
             >
-              {cat} {categoryCounts[cat]}
+              {cat} {categoryCounts[cat] || 0}
             </button>
           ))}
         </div>
@@ -242,7 +246,7 @@ export default function SkillsPage() {
                     {skill.description}
                   </p>
                   <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2 flex-wrap">
                       <Badge
                         className={`text-xs ${getTeamColor(skill.team)}`}
                         variant="secondary"
@@ -252,6 +256,11 @@ export default function SkillsPage() {
                       <Badge variant="outline" className="text-xs">
                         {skill.category}
                       </Badge>
+                      {skill.businessType && skill.businessType !== "通用" && (
+                        <Badge className={`text-xs ${businessTypeColors[skill.businessType] || "bg-gray-100 text-gray-600"}`} variant="secondary">
+                          {skill.businessType}
+                        </Badge>
+                      )}
                     </div>
                     <div className="flex items-center gap-3 text-xs text-gray-400">
                       {skill.metrics.invokeCount > 0 && (
