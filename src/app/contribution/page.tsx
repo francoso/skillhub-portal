@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useMemo, Fragment } from "react";
-import { getContributors, getSkills, getActivities } from "@/lib/data";
+import { getContributors, getSkills, getMapSkillIds, getCertifiedSkillCountForOwner } from "@/lib/data";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -12,360 +12,321 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { ChevronDown, ChevronUp, Users, Layers, Flame } from "lucide-react";
-import { MilestoneProgress } from "@/components/shared/milestone-progress";
-import { ActivityFeed } from "@/components/shared/activity-feed";
-
-type ViewMode = "all" | "team";
-
-// 简易雷达图（纯 SVG）
-function RadarChart({
-  dimensions,
-}: {
-  dimensions: { create: number; maintain: number; promote: number; assist: number };
-}) {
-  const labels = ["创建", "维护", "推广", "协助"];
-  const values = [dimensions.create, dimensions.maintain, dimensions.promote, dimensions.assist];
-  const max = Math.max(...values, 1);
-  const normalized = values.map((v) => v / max);
-
-  const cx = 60;
-  const cy = 60;
-  const r = 40;
-
-  // 4个方向：上、右、下、左
-  const angles = [
-    -Math.PI / 2,
-    0,
-    Math.PI / 2,
-    Math.PI,
-  ];
-
-  const points = normalized.map((v, i) => ({
-    x: cx + r * v * Math.cos(angles[i]),
-    y: cy + r * v * Math.sin(angles[i]),
-  }));
-
-  const axisPoints = angles.map((a) => ({
-    x: cx + r * Math.cos(a),
-    y: cy + r * Math.sin(a),
-  }));
-
-  const labelPositions = angles.map((a) => ({
-    x: cx + (r + 14) * Math.cos(a),
-    y: cy + (r + 14) * Math.sin(a),
-  }));
-
-  const polygon = points.map((p) => `${p.x},${p.y}`).join(" ");
-
-  return (
-    <svg width="120" height="120" viewBox="0 0 120 120" className="shrink-0">
-      {/* Grid */}
-      {[0.33, 0.66, 1].map((scale) => (
-        <polygon
-          key={scale}
-          points={axisPoints
-            .map((p) => `${cx + (p.x - cx) * scale},${cy + (p.y - cy) * scale}`)
-            .join(" ")}
-          fill="none"
-          stroke="#e5e7eb"
-          strokeWidth="0.5"
-        />
-      ))}
-      {/* Axes */}
-      {axisPoints.map((p, i) => (
-        <line
-          key={i}
-          x1={cx}
-          y1={cy}
-          x2={p.x}
-          y2={p.y}
-          stroke="#e5e7eb"
-          strokeWidth="0.5"
-        />
-      ))}
-      {/* Data */}
-      <polygon points={polygon} fill="rgba(59,130,246,0.15)" stroke="#3b82f6" strokeWidth="1.5" />
-      {points.map((p, i) => (
-        <circle key={i} cx={p.x} cy={p.y} r="2.5" fill="#3b82f6" />
-      ))}
-      {/* Labels */}
-      {labels.map((label, i) => (
-        <text
-          key={i}
-          x={labelPositions[i].x}
-          y={labelPositions[i].y}
-          textAnchor="middle"
-          dominantBaseline="middle"
-          className="text-[9px] fill-gray-500"
-        >
-          {label}
-        </text>
-      ))}
-    </svg>
-  );
-}
+import {
+  ChevronDown,
+  ChevronUp,
+  Users,
+  Layers,
+  Award,
+  Target,
+  BarChart3,
+  Map,
+} from "lucide-react";
 
 export default function ContributionPage() {
-  const contributors = getContributors().sort(
-    (a, b) => b.contributionScore - a.contributionScore
-  );
+  const contributors = getContributors();
   const skills = getSkills();
-  const activities = getActivities();
-  const [detailOpen, setDetailOpen] = useState(false);
-  const [viewMode, setViewMode] = useState<ViewMode>("all");
+  const mapSkillIds = getMapSkillIds();
+  const [tableOpen, setTableOpen] = useState(false);
 
-  // 用第一个用户作为"当前用户"展示 Hero（实际接通登录后替换）
-  const currentUser = contributors[0];
+  // 为每个 contributor 计算个人共享 vs 团队贡献的拆分
+  const enriched = useMemo(() => {
+    return contributors.map((c) => {
+      const personalSkills = c.skills.filter((id) => !mapSkillIds.has(id));
+      const teamSkills = c.skills.filter((id) => mapSkillIds.has(id));
 
-  const groupedByTeam = useMemo(() => {
-    const map = new Map<
-      string,
-      { members: typeof contributors; totalInvokes: number; totalScore: number }
-    >();
-    for (const c of contributors) {
-      if (!map.has(c.team)) {
-        map.set(c.team, { members: [], totalInvokes: 0, totalScore: 0 });
-      }
-      const group = map.get(c.team)!;
-      group.members.push(c);
-      group.totalInvokes += c.totalInvokes;
-      group.totalScore += c.contributionScore;
+      // 个人共享统计：只看非地图 skill 的使用量
+      const personalSkillObjects = personalSkills
+        .map((id) => skills.find((s) => s.id === id))
+        .filter(Boolean);
+      const personalInvokes = personalSkillObjects.reduce(
+        (sum, s) => sum + (s?.metrics?.invokeCount ?? 0),
+        0
+      );
+      const personalActiveUsers = personalSkillObjects.reduce(
+        (sum, s) => sum + (s?.metrics?.activeUsers ?? 0),
+        0
+      );
+
+      // 团队贡献统计：地图内 skill 的使用量 + 业务价值
+      const teamSkillObjects = teamSkills
+        .map((id) => skills.find((s) => s.id === id))
+        .filter(Boolean);
+      const teamInvokes = teamSkillObjects.reduce(
+        (sum, s) => sum + (s?.metrics?.invokeCount ?? 0),
+        0
+      );
+      const teamActiveUsers = teamSkillObjects.reduce(
+        (sum, s) => sum + (s?.metrics?.activeUsers ?? 0),
+        0
+      );
+      const certifiedInTeam = teamSkillObjects.filter(
+        (s) => s?.certified
+      ).length;
+
+      // 动态计算已认证 skill 数（从 certificationResults 推导，不依赖 JSON 硬编码）
+      const certifiedSkillCount = getCertifiedSkillCountForOwner(c.skills);
+
+      return {
+        ...c,
+        personalSkillCount: personalSkills.length,
+        personalInvokes,
+        personalActiveUsers,
+        teamSkillCount: teamSkills.length,
+        teamInvokes,
+        teamActiveUsers,
+        certifiedInTeam,
+        certifiedSkillCount,
+      };
+    });
+  }, [contributors, skills, mapSkillIds]);
+
+  // 按团队贡献排序（团队 skill 数 + 认证数 + 调用量加权）
+  const sorted = useMemo(() => {
+    return [...enriched].sort((a, b) => {
+      const scoreA = a.teamSkillCount * 10 + a.certifiedInTeam * 20 + a.teamInvokes * 0.5;
+      const scoreB = b.teamSkillCount * 10 + b.certifiedInTeam * 20 + b.teamInvokes * 0.5;
+      return scoreB - scoreA;
+    });
+  }, [enriched]);
+
+  // 按团队分组
+  const teamGroups = useMemo(() => {
+    const groups: Record<string, typeof sorted> = {};
+    for (const c of sorted) {
+      const team = c.team;
+      if (!groups[team]) groups[team] = [];
+      groups[team].push(c);
     }
-    return [...map.entries()].sort((a, b) => b[1].totalScore - a[1].totalScore);
-  }, [contributors]);
+    return groups;
+  }, [sorted]);
 
-  const contributionTypeLabel = (type: string) => {
-    switch (type) {
-      case "creator": return "创建者";
-      case "maintainer": return "维护者";
-      case "assistant": return "协助者";
-      default: return type;
-    }
-  };
+  // 用第一个用户作为"当前用户"展示 Hero
+  const currentUser = enriched[0];
 
-  const renderContributorRow = (
-    c: (typeof contributors)[0],
-    idx: number
-  ) => (
-    <TableRow key={c.id}>
-      <TableCell>
-        <span className="text-sm text-gray-400">{idx + 1}</span>
-      </TableCell>
-      <TableCell className="font-medium">{c.name}</TableCell>
-      <TableCell className="text-sm text-gray-500">{c.team}</TableCell>
-      <TableCell>
-        <Badge variant="secondary" className="text-xs">
-          {contributionTypeLabel(c.contributionType)}
-        </Badge>
-      </TableCell>
-      <TableCell>
-        <div className="flex gap-1 flex-wrap">
-          {c.skills.map((skillId) => {
-            const skill = skills.find((s) => s.id === skillId);
-            return (
-              <Badge key={skillId} variant="secondary" className="text-xs">
-                {skill?.name || skillId}
-              </Badge>
-            );
-          })}
-        </div>
-      </TableCell>
-      <TableCell className="text-right text-sm">
-        {c.totalInvokes.toLocaleString()}
-      </TableCell>
-      <TableCell className="text-right">
-        <span className="font-semibold text-blue-600">
-          {c.contributionScore}
-        </span>
-      </TableCell>
-    </TableRow>
-  );
-
-  const renderGroupedTable = (
-    groups: [
-      string,
-      { members: typeof contributors; totalInvokes: number; totalScore: number },
-    ][]
-  ) => (
-    <Table>
-      <TableHeader>
-        <TableRow>
-          <TableHead className="w-12">#</TableHead>
-          <TableHead>贡献者</TableHead>
-          <TableHead>团队</TableHead>
-          <TableHead>类型</TableHead>
-          <TableHead>贡献Skill</TableHead>
-          <TableHead className="text-right">累计调用</TableHead>
-          <TableHead className="text-right">贡献分</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {groups.map(([groupName, group]) => (
-          <Fragment key={groupName}>
-            <TableRow className="bg-gray-50">
-              <TableCell colSpan={5} className="font-semibold text-gray-700">
-                {groupName}
-                <span className="ml-2 text-xs font-normal text-gray-400">
-                  ({group.members.length} 人)
-                </span>
-              </TableCell>
-              <TableCell className="text-right text-sm font-medium text-gray-600">
-                {group.totalInvokes.toLocaleString()}
-              </TableCell>
-              <TableCell className="text-right font-semibold text-blue-600">
-                {group.totalScore}
-              </TableCell>
-            </TableRow>
-            {group.members
-              .sort((a, b) => b.contributionScore - a.contributionScore)
-              .map((c, idx) => renderContributorRow(c, idx))}
-          </Fragment>
-        ))}
-      </TableBody>
-    </Table>
-  );
 
   return (
     <div className="space-y-6">
+      {/* Header */}
       <div>
         <p className="text-xs font-medium text-gray-400 uppercase tracking-widest">
           CONTRIBUTION
         </p>
-        <h1 className="text-2xl font-bold text-gray-900 mt-1">贡献看板</h1>
+        <h1 className="text-2xl font-bold text-gray-900 mt-1">我的贡献概览</h1>
         <p className="text-sm text-gray-500 mt-1">
-          共 {contributors.length} 位贡献者参与生态建设
+          个人共享让生态丰富，团队贡献让业务增长
         </p>
       </div>
 
-      {/* === 区块 1：个人贡献概览 Hero === */}
-      <Card>
-        <CardHeader className="pb-2">
-          <CardTitle className="text-base">我的贡献概览</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="flex flex-col lg:flex-row gap-6">
-            {/* 左侧：指标卡 + 进度条 */}
-            <div className="flex-1 space-y-5">
-              {/* 3 个指标卡 */}
-              <div className="grid grid-cols-3 gap-4">
-                <div className="p-4 rounded-lg bg-blue-50 border border-blue-100">
-                  <div className="flex items-center gap-2 mb-1">
-                    <Layers className="w-4 h-4 text-blue-500" />
-                    <span className="text-xs text-gray-500">参与建设</span>
-                  </div>
-                  <p className="text-2xl font-bold text-gray-900">
-                    {currentUser.skills.length}
-                    <span className="text-sm font-normal text-gray-500 ml-1">个 Skill</span>
-                  </p>
+      {/* === Hero: 双卡片 === */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        {/* 左卡：个人共享 (blue) */}
+        <Card className="border-blue-200 bg-gradient-to-br from-white to-blue-50/30">
+          <CardHeader className="pb-2">
+            <CardTitle className="text-base flex items-center gap-2">
+              <BarChart3 className="w-4 h-4 text-blue-500" />
+              个人共享
+            </CardTitle>
+            <p className="text-xs text-gray-400">
+              所有我贡献的 Skill，按使用情况衡量
+            </p>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-3 gap-3">
+              <div className="p-3 rounded-lg bg-blue-50 border border-blue-100">
+                <div className="flex items-center gap-2 mb-1">
+                  <Layers className="w-4 h-4 text-blue-500" />
+                  <span className="text-xs text-gray-500">总Skill数</span>
                 </div>
-                <div className="p-4 rounded-lg bg-green-50 border border-green-100">
-                  <div className="flex items-center gap-2 mb-1">
-                    <Users className="w-4 h-4 text-green-500" />
-                    <span className="text-xs text-gray-500">服务同事</span>
-                  </div>
-                  <p className="text-2xl font-bold text-gray-900">
-                    {currentUser.impactUsers}
-                    <span className="text-sm font-normal text-gray-500 ml-1">人使用</span>
-                  </p>
-                </div>
-                <div className="p-4 rounded-lg bg-orange-50 border border-orange-100">
-                  <div className="flex items-center gap-2 mb-1">
-                    <Flame className="w-4 h-4 text-orange-500" />
-                    <span className="text-xs text-gray-500">持续投入</span>
-                  </div>
-                  <p className="text-2xl font-bold text-gray-900">
-                    {currentUser.weeklyStreak}
-                    <span className="text-sm font-normal text-gray-500 ml-1">周连续</span>
-                  </p>
-                </div>
+                <p className="text-xl font-bold text-gray-900">
+                  {currentUser.skills.length}
+                  <span className="text-sm font-normal text-gray-500 ml-1">个</span>
+                </p>
               </div>
-
-              {/* 里程碑进度条 */}
-              <MilestoneProgress stage={currentUser.stage} />
+              <div className="p-3 rounded-lg bg-blue-50 border border-blue-100">
+                <div className="flex items-center gap-2 mb-1">
+                  <Target className="w-4 h-4 text-blue-500" />
+                  <span className="text-xs text-gray-500">调用量</span>
+                </div>
+                <p className="text-xl font-bold text-gray-900">
+                  {currentUser.totalInvokes.toLocaleString()}
+                  <span className="text-sm font-normal text-gray-500 ml-1">次</span>
+                </p>
+              </div>
+              <div className="p-3 rounded-lg bg-blue-50 border border-blue-100">
+                <div className="flex items-center gap-2 mb-1">
+                  <Users className="w-4 h-4 text-blue-500" />
+                  <span className="text-xs text-gray-500">使用人数</span>
+                </div>
+                <p className="text-xl font-bold text-gray-900">
+                  {currentUser.impactUsers}
+                  <span className="text-sm font-normal text-gray-500 ml-1">人</span>
+                </p>
+              </div>
             </div>
+          </CardContent>
+        </Card>
 
-            {/* 右侧：雷达图 */}
-            <div className="flex flex-col items-center justify-center">
-              <span className="text-xs text-gray-500 mb-2">贡献维度</span>
-              <RadarChart dimensions={currentUser.dimensions} />
+        {/* 右卡：团队贡献 (purple) - 调用量 + 业务价值双评 */}
+        <Card className="border-purple-200 bg-gradient-to-br from-white to-purple-50/40 ring-1 ring-purple-100">
+          <CardHeader className="pb-2">
+            <CardTitle className="text-base flex items-center gap-2">
+              <Map className="w-4 h-4 text-purple-600" />
+              团队贡献
+              <Badge variant="secondary" className="text-[10px] bg-purple-100 text-purple-700 ml-1">
+                OKR 关联
+              </Badge>
+            </CardTitle>
+            <p className="text-xs text-gray-400">
+              建设地图内的 Skill，调用量 + 业务价值双评
+            </p>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-4 gap-3">
+              <div className="p-3 rounded-lg bg-purple-50 border border-purple-100">
+                <div className="flex items-center gap-2 mb-1">
+                  <Map className="w-4 h-4 text-purple-500" />
+                  <span className="text-xs text-gray-500">地图Skill数</span>
+                </div>
+                <p className="text-xl font-bold text-gray-900">
+                  {currentUser.teamSkillCount}
+                  <span className="text-sm font-normal text-gray-500 ml-1">个</span>
+                </p>
+              </div>
+              <div className="p-3 rounded-lg bg-purple-50 border border-purple-100">
+                <div className="flex items-center gap-2 mb-1">
+                  <Target className="w-4 h-4 text-purple-500" />
+                  <span className="text-xs text-gray-500">调用量</span>
+                </div>
+                <p className="text-xl font-bold text-gray-900">
+                  {currentUser.teamInvokes.toLocaleString()}
+                  <span className="text-sm font-normal text-gray-500 ml-1">次</span>
+                </p>
+              </div>
+              <div className="p-3 rounded-lg bg-purple-50 border border-purple-100">
+                <div className="flex items-center gap-2 mb-1">
+                  <Users className="w-4 h-4 text-purple-500" />
+                  <span className="text-xs text-gray-500">使用人数</span>
+                </div>
+                <p className="text-xl font-bold text-gray-900">
+                  {currentUser.teamActiveUsers}
+                  <span className="text-sm font-normal text-gray-500 ml-1">人</span>
+                </p>
+              </div>
+              <div className="p-3 rounded-lg bg-purple-50 border border-purple-100">
+                <div className="flex items-center gap-2 mb-1">
+                  <Award className="w-4 h-4 text-purple-500" />
+                  <span className="text-xs text-gray-500">已认证数</span>
+                </div>
+                <p className="text-xl font-bold text-gray-900">
+                  {currentUser.certifiedSkillCount}
+                  <span className="text-sm font-normal text-gray-500 ml-1">个</span>
+                </p>
+              </div>
             </div>
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* === 区块 2：生态动态 === */}
-      <div>
-        <h2 className="text-base font-semibold text-gray-800 mb-3">生态动态</h2>
-        <ActivityFeed events={activities} />
+          </CardContent>
+        </Card>
       </div>
 
-      {/* === 区块 3：贡献明细（可展开） === */}
+      {/* === 团队贡献排行（默认折叠，按组分组，仅团队贡献） === */}
       <div>
         <button
-          onClick={() => setDetailOpen(!detailOpen)}
-          className="flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900 transition-colors"
+          onClick={() => setTableOpen(!tableOpen)}
+          className="flex items-center gap-2 text-sm font-medium text-gray-700 hover:text-gray-900 transition-colors"
         >
-          {detailOpen ? (
+          {tableOpen ? (
             <ChevronUp className="w-4 h-4" />
           ) : (
             <ChevronDown className="w-4 h-4" />
           )}
-          <span>{detailOpen ? "收起详细" : "查看详细排行"}</span>
+          <span>团队贡献排行</span>
+          <span className="text-xs text-gray-400 font-normal">
+            ({sorted.length} 人 · 仅地图 Skill)
+          </span>
         </button>
 
-        {detailOpen && (
-          <div className="mt-4">
-            <Tabs
-              defaultValue="all"
-              onValueChange={(val) => setViewMode(val as ViewMode)}
-            >
-              <TabsList>
-                <TabsTrigger value="all">全部</TabsTrigger>
-                <TabsTrigger value="team">按团队</TabsTrigger>
-              </TabsList>
+        {tableOpen && (
+          <div className="mt-3">
+            <Card>
+              <CardContent className="pt-4 overflow-x-auto">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>贡献者</TableHead>
+                      <TableHead className="text-right">地图Skill数</TableHead>
+                      <TableHead className="text-right">调用量</TableHead>
+                      <TableHead className="text-right">使用人数</TableHead>
+                      <TableHead className="text-right">已认证</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {Object.entries(teamGroups).map(([team, members]) => {
+                      const teamTotalSkills = members.reduce((s, c) => s + c.teamSkillCount, 0);
+                      const teamTotalInvokes = members.reduce((s, c) => s + c.teamInvokes, 0);
+                      const teamTotalActiveUsers = members.reduce((s, c) => s + c.teamActiveUsers, 0);
+                      const teamTotalCertified = members.reduce((s, c) => s + c.certifiedInTeam, 0);
 
-              <TabsContent value="all">
-                <Card>
-                  <CardContent className="pt-4">
-                    <Table>
-                      <TableHeader>
-                        <TableRow>
-                          <TableHead className="w-12">#</TableHead>
-                          <TableHead>贡献者</TableHead>
-                          <TableHead>团队</TableHead>
-                          <TableHead>类型</TableHead>
-                          <TableHead>贡献Skill</TableHead>
-                          <TableHead className="text-right">累计调用</TableHead>
-                          <TableHead className="text-right">贡献分</TableHead>
-                        </TableRow>
-                      </TableHeader>
-                      <TableBody>
-                        {contributors.map((c, idx) =>
-                          renderContributorRow(c, idx)
-                        )}
-                      </TableBody>
-                    </Table>
-                  </CardContent>
-                </Card>
-              </TabsContent>
-
-              <TabsContent value="team">
-                <Card>
-                  <CardContent className="pt-4">
-                    {renderGroupedTable(groupedByTeam)}
-                  </CardContent>
-                </Card>
-              </TabsContent>
-            </Tabs>
+                      return (
+                        <Fragment key={team}>
+                          {/* Team header row */}
+                          <TableRow className="bg-purple-50/60 border-t-2 border-purple-100">
+                            <TableCell colSpan={5} className="font-semibold text-purple-800 text-sm py-2">
+                              {team}
+                              <span className="text-xs font-normal text-gray-500 ml-2">
+                                ({members.length} 人)
+                              </span>
+                            </TableCell>
+                          </TableRow>
+                          {/* Members */}
+                          {members.map((c) => (
+                            <TableRow key={c.id}>
+                              <TableCell className="font-medium pl-6">{c.name}</TableCell>
+                              <TableCell className="text-right text-sm font-medium">
+                                {c.teamSkillCount}
+                              </TableCell>
+                              <TableCell className="text-right text-sm">
+                                {c.teamInvokes.toLocaleString()}
+                              </TableCell>
+                              <TableCell className="text-right text-sm">
+                                {c.teamActiveUsers}
+                              </TableCell>
+                              <TableCell className="text-right text-sm">
+                                {c.certifiedInTeam}
+                              </TableCell>
+                            </TableRow>
+                          ))}
+                          {/* Subtotal row */}
+                          <TableRow className="bg-gray-50 border-b-2 border-gray-200">
+                            <TableCell className="pl-6 text-xs font-semibold text-gray-500">
+                              小计
+                            </TableCell>
+                            <TableCell className="text-right text-xs font-semibold text-gray-700">
+                              {teamTotalSkills}
+                            </TableCell>
+                            <TableCell className="text-right text-xs font-semibold text-gray-700">
+                              {teamTotalInvokes.toLocaleString()}
+                            </TableCell>
+                            <TableCell className="text-right text-xs font-semibold text-gray-700">
+                              {teamTotalActiveUsers}
+                            </TableCell>
+                            <TableCell className="text-right text-xs font-semibold text-gray-700">
+                              {teamTotalCertified}
+                            </TableCell>
+                          </TableRow>
+                        </Fragment>
+                      );
+                    })}
+                  </TableBody>
+                </Table>
+              </CardContent>
+            </Card>
           </div>
         )}
       </div>
 
       {/* Data source note */}
       <p className="text-xs text-gray-400">
-        注：数据为 mock 数据（_source: mock_beacon），后续接通 Beacon API 后自动更新
+        注：个人共享 = 所有贡献的 Skill（仅自己可见）；团队贡献排行 = 地图内 Skill 的调用量 + 业务价值双评（公开）。数据为 mock 数据，后续接通 Beacon API 自动更新。
       </p>
     </div>
   );

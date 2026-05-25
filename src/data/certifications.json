@@ -13,9 +13,9 @@
       "id": "round-2026-04",
       "month": "2026-04",
       "status": "completed",
-      "skills": ["data-analysis-assistant", "ad-competition-queue", "traffic-forecast"],
+      "skills": ["data-analysis-assistant", "ad-competition-queue", "traffic-forecast", "ai-mentor"],
       "publicReviewers": ["员工K", "员工L"],
-      "expertReviewers": ["PM-数据", "PM-变现", "PM-流量"],
+      "expertReviewers": ["PM-数据", "PM-变现", "PM-流量", "PM-培训"],
       "_expertNote": "每个 Skill 分配 1 位对口专家"
     }
   ],
@@ -141,6 +141,16 @@
       "expertScore": 4.0,
       "publicCount": 2,
       "summary": "大众评价均分4.0（2人），专家评价4.0分通过。端到端自动化程度高。"
+    },
+    {
+      "skillId": "ai-mentor",
+      "roundId": "round-2026-04",
+      "passed": false,
+      "publicScore": 2.5,
+      "expertScore": 2.0,
+      "publicCount": 2,
+      "summary": "大众评价均分2.5（2人），专家评价2.0分未通过。使用场景偏窄，联盟特色不够明显。",
+      "feedbackSummary": "建议方向：1）扩展适用范围，覆盖更多组的新人场景而非仅产品运营中心；2）增强联盟业务特色，目前通用性太强缺乏联盟差异化；3）补充数据埋点，当前无法追踪实际学习效果。改进后可报名下一轮评价。"
     }
   ]
 }

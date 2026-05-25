@@ -54,7 +54,8 @@ const sortLabels: Record<SortKey, string> = {
 const stageOrder: Record<SkillStage, number> = {
   certified: 0,
   reviewing: 1,
-  personal: 2,
+  "needs-improvement": 2,
+  personal: 3,
 };
 
 function StageBadge({ stage }: { stage: SkillStage }) {
@@ -71,6 +72,14 @@ function StageBadge({ stage }: { stage: SkillStage }) {
       <Badge className="bg-orange-100 text-orange-700 border-orange-200 text-xs gap-1" variant="outline">
         <Clock className="w-3 h-3" />
         评价中
+      </Badge>
+    );
+  }
+  if (stage === "needs-improvement") {
+    return (
+      <Badge className="bg-amber-100 text-amber-700 border-amber-200 text-xs gap-1" variant="outline">
+        <Clock className="w-3 h-3" />
+        待改进
       </Badge>
     );
   }

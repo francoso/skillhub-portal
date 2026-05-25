@@ -13,6 +13,10 @@
     "createdAt": "2026-03-01",
     "updatedAt": "2026-05-20",
     "downloadUrl": "https://knot.woa.com/skills/detail/13741",
+    "certified": true,
+    "certifiedAt": "2026-04-30",
+    "certificationRoundId": "round-2026-04",
+    "demoSessionId": 1,
     "metrics": {
       "_source": "mock_beacon",
       "invokeCount": 19,
@@ -35,6 +39,10 @@
     "createdAt": "2026-03-05",
     "updatedAt": "2026-05-21",
     "downloadUrl": "https://knot.woa.com/skills/detail/6013",
+    "certified": true,
+    "certifiedAt": "2026-04-30",
+    "certificationRoundId": "round-2026-04",
+    "demoSessionId": 1,
     "metrics": {
       "_source": "mock_beacon",
       "invokeCount": 24,
@@ -79,6 +87,7 @@
     "createdAt": "2026-03-15",
     "updatedAt": "2026-05-22",
     "downloadUrl": "https://knot.woa.com/skills/detail/19764",
+    "demoSessionId": 1,
     "metrics": {
       "_source": "mock_beacon",
       "invokeCount": 1,
@@ -208,6 +217,10 @@
     "createdAt": "2026-03-12",
     "updatedAt": "2026-05-22",
     "downloadUrl": "https://knot.woa.com/skills/detail/8688",
+    "certified": true,
+    "certifiedAt": "2026-04-30",
+    "certificationRoundId": "round-2026-04",
+    "demoSessionId": 1,
     "metrics": {
       "_source": "mock_beacon",
       "invokeCount": 10,
@@ -251,6 +264,7 @@
     "status": "active",
     "createdAt": "2026-04-10",
     "updatedAt": "2026-05-20",
+    "demoSessionId": 3,
     "metrics": {
       "_source": "mock_beacon",
       "invokeCount": 6,
@@ -273,6 +287,7 @@
     "createdAt": "2026-04-15",
     "updatedAt": "2026-05-21",
     "downloadUrl": "https://knot.woa.com/skills/detail/16605",
+    "demoSessionId": 2,
     "metrics": {
       "_source": "mock_beacon",
       "invokeCount": 3,
@@ -426,6 +441,7 @@
     "createdAt": "2026-05-05",
     "updatedAt": "2026-05-25",
     "downloadUrl": "https://knot.woa.com/skills/detail/26901",
+    "demoSessionId": 2,
     "metrics": {
       "_source": "mock_beacon",
       "invokeCount": 4,

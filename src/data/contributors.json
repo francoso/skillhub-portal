@@ -1,23 +1,8 @@
 [
   {
-    "id": "vicyanzhang",
-    "name": "vicyanzhang",
-    "team": "联盟产品",
-    "role": "产品",
-    "skills": ["data-analysis-assistant"],
-    "totalInvokes": 19,
-    "contributionScore": 60,
-    "stage": "active",
-    "impactUsers": 8,
-    "weeklyStreak": 4,
-    "dimensions": { "create": 1, "maintain": 3, "promote": 1, "assist": 0 },
-    "milestones": ["first-skill"],
-    "contributionType": "creator"
-  },
-  {
     "id": "towelyang",
     "name": "towelyang",
-    "team": "联盟产品",
+    "team": "APP运营",
     "role": "产品",
     "skills": ["ad-competition-queue"],
     "totalInvokes": 24,
@@ -27,12 +12,15 @@
     "weeklyStreak": 5,
     "dimensions": { "create": 1, "maintain": 4, "promote": 1, "assist": 0 },
     "milestones": ["first-skill"],
-    "contributionType": "creator"
+    "contributionType": "creator",
+    "certifiedSkillCount": 1,
+    "avgReviewScore": 82,
+    "efficiencyRating": "high"
   },
   {
     "id": "kellycong",
     "name": "kellycong",
-    "team": "联盟产品",
+    "team": "APP运营",
     "role": "运营",
     "skills": ["visit-doc-generator"],
     "totalInvokes": 11,
@@ -42,27 +30,33 @@
     "weeklyStreak": 3,
     "dimensions": { "create": 1, "maintain": 2, "promote": 1, "assist": 0 },
     "milestones": ["first-skill"],
-    "contributionType": "creator"
+    "contributionType": "creator",
+    "certifiedSkillCount": 0,
+    "avgReviewScore": null,
+    "efficiencyRating": "medium"
   },
   {
     "id": "maxieli",
     "name": "maxieli",
-    "team": "联盟产品",
+    "team": "APP运营",
     "role": "产品",
     "skills": ["ai-mentor", "group-fluctuation", "media-uv-analysis", "ad-style-distribution", "budget-penetration"],
     "totalInvokes": 6,
     "contributionScore": 85,
     "stage": "core",
-    "impactUsers": 10,
+    "impactUsers": 12,
     "weeklyStreak": 8,
     "dimensions": { "create": 5, "maintain": 6, "promote": 2, "assist": 1 },
     "milestones": ["first-skill", "first-active-users"],
-    "contributionType": "creator"
+    "contributionType": "creator",
+    "certifiedSkillCount": 0,
+    "avgReviewScore": 88,
+    "efficiencyRating": "high"
   },
   {
     "id": "yorkyzhang",
     "name": "yorkyzhang",
-    "team": "联盟产品",
+    "team": "厂商组",
     "role": "产品",
     "skills": ["vendor-scene-analysis"],
     "totalInvokes": 5,
@@ -72,27 +66,33 @@
     "weeklyStreak": 4,
     "dimensions": { "create": 1, "maintain": 3, "promote": 1, "assist": 0 },
     "milestones": ["first-skill"],
-    "contributionType": "creator"
+    "contributionType": "creator",
+    "certifiedSkillCount": 0,
+    "avgReviewScore": null,
+    "efficiencyRating": "low"
   },
   {
     "id": "hongyanhyli",
     "name": "hongyanhyli",
-    "team": "联盟产品",
+    "team": "预算组",
     "role": "产品",
     "skills": ["traffic-forecast", "revenue-fluctuation"],
     "totalInvokes": 18,
     "contributionScore": 70,
     "stage": "active",
-    "impactUsers": 8,
+    "impactUsers": 11,
     "weeklyStreak": 6,
     "dimensions": { "create": 2, "maintain": 5, "promote": 2, "assist": 0 },
     "milestones": ["first-skill", "first-active-users"],
-    "contributionType": "creator"
+    "contributionType": "creator",
+    "certifiedSkillCount": 1,
+    "avgReviewScore": 75,
+    "efficiencyRating": "medium"
   },
   {
     "id": "kenhlzhong",
     "name": "kenhlzhong",
-    "team": "联盟产品",
+    "team": "厂商组",
     "role": "商务",
     "skills": ["vendor-trip-material"],
     "totalInvokes": 6,
@@ -102,12 +102,15 @@
     "weeklyStreak": 3,
     "dimensions": { "create": 1, "maintain": 2, "promote": 1, "assist": 0 },
     "milestones": ["first-skill"],
-    "contributionType": "creator"
+    "contributionType": "creator",
+    "certifiedSkillCount": 0,
+    "avgReviewScore": null,
+    "efficiencyRating": "high"
   },
   {
     "id": "linusfliu",
     "name": "linusfliu",
-    "team": "联盟产品",
+    "team": "APP运营",
     "role": "产品",
     "skills": ["market-insight"],
     "totalInvokes": 3,
@@ -117,12 +120,15 @@
     "weeklyStreak": 3,
     "dimensions": { "create": 1, "maintain": 2, "promote": 0, "assist": 0 },
     "milestones": ["first-skill"],
-    "contributionType": "creator"
+    "contributionType": "creator",
+    "certifiedSkillCount": 0,
+    "avgReviewScore": null,
+    "efficiencyRating": null
   },
   {
     "id": "tangweiguo",
     "name": "tangweiguo",
-    "team": "联盟产品",
+    "team": "APP运营",
     "role": "运营",
     "skills": ["visit-summary"],
     "totalInvokes": 7,
@@ -132,12 +138,15 @@
     "weeklyStreak": 5,
     "dimensions": { "create": 1, "maintain": 3, "promote": 1, "assist": 0 },
     "milestones": ["first-skill"],
-    "contributionType": "creator"
+    "contributionType": "creator",
+    "certifiedSkillCount": 0,
+    "avgReviewScore": 72,
+    "efficiencyRating": "medium"
   },
   {
     "id": "faintang",
     "name": "faintang",
-    "team": "联盟产品",
+    "team": "APP产品",
     "role": "产品",
     "skills": ["roi-filter-release"],
     "totalInvokes": 12,
@@ -147,12 +156,15 @@
     "weeklyStreak": 5,
     "dimensions": { "create": 1, "maintain": 3, "promote": 2, "assist": 0 },
     "milestones": ["first-skill"],
-    "contributionType": "creator"
+    "contributionType": "creator",
+    "certifiedSkillCount": 0,
+    "avgReviewScore": 80,
+    "efficiencyRating": "high"
   },
   {
     "id": "ymzhao",
     "name": "ymzhao",
-    "team": "联盟产品",
+    "team": "厂商组",
     "role": "产品",
     "skills": ["ad-slot-query"],
     "totalInvokes": 5,
@@ -162,27 +174,33 @@
     "weeklyStreak": 3,
     "dimensions": { "create": 1, "maintain": 2, "promote": 1, "assist": 0 },
     "milestones": ["first-skill"],
-    "contributionType": "creator"
+    "contributionType": "creator",
+    "certifiedSkillCount": 0,
+    "avgReviewScore": null,
+    "efficiencyRating": "low"
   },
   {
     "id": "aaroncxu",
     "name": "aaroncxu",
-    "team": "联盟产品",
+    "team": "APP产品",
     "role": "产品",
     "skills": ["template-query", "ad-style-capture", "template-rule-check"],
     "totalInvokes": 18,
     "contributionScore": 78,
     "stage": "core",
-    "impactUsers": 10,
+    "impactUsers": 13,
     "weeklyStreak": 7,
     "dimensions": { "create": 3, "maintain": 5, "promote": 2, "assist": 1 },
     "milestones": ["first-skill", "first-active-users"],
-    "contributionType": "creator"
+    "contributionType": "creator",
+    "certifiedSkillCount": 0,
+    "avgReviewScore": 85,
+    "efficiencyRating": "high"
   },
   {
     "id": "yadongnie",
     "name": "yadongnie",
-    "team": "联盟产品",
+    "team": "APP运营",
     "role": "运营",
     "skills": ["monthly-report"],
     "totalInvokes": 3,
@@ -192,12 +210,15 @@
     "weeklyStreak": 3,
     "dimensions": { "create": 1, "maintain": 2, "promote": 0, "assist": 0 },
     "milestones": ["first-skill"],
-    "contributionType": "creator"
+    "contributionType": "creator",
+    "certifiedSkillCount": 0,
+    "avgReviewScore": null,
+    "efficiencyRating": null
   },
   {
     "id": "mikelcwang",
     "name": "mikelcwang",
-    "team": "联盟产品",
+    "team": "APP运营",
     "role": "产品",
     "skills": ["material-experience"],
     "totalInvokes": 9,
@@ -207,6 +228,9 @@
     "weeklyStreak": 4,
     "dimensions": { "create": 1, "maintain": 3, "promote": 1, "assist": 0 },
     "milestones": ["first-skill"],
-    "contributionType": "creator"
+    "contributionType": "creator",
+    "certifiedSkillCount": 0,
+    "avgReviewScore": 76,
+    "efficiencyRating": "medium"
   }
 ]

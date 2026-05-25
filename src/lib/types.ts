@@ -54,6 +54,10 @@ export interface Contributor {
   };
   milestones: string[];
   contributionType: "creator" | "maintainer" | "assistant";
+  // 业务价值维度（认证评审来源）
+  certifiedSkillCount: number;
+  avgReviewScore: number | null;
+  efficiencyRating: "high" | "medium" | "low" | null;
 }
 
 // === Milestone ===
@@ -183,6 +187,7 @@ export interface CertificationResult {
   expertScore: number;
   publicCount: number;
   summary: string;
+  feedbackSummary?: string;
 }
 
 // === Skill Assessment (Upload Analysis) ===

@@ -7,7 +7,7 @@
     "skills": [
       {
         "skillId": "traffic-forecast",
-        "presenter": "hongyanhy1i",
+        "presenter": "hongyanhyli",
         "summary": "联盟流量预估 Skill 能力分享，预算服务场景落地",
         "docUrl": "联盟流量预估 skill 能力分享",
         "skillUrl": "https://knot.woa.com/skills/detail/8688"
@@ -32,15 +32,15 @@
   {
     "id": 2,
     "date": "2026-05-08",
-    "title": "第二期 Skill Demo会：模板审查 & 市场洞察 & 预算诊断",
+    "title": "第二期 Skill Demo会：模板审查 & 市场洞察",
     "status": "completed",
     "skills": [
       {
-        "skillId": "template-review",
+        "skillId": "template-rule-check",
         "presenter": "aaroncxu",
         "summary": "模板规则审查 + 模板问题排查，形态样式场景",
         "docUrl": "联盟形态skill能力介绍",
-        "skillUrl": "https://knot.woa.com/skills/detail/8901"
+        "skillUrl": "https://knot.woa.com/skills/detail/26901"
       },
       {
         "skillId": "market-insight",
@@ -48,37 +48,24 @@
         "summary": "流量市场洞察，市场分析场景落地",
         "docUrl": "流量市场洞察 Skill 使用指南",
         "skillUrl": "https://knot.woa.com/skills/detail/16605"
-      },
-      {
-        "skillId": "budget-diagnose",
-        "presenter": "everli",
-        "summary": "预算开口诊断，预算服务场景",
-        "docUrl": "预算开口诊断skill分享",
-        "skillUrl": "https://knot.woa.com/skills/detail/13411"
       }
     ],
     "replayUrl": null,
-    "promotionText": "第二期来了！模板审查、市场洞察、预算诊断——三个Skill覆盖形态、分析、预算三大场景，联盟AI提效持续扩展中。"
+    "promotionText": "第二期来了！模板审查、市场洞察——形态和分析两大场景的Skill落地分享，联盟AI提效持续扩展中。"
   },
   {
     "id": 3,
     "date": "2026-05-22",
-    "title": "第三期 Skill Demo会：厂商拜访 & 小游戏预算日报",
+    "title": "第三期 Skill Demo会：厂商拜访材料自动化",
     "status": "completed",
     "skills": [
       {
-        "skillId": "vendor-visit",
+        "skillId": "vendor-trip-material",
         "presenter": "ymzhao,kenhlzhong",
         "summary": "厂商拜访材料自动生成（厂商组可直接在adataclaw上下载，其他组需联系kenhlzhong打开访问权限）",
         "docUrl": "厂拜材料skill介绍"
-      },
-      {
-        "skillId": "game-budget-monitor",
-        "presenter": "haleyxli",
-        "summary": "联盟小游戏预算监控日报 Skill 1.0 分享",
-        "docUrl": "联盟小游戏预算监控日报 Skill 1.0 分享"
       }
     ],
-    "promotionText": "第三期！厂商拜访材料+小游戏预算日报，客户服务和预算监控两个新方向的Skill落地。"
+    "promotionText": "第三期！厂商拜访材料自动化，客户服务方向的Skill落地。"
   }
 ]

@@ -11,6 +11,7 @@ import rulesData from "@/data/rules.json";
 import milestonesData from "@/data/milestones.json";
 import activitiesData from "@/data/activities.json";
 import certificationsData from "@/data/certifications.json";
+import coverageData from "@/data/coverage.json";
 
 // 数据加载层 — MVP阶段从JSON读取，后续切API只改这里
 
@@ -73,14 +74,73 @@ export function getCurrentReviewRound(): CertificationRound | undefined {
 }
 
 // === Skill Stage ===
-export type SkillStage = "personal" | "reviewing" | "certified";
+export type SkillStage = "personal" | "reviewing" | "certified" | "needs-improvement";
 
 export function getSkillStage(skillId: string): SkillStage {
+  // 优先从认证结果判断（数据驱动）
+  const results = getCertificationResults();
+  const passed = results.find(r => r.skillId === skillId && r.passed);
+  if (passed) return "certified";
+
+  // 兼容 skill 字段标记
   const skill = getSkillById(skillId);
   if (skill?.certified) return "certified";
+
+  // 是否在当前评价轮次中
   const reviewingRound = getCurrentReviewRound();
   if (reviewingRound && reviewingRound.skills.includes(skillId)) return "reviewing";
+
+  // 是否曾经评价未通过（有 failed result 且不在当前轮次）
+  const failed = results.find(r => r.skillId === skillId && !r.passed);
+  if (failed) return "needs-improvement";
+
   return "personal";
+}
+
+/** Get the failed certification result with feedback for a skill */
+export function getFailedResult(skillId: string): CertificationResult | undefined {
+  return getCertificationResults().find(r => r.skillId === skillId && !r.passed);
+}
+
+// === Coverage Map ===
+interface CoverageTask {
+  content: string;
+  businessType: string;
+  status: string;
+  skillId: string | null;
+}
+interface CoverageModule {
+  name: string;
+  tasks: CoverageTask[];
+}
+interface CoverageWorkflow {
+  workflow: string;
+  modules: CoverageModule[];
+}
+
+export function getCoverage(): CoverageWorkflow[] {
+  return coverageData as CoverageWorkflow[];
+}
+
+/** Returns all skill IDs that appear in the coverage map (建设地图) */
+export function getMapSkillIds(): Set<string> {
+  const ids = new Set<string>();
+  for (const wf of getCoverage()) {
+    for (const mod of wf.modules) {
+      for (const task of mod.tasks) {
+        if (task.skillId) {
+          ids.add(task.skillId);
+        }
+      }
+    }
+  }
+  return ids;
+}
+
+/** Compute certified skill count for a contributor dynamically from certification results */
+export function getCertifiedSkillCountForOwner(ownerSkillIds: string[]): number {
+  const results = getCertificationResults();
+  return ownerSkillIds.filter(id => results.some(r => r.skillId === id && r.passed)).length;
 }
 
 // 聚合统计

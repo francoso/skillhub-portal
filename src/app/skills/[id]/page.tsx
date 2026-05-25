@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { getSkillById, getSkills, getDemos, getSkillStage, getCertificationResults } from "@/lib/data";
+import { getSkillById, getSkills, getDemos, getSkillStage, getCertificationResults, getFailedResult } from "@/lib/data";
 import type { SkillStage } from "@/lib/data";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -92,6 +92,9 @@ function GrowthPath({ stage, skill }: { stage: SkillStage; skill: Skill }) {
   const certResult = stage === "certified"
     ? getCertificationResults().find(r => r.skillId === skill.id)
     : undefined;
+  const failedResult = stage === "needs-improvement"
+    ? getFailedResult(skill.id)
+    : undefined;
 
   return (
     <Card>
@@ -150,6 +153,30 @@ function GrowthPath({ stage, skill }: { stage: SkillStage; skill: Skill }) {
               </Link>
               ，通过后获得联盟官方认证标识和优先推荐。
             </p>
+          )}
+          {stage === "needs-improvement" && failedResult && (
+            <div className="space-y-2">
+              <p className="flex items-center gap-1.5">
+                <span className="inline-block w-2 h-2 rounded-full bg-amber-400" />
+                <span className="font-medium text-amber-700">待改进</span>
+                <span className="text-gray-400 text-xs ml-2">
+                  {failedResult.roundId.replace("round-", "")} 轮评价未通过
+                </span>
+              </p>
+              <p className="text-xs text-gray-600 leading-relaxed">
+                {failedResult.feedbackSummary}
+              </p>
+              <p className="text-xs text-gray-500 mt-2 pt-2 border-t border-gray-100">
+                大众评价 {failedResult.publicScore.toFixed(1)} 分（{failedResult.publicCount} 人）· 专家评价 {failedResult.expertScore.toFixed(1)} 分
+              </p>
+              <p className="text-xs text-blue-600 mt-1">
+                改进后可
+                <Link href="/rules#certification" className="underline hover:text-blue-800">
+                  报名下一轮评价
+                </Link>
+                ，不限重试次数。
+              </p>
+            </div>
           )}
           {stage === "reviewing" && (
             <p>本月评价进行中，经过 Demo 展示 + 大众点评官 + 专家评价，结果将在月底公布。</p>
