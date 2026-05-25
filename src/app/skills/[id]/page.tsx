@@ -5,7 +5,7 @@ import type { SkillStage } from "@/lib/data";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, ExternalLink, Users, Activity, Calendar, ShieldCheck, Check, Download, FileText } from "lucide-react";
+import { ArrowLeft, ExternalLink, Activity, Calendar, ShieldCheck, Check, Download, FileText } from "lucide-react";
 import { SkillRadarChart } from "@/components/charts/radar-chart";
 import type { Skill } from "@/lib/types";
 
@@ -235,6 +235,13 @@ export default async function SkillDetailPage({
                 联盟认证
               </Badge>
             )}
+          {/* Team info */}
+          <p className="text-xs text-gray-400 mt-2">
+            Owner: <span className="text-gray-600">{skill.owner}</span>
+            {skill.contributors.length > 0 && (
+              <> · Contributors: {skill.contributors.join(", ")}</>
+            )}
+          </p>
           </div>
         </div>
         {skill.score && (
@@ -304,37 +311,11 @@ export default async function SkillDetailPage({
         </CardContent>
       </Card>
 
-      {/* Description + People (compact) */}
+      {/* Description */}
       <Card>
-        <CardContent className="p-5 space-y-4">
-          <div>
-            <h2 className="text-sm font-medium text-gray-500 mb-2">描述</h2>
-            <p className="text-gray-700 leading-relaxed">{skill.description}</p>
-          </div>
-
-          {/* Compact People/Team row */}
-          <div className="flex items-center gap-4 pt-3 border-t border-gray-100">
-            <Users className="w-4 h-4 text-gray-400 flex-shrink-0" />
-            <div className="flex items-center gap-3 flex-wrap text-sm">
-              <span className="text-gray-500">
-                Owner: <span className="text-gray-900 font-medium">{skill.owner}</span>
-              </span>
-              {skill.contributors.length > 0 && (
-                <>
-                  <span className="text-gray-300">|</span>
-                  <span className="text-gray-500">
-                    Contributors:{" "}
-                    {skill.contributors.map((c, i) => (
-                      <span key={c}>
-                        <span className="text-gray-700">{c}</span>
-                        {i < skill.contributors.length - 1 && ", "}
-                      </span>
-                    ))}
-                  </span>
-                </>
-              )}
-            </div>
-          </div>
+        <CardContent className="p-5">
+          <h2 className="text-sm font-medium text-gray-500 mb-2">描述</h2>
+          <p className="text-gray-700 leading-relaxed">{skill.description}</p>
         </CardContent>
       </Card>
 
