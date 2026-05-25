@@ -2,9 +2,10 @@
 
 import { useState, useCallback, useRef, useEffect } from "react";
 import Link from "next/link";
-import { Upload, Puzzle, Shield, Presentation } from "lucide-react";
+import { Upload, Puzzle, Shield, Presentation, Check, Download, ArrowRight, ArrowLeft, Loader2, Code2 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { SkillRadarChart } from "@/components/charts/radar-chart";
 import { getStats, getSkills, getDemos, getCurrentReviewRound, CURRENT_USER } from "@/lib/data";
 import { analyzeSkillFiles, isAcceptedFile } from "@/lib/skill-analyzer";
@@ -77,7 +78,7 @@ interface ActivityItem {
 
 function ActivityTicker({ activities }: { activities: ActivityItem[] }) {
   const [offset, setOffset] = useState(0);
-  const itemHeight = 40; // px per row
+  const itemHeight = 40;
   const visibleCount = 3;
   const totalItems = activities.length;
 
@@ -89,10 +90,7 @@ function ActivityTicker({ activities }: { activities: ActivityItem[] }) {
     return () => clearInterval(interval);
   }, [totalItems]);
 
-  // Double the list for seamless looping
   const doubled = [...activities, ...activities];
-
-  // Reset offset when it reaches the original length to create seamless loop
   const displayOffset = offset % totalItems;
 
   return (
@@ -135,22 +133,50 @@ function ActivityTicker({ activities }: { activities: ActivityItem[] }) {
   );
 }
 
-export default function HomePage() {
+// Upload wizard steps
+type UploadStep = "upload" | "scoring" | "result" | "beacon" | "confirm";
+
+const UPLOAD_STEPS: { key: UploadStep; label: string }[] = [
+  { key: "upload", label: "上传" },
+  { key: "scoring", label: "AI 评分" },
+  { key: "result", label: "评测结果" },
+  { key: "beacon", label: "埋点注入" },
+  { key: "confirm", label: "确认上传" },
+];
+
+// Mock beacon instrumentation data
+const MOCK_BEACON_POINTS = [
+  { event: "skill_invoke_start", desc: "Skill 被调用时触发", location: "入口函数" },
+  { event: "skill_invoke_end", desc: "Skill 执行完成时触发", location: "返回语句" },
+  { event: "skill_error", desc: "执行异常时触发", location: "catch 块" },
+  { event: "skill_input_size", desc: "输入数据量上报", location: "参数解析" },
+  { event: "skill_output_quality", desc: "输出质量采样", location: "结果序列化" },
+];
+
+function UploadWizard() {
+  const [step, setStep] = useState<UploadStep>("upload");
   const [assessment, setAssessment] = useState<SkillAssessment | null>(null);
   const [analyzing, setAnalyzing] = useState(false);
+  const [beaconInjecting, setBeaconInjecting] = useState(false);
+  const [beaconDone, setBeaconDone] = useState(false);
   const [dragOver, setDragOver] = useState(false);
+  const [uploadedFileName, setUploadedFileName] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFiles = useCallback(async (files: FileList | File[]) => {
     const fileArray = Array.from(files).filter((f) => isAcceptedFile(f.name));
     if (fileArray.length === 0) return;
 
+    setUploadedFileName(fileArray[0].name);
+    setStep("scoring");
     setAnalyzing(true);
     try {
       const result = await analyzeSkillFiles(fileArray);
       setAssessment(result);
+      setStep("result");
     } catch (e) {
       console.error("Analysis failed:", e);
+      setStep("upload");
     } finally {
       setAnalyzing(false);
     }
@@ -167,6 +193,30 @@ export default function HomePage() {
     [handleFiles]
   );
 
+  const handleContinueToBeacon = useCallback(() => {
+    setStep("beacon");
+    setBeaconInjecting(true);
+    setTimeout(() => {
+      setBeaconInjecting(false);
+      setBeaconDone(true);
+    }, 2000);
+  }, []);
+
+  const handleConfirmUpload = useCallback(() => {
+    setStep("confirm");
+  }, []);
+
+  const handleReset = useCallback(() => {
+    setStep("upload");
+    setAssessment(null);
+    setAnalyzing(false);
+    setBeaconInjecting(false);
+    setBeaconDone(false);
+    setUploadedFileName("");
+  }, []);
+
+  const currentStepIndex = UPLOAD_STEPS.findIndex((s) => s.key === step);
+
   const radarData = assessment
     ? Object.entries(assessment.scores).map(([key, value]) => ({
         dimension: DIMENSION_LABELS[key] || key,
@@ -175,6 +225,292 @@ export default function HomePage() {
       }))
     : [];
 
+  return (
+    <Card className="overflow-hidden">
+      {/* Step Indicator */}
+      <div className="px-6 pt-5 pb-3">
+        <div className="flex items-center justify-between mb-1">
+          {UPLOAD_STEPS.map((s, idx) => {
+            const isCompleted = idx < currentStepIndex;
+            const isCurrent = idx === currentStepIndex;
+            return (
+              <div key={s.key} className="flex items-center flex-1">
+                <div className="flex flex-col items-center flex-1">
+                  <div
+                    className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-medium transition-colors ${
+                      isCompleted
+                        ? "bg-green-100 text-green-700"
+                        : isCurrent
+                        ? "bg-blue-600 text-white"
+                        : "bg-gray-100 text-gray-400"
+                    }`}
+                  >
+                    {isCompleted ? <Check className="w-3.5 h-3.5" /> : idx + 1}
+                  </div>
+                  <span
+                    className={`text-[10px] mt-1 ${
+                      isCurrent ? "text-blue-600 font-medium" : "text-gray-400"
+                    }`}
+                  >
+                    {s.label}
+                  </span>
+                </div>
+                {idx < UPLOAD_STEPS.length - 1 && (
+                  <div
+                    className={`h-0.5 flex-1 mx-1 -mt-4 ${
+                      idx < currentStepIndex ? "bg-green-300" : "bg-gray-200"
+                    }`}
+                  />
+                )}
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      <CardContent className="p-6 pt-2">
+        {/* Step 1: Upload */}
+        {step === "upload" && (
+          <div
+            className={`flex flex-col items-center justify-center text-center cursor-pointer rounded-lg p-8 border-2 border-dashed transition-colors ${
+              dragOver ? "bg-blue-50 border-blue-300" : "border-gray-200 hover:border-blue-300"
+            }`}
+            onDragOver={(e) => {
+              e.preventDefault();
+              setDragOver(true);
+            }}
+            onDragLeave={() => setDragOver(false)}
+            onDrop={handleDrop}
+            onClick={() => fileInputRef.current?.click()}
+          >
+            <div className="w-12 h-12 rounded-full bg-blue-50 flex items-center justify-center mb-4">
+              <Upload className="w-6 h-6 text-blue-600" />
+            </div>
+            <h2 className="text-lg font-semibold text-gray-900">
+              Skill 规范评测器
+            </h2>
+            <p className="text-sm text-gray-500 mt-1">
+              拖入压缩包 → 五维评测 → 自动埋点 → 上线
+            </p>
+            <p className="text-xs text-gray-400 mt-3">
+              支持 .skill / .zip 压缩包格式
+            </p>
+            <input
+              ref={fileInputRef}
+              type="file"
+              multiple
+              accept=".skill,.zip"
+              className="hidden"
+              onChange={(e) => {
+                if (e.target.files) handleFiles(e.target.files);
+              }}
+            />
+          </div>
+        )}
+
+        {/* Step 2: Scoring (loading) */}
+        {step === "scoring" && analyzing && (
+          <div className="flex flex-col items-center justify-center py-12">
+            <Loader2 className="w-8 h-8 text-blue-600 animate-spin mb-4" />
+            <p className="text-sm font-medium text-gray-700">AI 正在评测...</p>
+            <p className="text-xs text-gray-400 mt-1">
+              分析 {uploadedFileName} 的五维规范性
+            </p>
+          </div>
+        )}
+
+        {/* Step 3: Result */}
+        {step === "result" && assessment && (
+          <div className="space-y-5">
+            <div className="flex items-center justify-between">
+              <h3 className="text-base font-semibold text-gray-900">
+                评测结果
+              </h3>
+              <Badge className={GRADE_MAP[assessment.grade].color}>
+                {GRADE_MAP[assessment.grade].label}
+              </Badge>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <SkillRadarChart data={radarData} />
+              </div>
+              <div className="space-y-3">
+                <div className="space-y-2">
+                  {Object.entries(assessment.scores).map(([key, value]) => (
+                    <div key={key} className="flex items-center justify-between">
+                      <div className="flex-1 min-w-0">
+                        <span className="text-sm text-gray-600">
+                          {DIMENSION_LABELS[key]}
+                        </span>
+                        <p className="text-xs text-gray-400 truncate">
+                          {DIMENSION_TIPS[key]}
+                        </p>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <div className="w-20 h-2 bg-gray-100 rounded-full overflow-hidden">
+                          <div
+                            className={`h-full rounded-full ${
+                              value >= 80
+                                ? "bg-green-500"
+                                : value >= 60
+                                ? "bg-blue-500"
+                                : "bg-orange-500"
+                            }`}
+                            style={{ width: `${value}%` }}
+                          />
+                        </div>
+                        <span className="text-xs font-medium text-gray-700 w-6 text-right">
+                          {value}
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {assessment.suggestions.length > 0 && (
+                  <div className="border-t pt-2">
+                    <p className="text-xs font-medium text-gray-500 mb-1">改进建议</p>
+                    <ul className="space-y-0.5">
+                      {assessment.suggestions.map((s, i) => (
+                        <li key={i} className="text-xs text-gray-600 flex items-start gap-1">
+                          <span className="text-gray-400">•</span>{s}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Action Buttons */}
+            <div className="flex items-center justify-between pt-3 border-t">
+              <Button variant="ghost" size="sm" onClick={handleReset} className="gap-1.5 text-gray-500">
+                <ArrowLeft className="w-3.5 h-3.5" />
+                取消
+              </Button>
+              <Button size="sm" onClick={handleContinueToBeacon} className="gap-1.5">
+                继续上传
+                <ArrowRight className="w-3.5 h-3.5" />
+              </Button>
+            </div>
+          </div>
+        )}
+
+        {/* Step 4: Beacon Injection */}
+        {step === "beacon" && (
+          <div className="space-y-5">
+            {beaconInjecting ? (
+              <div className="flex flex-col items-center justify-center py-10">
+                <Loader2 className="w-8 h-8 text-purple-600 animate-spin mb-4" />
+                <p className="text-sm font-medium text-gray-700">正在调用大同注入埋点...</p>
+                <p className="text-xs text-gray-400 mt-1">
+                  为 {uploadedFileName} 添加数据追踪能力
+                </p>
+              </div>
+            ) : beaconDone ? (
+              <>
+                <div className="flex items-center gap-2">
+                  <Code2 className="w-4 h-4 text-purple-600" />
+                  <h3 className="text-base font-semibold text-gray-900">
+                    埋点注入完成
+                  </h3>
+                  <Badge className="bg-purple-100 text-purple-700 text-xs">
+                    +{MOCK_BEACON_POINTS.length} 个埋点
+                  </Badge>
+                </div>
+
+                <p className="text-xs text-gray-500">
+                  以下埋点已自动注入，上线后将通过大同上报使用数据：
+                </p>
+
+                <div className="rounded-lg border border-gray-200 overflow-hidden">
+                  <table className="w-full text-xs">
+                    <thead className="bg-gray-50">
+                      <tr>
+                        <th className="text-left px-3 py-2 font-medium text-gray-600">事件名</th>
+                        <th className="text-left px-3 py-2 font-medium text-gray-600">说明</th>
+                        <th className="text-left px-3 py-2 font-medium text-gray-600">注入位置</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-100">
+                      {MOCK_BEACON_POINTS.map((bp) => (
+                        <tr key={bp.event}>
+                          <td className="px-3 py-2 font-mono text-purple-700">{bp.event}</td>
+                          <td className="px-3 py-2 text-gray-600">{bp.desc}</td>
+                          <td className="px-3 py-2 text-gray-400">{bp.location}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+
+                {/* Download instrumented package */}
+                <div className="flex items-center gap-3 p-3 bg-purple-50 rounded-lg border border-purple-100">
+                  <Download className="w-4 h-4 text-purple-600 shrink-0" />
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-medium text-gray-800">
+                      {uploadedFileName.replace(/\.(skill|zip)$/, "")}_instrumented.skill
+                    </p>
+                    <p className="text-xs text-gray-500">已注入埋点的版本，可本地预览验证</p>
+                  </div>
+                  <Button variant="outline" size="sm" className="text-xs shrink-0">
+                    下载
+                  </Button>
+                </div>
+
+                {/* Action Buttons */}
+                <div className="flex items-center justify-between pt-3 border-t">
+                  <Button variant="ghost" size="sm" onClick={handleReset} className="gap-1.5 text-gray-500">
+                    <ArrowLeft className="w-3.5 h-3.5" />
+                    取消
+                  </Button>
+                  <Button size="sm" onClick={handleConfirmUpload} className="gap-1.5">
+                    确认上传
+                    <Check className="w-3.5 h-3.5" />
+                  </Button>
+                </div>
+              </>
+            ) : null}
+          </div>
+        )}
+
+        {/* Step 5: Confirm */}
+        {step === "confirm" && (
+          <div className="flex flex-col items-center justify-center py-10">
+            <div className="w-14 h-14 rounded-full bg-green-100 flex items-center justify-center mb-4">
+              <Check className="w-7 h-7 text-green-600" />
+            </div>
+            <h3 className="text-lg font-semibold text-gray-900">上传成功！</h3>
+            <p className="text-sm text-gray-500 mt-1">
+              {uploadedFileName} 已上线，全员可搜索使用
+            </p>
+            <div className="flex items-center gap-3 mt-6">
+              <Button variant="outline" size="sm" onClick={handleReset}>
+                继续上传
+              </Button>
+              <Link href="/skills">
+                <Button size="sm" className="gap-1.5">
+                  查看 Skill 库
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </Button>
+              </Link>
+            </div>
+            <p className="text-xs text-gray-400 mt-6">
+              涉及联盟业务场景？可{" "}
+              <Link href="/rules#certification" className="text-blue-600 hover:underline">
+                申请参与联盟认证
+              </Link>
+              {" "}→ 获得官方推荐
+            </p>
+          </div>
+        )}
+      </CardContent>
+    </Card>
+  );
+}
+
+export default function HomePage() {
   return (
     <div className="space-y-8">
       {/* Header */}
@@ -202,147 +538,8 @@ export default function HomePage() {
         </div>
       )}
 
-      {/* Hero CTA - Upload Zone */}
-      <Card className="border-2 border-dashed border-gray-200 hover:border-blue-300 transition-colors">
-        <CardContent className="p-8">
-          <div
-            className={`flex flex-col items-center justify-center text-center cursor-pointer rounded-lg p-6 transition-colors ${
-              dragOver ? "bg-blue-50" : ""
-            }`}
-            onDragOver={(e) => {
-              e.preventDefault();
-              setDragOver(true);
-            }}
-            onDragLeave={() => setDragOver(false)}
-            onDrop={handleDrop}
-            onClick={() => fileInputRef.current?.click()}
-          >
-            <div className="w-12 h-12 rounded-full bg-blue-50 flex items-center justify-center mb-4">
-              <Upload className="w-6 h-6 text-blue-600" />
-            </div>
-            <h2 className="text-lg font-semibold text-gray-900">
-              Skill 规范评测器
-            </h2>
-            <p className="text-sm text-gray-500 mt-1">
-              拖入压缩包 → 五维规范评测
-            </p>
-            <p className="text-xs text-gray-400 mt-3">
-              支持 .skill / .zip 压缩包格式
-            </p>
-            <input
-              ref={fileInputRef}
-              type="file"
-              multiple
-              accept=".skill,.zip"
-              className="hidden"
-              onChange={(e) => {
-                if (e.target.files) handleFiles(e.target.files);
-              }}
-            />
-          </div>
-
-          {/* Loading */}
-          {analyzing && (
-            <div className="mt-6 text-center">
-              <div className="inline-block w-5 h-5 border-2 border-blue-600 border-t-transparent rounded-full animate-spin" />
-              <p className="text-sm text-gray-500 mt-2">分析中...</p>
-            </div>
-          )}
-        </CardContent>
-      </Card>
-
-      {/* Certification Guidance */}
-      <div className="text-center text-sm text-gray-500 -mt-4">
-        上传后即可上线使用。涉及联盟业务场景的 Skill，可申请参与{" "}
-        <Link href="/rules#certification" className="text-blue-600 hover:underline font-medium">
-          联盟认证
-        </Link>
-        {" "}→ 获得官方推荐
-      </div>
-
-      {/* Assessment Result */}
-      {assessment && !analyzing && (
-        <Card>
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-base font-semibold text-gray-900">
-                评估结果
-              </h3>
-              <Badge className={GRADE_MAP[assessment.grade].color}>
-                {GRADE_MAP[assessment.grade].label}
-              </Badge>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {/* Radar Chart */}
-              <div>
-                <SkillRadarChart data={radarData} />
-              </div>
-
-              {/* Dimension Scores + Suggestions */}
-              <div className="space-y-4">
-                <div className="space-y-2">
-                  {Object.entries(assessment.scores).map(([key, value]) => (
-                    <div
-                      key={key}
-                      className="flex items-center justify-between"
-                    >
-                      <div className="flex-1 min-w-0">
-                        <span className="text-sm text-gray-600">
-                          {DIMENSION_LABELS[key]}
-                        </span>
-                        <p className="text-xs text-gray-400 truncate">
-                          {DIMENSION_TIPS[key]}
-                        </p>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <div className="w-24 h-2 bg-gray-100 rounded-full overflow-hidden">
-                          <div
-                            className={`h-full rounded-full ${
-                              value >= 80
-                                ? "bg-green-500"
-                                : value >= 60
-                                ? "bg-blue-500"
-                                : "bg-orange-500"
-                            }`}
-                            style={{ width: `${value}%` }}
-                          />
-                        </div>
-                        <span className="text-sm font-medium text-gray-700 w-8 text-right">
-                          {value}
-                        </span>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-
-                <div className="border-t pt-3">
-                  <p className="text-xs font-medium text-gray-500 mb-2">
-                    改进建议
-                  </p>
-                  <ul className="space-y-1">
-                    {assessment.suggestions.map((s, i) => (
-                      <li
-                        key={i}
-                        className="text-xs text-gray-600 flex items-start gap-1.5"
-                      >
-                        <span className="text-gray-400 mt-0.5">•</span>
-                        {s}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                <div className="border-t pt-3">
-                  <p className="text-xs text-gray-400">
-                    已分析: {assessment.analyzedFiles.join(", ")}
-                  </p>
-                </div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      )}
+      {/* Upload Wizard */}
+      <UploadWizard />
 
       {/* Quick Entry Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
