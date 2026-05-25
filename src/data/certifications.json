@@ -5,7 +5,7 @@
       "month": "2026-05",
       "status": "reviewing",
       "skills": ["template-review", "market-insight", "budget-diagnose"],
-      "publicReviewers": ["员工A", "员工B", "员工C", "员工D", "员工E", "员工F", "员工G", "员工H", "员工I", "员工J"],
+      "publicReviewers": ["员工A", "员工B"],
       "expertReviewers": ["PM-形态", "PM-预算", "PM-市场"]
     },
     {
@@ -13,7 +13,7 @@
       "month": "2026-04",
       "status": "completed",
       "skills": ["traffic-forecast", "ad-competition-queue", "ai-mentor"],
-      "publicReviewers": ["员工K", "员工L", "员工M", "员工N", "员工O", "员工P", "员工Q", "员工R"],
+      "publicReviewers": ["员工K", "员工L"],
       "expertReviewers": ["PM-预算", "PM-变现", "PM-平台"]
     }
   ],
@@ -37,46 +37,6 @@
       "score": 4,
       "comment": "对日常预算工作有实际帮助",
       "submittedAt": "2026-04-25"
-    },
-    {
-      "id": "rev-003",
-      "roundId": "round-2026-04",
-      "skillId": "traffic-forecast",
-      "reviewerName": "员工M",
-      "reviewerType": "public",
-      "score": 3,
-      "comment": "基本功能可用，希望加入更多维度",
-      "submittedAt": "2026-04-26"
-    },
-    {
-      "id": "rev-004",
-      "roundId": "round-2026-04",
-      "skillId": "traffic-forecast",
-      "reviewerName": "员工N",
-      "reviewerType": "public",
-      "score": 5,
-      "comment": "非常实用，省了很多手动计算时间",
-      "submittedAt": "2026-04-26"
-    },
-    {
-      "id": "rev-005",
-      "roundId": "round-2026-04",
-      "skillId": "traffic-forecast",
-      "reviewerName": "员工O",
-      "reviewerType": "public",
-      "score": 4,
-      "comment": "预估结果跟实际偏差在可接受范围",
-      "submittedAt": "2026-04-27"
-    },
-    {
-      "id": "rev-006",
-      "roundId": "round-2026-04",
-      "skillId": "traffic-forecast",
-      "reviewerName": "员工P",
-      "reviewerType": "public",
-      "score": 4,
-      "comment": "推荐给预算组的同事使用",
-      "submittedAt": "2026-04-27"
     },
     {
       "id": "rev-007",
@@ -110,46 +70,6 @@
       "submittedAt": "2026-04-25"
     },
     {
-      "id": "rev-010",
-      "roundId": "round-2026-04",
-      "skillId": "ad-competition-queue",
-      "reviewerName": "员工M",
-      "reviewerType": "public",
-      "score": 3,
-      "comment": "适合有经验的运营使用",
-      "submittedAt": "2026-04-26"
-    },
-    {
-      "id": "rev-011",
-      "roundId": "round-2026-04",
-      "skillId": "ad-competition-queue",
-      "reviewerName": "员工N",
-      "reviewerType": "public",
-      "score": 4,
-      "comment": "数据准确，效率提升明显",
-      "submittedAt": "2026-04-26"
-    },
-    {
-      "id": "rev-012",
-      "roundId": "round-2026-04",
-      "skillId": "ad-competition-queue",
-      "reviewerName": "员工O",
-      "reviewerType": "public",
-      "score": 3,
-      "comment": "功能完整，期待更多可视化",
-      "submittedAt": "2026-04-27"
-    },
-    {
-      "id": "rev-013",
-      "roundId": "round-2026-04",
-      "skillId": "ad-competition-queue",
-      "reviewerName": "员工Q",
-      "reviewerType": "public",
-      "score": 4,
-      "comment": "对变现优化有帮助",
-      "submittedAt": "2026-04-27"
-    },
-    {
       "id": "rev-014",
       "roundId": "round-2026-04",
       "skillId": "ad-competition-queue",
@@ -181,46 +101,6 @@
       "submittedAt": "2026-04-25"
     },
     {
-      "id": "rev-017",
-      "roundId": "round-2026-04",
-      "skillId": "ai-mentor",
-      "reviewerName": "员工R",
-      "reviewerType": "public",
-      "score": 4,
-      "comment": "比翻文档快多了",
-      "submittedAt": "2026-04-26"
-    },
-    {
-      "id": "rev-018",
-      "roundId": "round-2026-04",
-      "skillId": "ai-mentor",
-      "reviewerName": "员工N",
-      "reviewerType": "public",
-      "score": 5,
-      "comment": "强烈推荐给每个新人",
-      "submittedAt": "2026-04-26"
-    },
-    {
-      "id": "rev-019",
-      "roundId": "round-2026-04",
-      "skillId": "ai-mentor",
-      "reviewerName": "员工O",
-      "reviewerType": "public",
-      "score": 4,
-      "comment": "联盟知识覆盖面广",
-      "submittedAt": "2026-04-27"
-    },
-    {
-      "id": "rev-020",
-      "roundId": "round-2026-04",
-      "skillId": "ai-mentor",
-      "reviewerName": "员工P",
-      "reviewerType": "public",
-      "score": 4,
-      "comment": "有助于加速新人融入",
-      "submittedAt": "2026-04-27"
-    },
-    {
       "id": "rev-021",
       "roundId": "round-2026-04",
       "skillId": "ai-mentor",
@@ -239,8 +119,8 @@
       "passed": true,
       "publicScore": 4.0,
       "expertScore": 4.0,
-      "publicCount": 6,
-      "summary": "大众评审均分4.0（6人），专家评审4.0分通过。流量预估能力实用，建议增加异常预警。"
+      "publicCount": 2,
+      "summary": "大众评价均分4.0（2人），专家评价4.0分通过。流量预估能力实用，建议增加异常预警。"
     },
     {
       "skillId": "ad-competition-queue",
@@ -248,8 +128,8 @@
       "passed": true,
       "publicScore": 3.5,
       "expertScore": 3.0,
-      "publicCount": 6,
-      "summary": "大众评审均分3.5（6人），专家评审3.0分通过。联盟特色突出，交互可优化。"
+      "publicCount": 2,
+      "summary": "大众评价均分3.5（2人），专家评价3.0分通过。联盟特色突出，交互可优化。"
     },
     {
       "skillId": "ai-mentor",
@@ -257,8 +137,8 @@
       "passed": true,
       "publicScore": 4.3,
       "expertScore": 4.0,
-      "publicCount": 6,
-      "summary": "大众评审均分4.3（6人），专家评审4.0分通过。新人导师深受好评，需注意知识时效性维护。"
+      "publicCount": 2,
+      "summary": "大众评价均分4.3（2人），专家评价4.0分通过。新人导师深受好评，需注意知识时效性维护。"
     }
   ]
 }

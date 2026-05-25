@@ -187,17 +187,17 @@ export default function HomePage() {
         </p>
       </div>
 
-      {/* 评审邀请通知 */}
+      {/* 评价邀请通知 */}
       {pendingReviewCount > 0 && (
         <div className="flex items-center justify-between px-4 py-3 bg-blue-50 border border-blue-200 rounded-lg">
           <p className="text-sm text-blue-800">
-            你有 <strong>{pendingReviewCount}</strong> 个 Skill 待评审
+            本月你被选为大众点评官，待评价 <strong>{pendingReviewCount}</strong> 个 Skill
           </p>
           <Link
             href="/review"
             className="text-sm font-medium text-blue-600 hover:text-blue-700"
           >
-            去评审 →
+            去评价 →
           </Link>
         </div>
       )}
@@ -368,7 +368,7 @@ export default function HomePage() {
               </div>
               <div>
                 <p className="text-sm font-medium text-gray-900">本月认证</p>
-                <p className="text-xs text-gray-500">评审进度与结果</p>
+                <p className="text-xs text-gray-500">评价进度与结果</p>
               </div>
             </CardContent>
           </Card>

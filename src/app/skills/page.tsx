@@ -61,7 +61,7 @@ function StageBadge({ stage }: { stage: SkillStage }) {
     return (
       <Badge className="bg-orange-100 text-orange-700 border-orange-200 text-xs gap-1" variant="outline">
         <Clock className="w-3 h-3" />
-        评审中
+        评价中
       </Badge>
     );
   }

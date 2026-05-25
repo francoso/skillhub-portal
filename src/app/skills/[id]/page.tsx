@@ -73,7 +73,7 @@ function getRadarData(skill: Skill) {
 
 const stageSteps: { key: SkillStage; label: string; step: number }[] = [
   { key: "personal", label: "已上线", step: 1 },
-  { key: "reviewing", label: "评审中", step: 2 },
+  { key: "reviewing", label: "评价中", step: 2 },
   { key: "certified", label: "联盟认证", step: 3 },
 ];
 
@@ -136,13 +136,13 @@ function GrowthPath({ stage, skill }: { stage: SkillStage; skill: Skill }) {
             <p>
               涉及联盟业务场景？可{" "}
               <Link href="/rules#certification" className="text-blue-600 hover:underline">
-                申请参与下月认证评审
+                申请参与下月认证评价
               </Link>
               ，通过后获得联盟官方认证标识和优先推荐。
             </p>
           )}
           {stage === "reviewing" && (
-            <p>本月评审进行中，经过 Demo 展示 + 大众评审 + 专家评审，结果将在月底公布。</p>
+            <p>本月评价进行中，经过 Demo 展示 + 大众点评官 + 专家评价，结果将在月底公布。</p>
           )}
           {stage === "certified" && (
             <div className="space-y-1">
@@ -155,7 +155,7 @@ function GrowthPath({ stage, skill }: { stage: SkillStage; skill: Skill }) {
               </p>
               {certResult && (
                 <p className="text-xs text-gray-500 mt-1">
-                  大众评审 {certResult.publicScore.toFixed(1)} 分（{certResult.publicCount} 人）· 专家评审 {certResult.expertScore.toFixed(1)} 分
+                  大众评价 {certResult.publicScore.toFixed(1)} 分（{certResult.publicCount} 人）· 专家评价 {certResult.expertScore.toFixed(1)} 分
                 </p>
               )}
             </div>

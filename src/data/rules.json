@@ -3,7 +3,7 @@
     "description": "Skill上架需要经过标准化流程审核，确保质量和可维护性",
     "steps": [
       { "step": 1, "title": "提交申请", "description": "在skillhub提交skill基本信息：名称、描述、owner、预期受众" },
-      { "step": 2, "title": "技术评审", "description": "确认skill具备标准埋点（Beacon track.sh）、错误处理、文档说明" },
+      { "step": 2, "title": "技术评估", "description": "确认skill具备标准埋点（Beacon track.sh）、错误处理、文档说明" },
       { "step": 3, "title": "Demo展示", "description": "在Demo会进行现场演示，收集反馈" },
       { "step": 4, "title": "试运行", "description": "灰度上线1周，监控调用量和完成率" },
       { "step": 5, "title": "正式上架", "description": "通过试运行后正式对全员开放" }

@@ -5,7 +5,7 @@ import { Shield, Users, Star, CheckCircle, XCircle } from "lucide-react";
 
 const statusConfig = {
   collecting: { label: "征集中", color: "bg-yellow-100 text-yellow-800" },
-  reviewing: { label: "评审中", color: "bg-blue-100 text-blue-800" },
+  reviewing: { label: "评价中", color: "bg-blue-100 text-blue-800" },
   completed: { label: "已完成", color: "bg-green-100 text-green-800" },
 };
 
@@ -32,7 +32,7 @@ export default function CertificationPage() {
         </p>
         <h1 className="text-2xl font-bold text-gray-900 mt-1">联盟认证</h1>
         <p className="text-sm text-gray-500 mt-1">
-          双轨评审机制：大众评审团 + 专家评审，共同把关 Skill 质量
+          双轨评价机制：大众点评官 + 专家评价，共同把关 Skill 质量
         </p>
       </div>
 
@@ -45,13 +45,13 @@ export default function CertificationPage() {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs text-gray-600">
             <div className="space-y-1.5">
-              <p className="font-medium text-gray-700">大众评审团（每月 10 人）</p>
+              <p className="font-medium text-gray-700">大众点评官（每月 2 人）</p>
               <p>• 从联盟产运同学中抽选</p>
               <p>• 对当期 Skill 打分（1-5）+ 写评语</p>
-              <p>• 通过条件：均分 ≥ 3.5 且 ≥ 6 人提交</p>
+              <p>• 通过条件：均分 ≥ 3.5 且 ≥ 2 人提交</p>
             </div>
             <div className="space-y-1.5">
-              <p className="font-medium text-gray-700">专家评审（各组 PM/老板）</p>
+              <p className="font-medium text-gray-700">专家评价（各组 PM/老板）</p>
               <p>• 测试验证 + 五维度打分</p>
               <p>• 维度：规范性 / 适用范围 / 联盟特色 / 可持续性 / 使用效果</p>
               <p>• 通过条件：均分 ≥ 3.0 且至少 1 位标记"通过"</p>
@@ -93,7 +93,7 @@ export default function CertificationPage() {
                   </div>
                 </div>
                 <div>
-                  <p className="text-xs text-gray-500 mb-1">评审团</p>
+                  <p className="text-xs text-gray-500 mb-1">评价团</p>
                   <div className="flex items-center gap-3 text-xs text-gray-600">
                     <span className="flex items-center gap-1">
                       <Users className="w-3 h-3" />
@@ -134,7 +134,7 @@ export default function CertificationPage() {
                   </div>
                   <div className="flex items-center gap-3 text-xs text-gray-500">
                     <span>{round.skills.length} 个 Skill 参评</span>
-                    <span>{round.publicReviewers.length + round.expertReviewers.length} 位评审</span>
+                    <span>{round.publicReviewers.length + round.expertReviewers.length} 位评价</span>
                   </div>
                 </div>
 
@@ -178,7 +178,7 @@ function ResultsTable({ roundId }: { roundId: string }) {
                 <span className={`text-sm font-semibold ${result.publicScore >= 3.5 ? "text-green-600" : "text-red-500"}`}>
                   {result.publicScore.toFixed(1)}
                 </span>
-                <p className="text-[11px] text-gray-400">{result.publicCount} 人评审</p>
+                <p className="text-[11px] text-gray-400">{result.publicCount} 人评价</p>
               </td>
               <td className="px-4 py-3 text-center">
                 <span className={`text-sm font-semibold ${result.expertScore >= 3.0 ? "text-green-600" : "text-red-500"}`}>

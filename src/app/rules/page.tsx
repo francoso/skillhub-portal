@@ -45,8 +45,8 @@ export default function RulesPage() {
               <div className="flex items-center gap-2 px-4 py-3 bg-orange-50 rounded-lg border border-orange-200 flex-1 min-w-[180px]">
                 <div className="w-6 h-6 rounded-full bg-orange-200 flex items-center justify-center text-xs font-bold text-orange-700">2</div>
                 <div>
-                  <p className="text-sm font-medium text-gray-800">评审中</p>
-                  <p className="text-xs text-gray-500">申请认证后纳入月度评审轮次</p>
+                  <p className="text-sm font-medium text-gray-800">评价中</p>
+                  <p className="text-xs text-gray-500">申请认证后纳入月度评价轮次</p>
                 </div>
               </div>
               <ArrowRight className="w-4 h-4 text-gray-300 shrink-0" />
@@ -54,7 +54,7 @@ export default function RulesPage() {
                 <div className="w-6 h-6 rounded-full bg-green-200 flex items-center justify-center text-xs font-bold text-green-700">3</div>
                 <div>
                   <p className="text-sm font-medium text-gray-800">联盟认证</p>
-                  <p className="text-xs text-gray-500">通过评审，获官方标识 + 优先推荐</p>
+                  <p className="text-xs text-gray-500">通过评价，获官方标识 + 优先推荐</p>
                 </div>
               </div>
             </div>
@@ -89,20 +89,20 @@ export default function RulesPage() {
 
           <Separator />
 
-          {/* 认证评审流程 */}
+          {/* 认证评价流程 */}
           <div>
             <div className="flex items-center gap-2 mb-3">
               <ShieldCheck className="w-4 h-4 text-green-500" />
-              <h3 className="text-sm font-medium text-gray-700">认证：月度评审流程</h3>
+              <h3 className="text-sm font-medium text-gray-700">认证：月度评价流程</h3>
             </div>
             <p className="text-xs text-gray-500 mb-3">
-              涉及联盟业务场景的 Skill，可申请参与月度认证评审。通过后获得联盟官方认证标识和优先推荐位。
+              涉及联盟业务场景的 Skill，可申请参与月度认证评价。通过后获得联盟官方认证标识和优先推荐位。
             </p>
             <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
               {[
                 { step: "申请参评", desc: "Owner 主动申请，需 Skill 已上线且有实际用户" },
                 { step: "Demo 会展示", desc: "在月度 Demo 会现场演示核心能力和业务价值" },
-                { step: "大众 + 专家评审", desc: "大众（6-10 人打分）+ 专家 PM（维度评审）" },
+                { step: "大众 + 专家评价", desc: "大众点评官（2 名一线用户打分）+ 专家 PM（维度评价）" },
                 { step: "结果公布", desc: "月底公布，通过者获得认证标识" },
               ].map((item, idx) => (
                 <div key={idx} className="p-3 bg-blue-50 rounded-lg">
@@ -121,12 +121,12 @@ export default function RulesPage() {
             <h3 className="text-sm font-medium text-gray-700 mb-3">通过条件</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               <div className="p-3 bg-green-50 rounded-lg border border-green-100">
-                <p className="text-sm font-medium text-green-800">大众评审通过</p>
-                <p className="text-xs text-green-600 mt-1">均分 ≥ 3.5 分，且参评人数 ≥ 6 人</p>
+                <p className="text-sm font-medium text-green-800">大众点评官通过</p>
+                <p className="text-xs text-green-600 mt-1">均分 ≥ 3.5 分，且参评人数 ≥ 2 人</p>
               </div>
               <div className="p-3 bg-green-50 rounded-lg border border-green-100">
-                <p className="text-sm font-medium text-green-800">专家评审通过</p>
-                <p className="text-xs text-green-600 mt-1">均分 ≥ 3.0 分，至少 1 位专家评审通过</p>
+                <p className="text-sm font-medium text-green-800">专家评价通过</p>
+                <p className="text-xs text-green-600 mt-1">均分 ≥ 3.0 分，至少 1 位专家评价通过</p>
               </div>
             </div>
             <p className="text-xs text-gray-500 mt-3">

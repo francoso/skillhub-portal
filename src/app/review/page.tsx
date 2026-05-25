@@ -66,7 +66,7 @@ export default function ReviewPage() {
           <ArrowLeft className="w-4 h-4" /> 返回首页
         </Link>
         <div className="text-center py-12">
-          <p className="text-gray-500">当前没有待评审的任务</p>
+          <p className="text-gray-500">当前没有待评价的任务</p>
         </div>
       </div>
     );
@@ -83,7 +83,7 @@ export default function ReviewPage() {
 
       <div>
         <h1 className="text-2xl font-bold text-gray-900">
-          本月大众评审（{round.month}）
+          本月大众点评官（{round.month}）
         </h1>
         <p className="text-sm text-gray-500 mt-1">
           请对以下 Skill 进行评分和评语，你的反馈将帮助 Skill 持续改进
@@ -97,17 +97,17 @@ export default function ReviewPage() {
             <CheckCircle2 className="w-5 h-5 text-green-600" />
             <div>
               <p className="text-sm font-medium text-green-800">
-                感谢参与本月评审！
+                感谢参与本月评价！
               </p>
               <p className="text-xs text-green-600 mt-0.5">
-                你的评分已记录，评审结果将在本轮结束后公布
+                你的评分已记录，评价结果将在本轮结束后公布
               </p>
             </div>
           </CardContent>
         </Card>
       )}
 
-      {/* Skill 评审卡片 */}
+      {/* Skill 评价卡片 */}
       <div className="space-y-4">
         {skills.map((skill) => {
           const review = reviews[skill.id];
@@ -225,7 +225,7 @@ export default function ReviewPage() {
                       : "bg-gray-100 text-gray-400 cursor-not-allowed"
                   }`}
                 >
-                  提交评审
+                  提交评价
                 </button>
               </CardContent>
             </Card>
