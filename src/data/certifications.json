@@ -4,19 +4,18 @@
       "id": "round-2026-05",
       "month": "2026-05",
       "status": "reviewing",
-      "skills": ["template-review", "market-insight", "budget-diagnose"],
+      "skills": ["template-query", "ad-style-capture", "template-rule-check"],
       "publicReviewers": ["员工A", "员工B"],
-      "expertReviewers": ["PM-形态", "PM-预算", "PM-市场"],
-      "_expertNote": "每个 Skill 分配 1 位对口专家",
+      "expertReviewers": ["PM-形态", "PM-样式", "PM-规则"],
       "_expertNote": "每个 Skill 分配 1 位对口专家"
     },
     {
       "id": "round-2026-04",
       "month": "2026-04",
       "status": "completed",
-      "skills": ["traffic-forecast", "ad-competition-queue", "ai-mentor"],
+      "skills": ["data-analysis-assistant", "ad-competition-queue", "traffic-forecast"],
       "publicReviewers": ["员工K", "员工L"],
-      "expertReviewers": ["PM-预算", "PM-变现", "PM-平台"],
+      "expertReviewers": ["PM-数据", "PM-变现", "PM-流量"],
       "_expertNote": "每个 Skill 分配 1 位对口专家"
     }
   ],
@@ -24,98 +23,116 @@
     {
       "id": "rev-001",
       "roundId": "round-2026-04",
-      "skillId": "traffic-forecast",
+      "skillId": "data-analysis-assistant",
       "reviewerName": "员工K",
       "reviewerType": "public",
       "score": 4,
-      "comment": "预测准确率不错，界面简洁好用",
+      "comment": "数据查询能力不错，整合了多个分析场景",
       "submittedAt": "2026-04-25"
     },
     {
       "id": "rev-002",
       "roundId": "round-2026-04",
-      "skillId": "traffic-forecast",
+      "skillId": "data-analysis-assistant",
       "reviewerName": "员工L",
       "reviewerType": "public",
       "score": 4,
-      "comment": "对日常预算工作有实际帮助",
+      "comment": "预算诊断功能对日常工作有帮助",
       "submittedAt": "2026-04-25"
+    },
+    {
+      "id": "rev-003",
+      "roundId": "round-2026-04",
+      "skillId": "data-analysis-assistant",
+      "reviewerName": "PM-数据",
+      "reviewerType": "expert",
+      "score": 4,
+      "comment": "整合度高，联盟场景覆盖好，建议增加更多可视化输出",
+      "dimensions": { "normative": 4, "applicability": 5, "unionFeature": 4, "sustainability": 3, "effectiveness": 4 },
+      "submittedAt": "2026-04-28"
+    },
+    {
+      "id": "rev-004",
+      "roundId": "round-2026-04",
+      "skillId": "ad-competition-queue",
+      "reviewerName": "员工K",
+      "reviewerType": "public",
+      "score": 4,
+      "comment": "竞争队列漏斗分析很实用，能快速看到问题",
+      "submittedAt": "2026-04-25"
+    },
+    {
+      "id": "rev-005",
+      "roundId": "round-2026-04",
+      "skillId": "ad-competition-queue",
+      "reviewerName": "员工L",
+      "reviewerType": "public",
+      "score": 3,
+      "comment": "错误码分析有参考价值，部分场景覆盖不全",
+      "submittedAt": "2026-04-25"
+    },
+    {
+      "id": "rev-006",
+      "roundId": "round-2026-04",
+      "skillId": "ad-competition-queue",
+      "reviewerName": "PM-变现",
+      "reviewerType": "expert",
+      "score": 4,
+      "comment": "联盟特色明显，漏斗分析对变现调优有直接价值",
+      "dimensions": { "normative": 3, "applicability": 4, "unionFeature": 5, "sustainability": 3, "effectiveness": 4 },
+      "submittedAt": "2026-04-28"
     },
     {
       "id": "rev-007",
       "roundId": "round-2026-04",
       "skillId": "traffic-forecast",
-      "reviewerName": "PM-预算",
-      "reviewerType": "expert",
+      "reviewerName": "员工K",
+      "reviewerType": "public",
       "score": 4,
-      "comment": "规范性好，适用于联盟预算场景，建议增加异常波动预警",
-      "dimensions": { "normative": 4, "applicability": 5, "unionFeature": 4, "sustainability": 3, "effectiveness": 4 },
-      "submittedAt": "2026-04-28"
+      "comment": "流量预估结合节假日因子这点很实用",
+      "submittedAt": "2026-04-25"
     },
     {
       "id": "rev-008",
       "roundId": "round-2026-04",
-      "skillId": "ad-competition-queue",
-      "reviewerName": "员工K",
+      "skillId": "traffic-forecast",
+      "reviewerName": "员工L",
       "reviewerType": "public",
-      "score": 3,
-      "comment": "分析结果有参考价值，但交互略复杂",
+      "score": 4,
+      "comment": "自动写入企微文档省了不少手动操作",
       "submittedAt": "2026-04-25"
     },
     {
       "id": "rev-009",
       "roundId": "round-2026-04",
-      "skillId": "ad-competition-queue",
-      "reviewerName": "员工L",
-      "reviewerType": "public",
-      "score": 4,
-      "comment": "能快速看到竞争队列状态",
-      "submittedAt": "2026-04-25"
-    },
-    {
-      "id": "rev-014",
-      "roundId": "round-2026-04",
-      "skillId": "ad-competition-queue",
-      "reviewerName": "PM-变现",
-      "reviewerType": "expert",
-      "score": 3,
-      "comment": "联盟特色明显，建议标准化输出格式以便横向对比",
-      "dimensions": { "normative": 3, "applicability": 4, "unionFeature": 5, "sustainability": 3, "effectiveness": 3 },
-      "submittedAt": "2026-04-28"
-    },
-    {
-      "id": "rev-015",
-      "roundId": "round-2026-04",
-      "skillId": "ai-mentor",
-      "reviewerName": "员工K",
-      "reviewerType": "public",
-      "score": 5,
-      "comment": "新人入职时用了这个，确实省了很多问人的时间",
-      "submittedAt": "2026-04-25"
-    },
-    {
-      "id": "rev-016",
-      "roundId": "round-2026-04",
-      "skillId": "ai-mentor",
-      "reviewerName": "员工L",
-      "reviewerType": "public",
-      "score": 4,
-      "comment": "回答质量不错，偶尔有信息过时",
-      "submittedAt": "2026-04-25"
-    },
-    {
-      "id": "rev-021",
-      "roundId": "round-2026-04",
-      "skillId": "ai-mentor",
-      "reviewerName": "PM-平台",
+      "skillId": "traffic-forecast",
+      "reviewerName": "PM-流量",
       "reviewerType": "expert",
       "score": 4,
-      "comment": "创意好，联盟特色强，建议定期更新知识库保证时效性",
-      "dimensions": { "normative": 3, "applicability": 5, "unionFeature": 4, "sustainability": 4, "effectiveness": 5 },
+      "comment": "端到端自动化程度高，建议增加预估准确率回测机制",
+      "dimensions": { "normative": 4, "applicability": 4, "unionFeature": 4, "sustainability": 4, "effectiveness": 4 },
       "submittedAt": "2026-04-28"
     }
   ],
   "results": [
+    {
+      "skillId": "data-analysis-assistant",
+      "roundId": "round-2026-04",
+      "passed": true,
+      "publicScore": 4.0,
+      "expertScore": 4.0,
+      "publicCount": 2,
+      "summary": "大众评价均分4.0（2人），专家评价4.0分通过。数据整合能力强，联盟场景覆盖好。"
+    },
+    {
+      "skillId": "ad-competition-queue",
+      "roundId": "round-2026-04",
+      "passed": true,
+      "publicScore": 3.5,
+      "expertScore": 4.0,
+      "publicCount": 2,
+      "summary": "大众评价均分3.5（2人），专家评价4.0分通过。联盟特色突出，漏斗分析实用。"
+    },
     {
       "skillId": "traffic-forecast",
       "roundId": "round-2026-04",
@@ -123,25 +140,7 @@
       "publicScore": 4.0,
       "expertScore": 4.0,
       "publicCount": 2,
-      "summary": "大众评价均分4.0（2人），专家评价4.0分通过。流量预估能力实用，建议增加异常预警。"
-    },
-    {
-      "skillId": "ad-competition-queue",
-      "roundId": "round-2026-04",
-      "passed": true,
-      "publicScore": 3.5,
-      "expertScore": 3.0,
-      "publicCount": 2,
-      "summary": "大众评价均分3.5（2人），专家评价3.0分通过。联盟特色突出，交互可优化。"
-    },
-    {
-      "skillId": "ai-mentor",
-      "roundId": "round-2026-04",
-      "passed": true,
-      "publicScore": 4.3,
-      "expertScore": 4.0,
-      "publicCount": 2,
-      "summary": "大众评价均分4.3（2人），专家评价4.0分通过。新人导师深受好评，需注意知识时效性维护。"
+      "summary": "大众评价均分4.0（2人），专家评价4.0分通过。端到端自动化程度高。"
     }
   ]
 }

@@ -1,0 +1,184 @@
+[
+  {
+    "workflow": "市场分析",
+    "modules": [
+      {
+        "name": "基本面分析",
+        "tasks": [
+          { "content": "行业基本面盘点", "businessType": "分赛道建设", "status": "building", "skillId": null },
+          { "content": "媒体商业化分析", "businessType": "分赛道建设", "status": "building", "skillId": null },
+          { "content": "流量市场洞察", "businessType": "APP流量", "status": "covered", "skillId": "market-insight" }
+        ]
+      },
+      {
+        "name": "竞品对标",
+        "tasks": [
+          { "content": "竞品广告产品对标", "businessType": "通用", "status": "unclaimed", "skillId": null },
+          { "content": "竞品份额监测", "businessType": "通用", "status": "unclaimed", "skillId": null }
+        ]
+      },
+      {
+        "name": "异动分析",
+        "tasks": [
+          { "content": "集团颗粒度异动分析", "businessType": "通用", "status": "covered", "skillId": "group-fluctuation" },
+          { "content": "媒体UV波动分析", "businessType": "通用", "status": "covered", "skillId": "media-uv-analysis" },
+          { "content": "联盟大盘收入波动分析", "businessType": "通用", "status": "covered", "skillId": "revenue-fluctuation" }
+        ]
+      },
+      {
+        "name": "运营报告",
+        "tasks": [
+          { "content": "开发者运营月报", "businessType": "通用", "status": "covered", "skillId": "monthly-report" },
+          { "content": "周报自动化生成", "businessType": "通用", "status": "unclaimed", "skillId": null }
+        ]
+      }
+    ]
+  },
+  {
+    "workflow": "变现调优",
+    "modules": [
+      {
+        "name": "数据分析",
+        "tasks": [
+          { "content": "广告数据智能分析", "businessType": "通用", "status": "covered", "skillId": "data-analysis-assistant" },
+          { "content": "竞争队列分析", "businessType": "通用", "status": "covered", "skillId": "ad-competition-queue" },
+          { "content": "广告位跨天曝光/点击查询", "businessType": "厂商流量", "status": "covered", "skillId": "ad-slot-query" }
+        ]
+      },
+      {
+        "name": "预算优化",
+        "tasks": [
+          { "content": "预算渗透差异分析", "businessType": "通用", "status": "covered", "skillId": "budget-penetration" },
+          { "content": "预算开口诊断", "businessType": "通用", "status": "building", "skillId": null },
+          { "content": "预算分配建议", "businessType": "通用", "status": "unclaimed", "skillId": null }
+        ]
+      },
+      {
+        "name": "流量优化",
+        "tasks": [
+          { "content": "联盟流量预估", "businessType": "通用", "status": "covered", "skillId": "traffic-forecast" },
+          { "content": "厂商分场景消耗分析", "businessType": "厂商流量", "status": "covered", "skillId": "vendor-scene-analysis" },
+          { "content": "广告位样式分布差异对比", "businessType": "通用", "status": "covered", "skillId": "ad-style-distribution" }
+        ]
+      },
+      {
+        "name": "eCPM调优",
+        "tasks": [
+          { "content": "eCPM分层分析", "businessType": "通用", "status": "building", "skillId": null },
+          { "content": "出价策略优化建议", "businessType": "通用", "status": "unclaimed", "skillId": null }
+        ]
+      }
+    ]
+  },
+  {
+    "workflow": "客户服务",
+    "modules": [
+      {
+        "name": "拜访准备",
+        "tasks": [
+          { "content": "开发者运营拜访文档生成", "businessType": "分赛道建设", "status": "covered", "skillId": "visit-doc-generator" },
+          { "content": "厂商出差材料自动化", "businessType": "厂商流量", "status": "covered", "skillId": "vendor-trip-material" }
+        ]
+      },
+      {
+        "name": "拜访跟进",
+        "tasks": [
+          { "content": "开发者拜访纪要", "businessType": "分赛道建设", "status": "covered", "skillId": "visit-summary" },
+          { "content": "TODO自动跟踪", "businessType": "通用", "status": "unclaimed", "skillId": null }
+        ]
+      },
+      {
+        "name": "新人培训",
+        "tasks": [
+          { "content": "新人AI导师", "businessType": "通用", "status": "covered", "skillId": "ai-mentor" },
+          { "content": "业务知识库问答", "businessType": "通用", "status": "building", "skillId": null }
+        ]
+      },
+      {
+        "name": "客户需求",
+        "tasks": [
+          { "content": "客户需求收集", "businessType": "通用", "status": "unclaimed", "skillId": null },
+          { "content": "客户满意度追踪", "businessType": "通用", "status": "unclaimed", "skillId": null }
+        ]
+      }
+    ]
+  },
+  {
+    "workflow": "流量接入",
+    "modules": [
+      {
+        "name": "接入审核",
+        "tasks": [
+          { "content": "ROI过滤放开提报", "businessType": "APP流量", "status": "covered", "skillId": "roi-filter-release" },
+          { "content": "新媒体接入评估", "businessType": "APP流量", "status": "unclaimed", "skillId": null }
+        ]
+      },
+      {
+        "name": "冷启扶持",
+        "tasks": [
+          { "content": "冷启流量扶持方案", "businessType": "APP流量", "status": "building", "skillId": null },
+          { "content": "冷启效果追踪", "businessType": "APP流量", "status": "unclaimed", "skillId": null }
+        ]
+      },
+      {
+        "name": "SDK对接",
+        "tasks": [
+          { "content": "SDK接入指引", "businessType": "通用", "status": "unclaimed", "skillId": null },
+          { "content": "接入问题诊断", "businessType": "通用", "status": "unclaimed", "skillId": null }
+        ]
+      }
+    ]
+  },
+  {
+    "workflow": "形态样式",
+    "modules": [
+      {
+        "name": "模板管理",
+        "tasks": [
+          { "content": "模板相关查询", "businessType": "APP流量", "status": "covered", "skillId": "template-query" },
+          { "content": "模板规则审查", "businessType": "APP流量", "status": "covered", "skillId": "template-rule-check" }
+        ]
+      },
+      {
+        "name": "样式采集",
+        "tasks": [
+          { "content": "开/插屏广告样式收集", "businessType": "APP流量", "status": "covered", "skillId": "ad-style-capture" },
+          { "content": "竞品样式对标采集", "businessType": "通用", "status": "unclaimed", "skillId": null }
+        ]
+      },
+      {
+        "name": "样式分析",
+        "tasks": [
+          { "content": "样式效果归因", "businessType": "通用", "status": "building", "skillId": null },
+          { "content": "样式CTR预估", "businessType": "通用", "status": "unclaimed", "skillId": null }
+        ]
+      }
+    ]
+  },
+  {
+    "workflow": "体验管理",
+    "modules": [
+      {
+        "name": "素材审核",
+        "tasks": [
+          { "content": "素材体验管理", "businessType": "通用", "status": "covered", "skillId": "material-experience" },
+          { "content": "素材合规预检", "businessType": "通用", "status": "unclaimed", "skillId": null }
+        ]
+      },
+      {
+        "name": "屏蔽管理",
+        "tasks": [
+          { "content": "屏蔽规则配置", "businessType": "通用", "status": "building", "skillId": null },
+          { "content": "屏蔽诊断报告", "businessType": "通用", "status": "building", "skillId": null }
+        ]
+      },
+      {
+        "name": "用户体验",
+        "tasks": [
+          { "content": "广告体验评分", "businessType": "通用", "status": "unclaimed", "skillId": null },
+          { "content": "负反馈分析", "businessType": "通用", "status": "unclaimed", "skillId": null }
+        ]
+      }
+    ]
+  }
+]

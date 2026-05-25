@@ -89,10 +89,13 @@ export function getStats() {
   const contributors = getContributors();
   const metrics = getMetrics();
 
+  // Count unique owners from skills as real contributor count
+  const uniqueOwners = new Set(skills.map((s) => s.owner)).size;
+
   return {
     totalSkills: skills.length,
     activeSkills: skills.filter((s) => s.status === "active").length,
-    totalContributors: contributors.length,
+    totalContributors: uniqueOwners,
     monthlyInvokes: metrics.monthlyInvokes,
     totalInvokes: metrics.totalInvokes,
   };

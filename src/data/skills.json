@@ -1,372 +1,459 @@
 [
   {
-    "id": "traffic-forecast",
-    "slug": "tad-traffic-forecast",
-    "name": "流量预估助手",
-    "description": "基于历史数据和季节性模型预测联盟广告流量趋势，辅助预算分配和投放节奏规划。支持按行业/位置/时段维度预估。",
-    "owner": "朋哥",
+    "id": "data-analysis-assistant",
+    "slug": "@alliance/data-analysis-assistant",
+    "name": "联盟广告数据智能分析助手",
+    "description": "整合了算力业务分析、通用数据查询与预算开口诊断三大能力",
+    "owner": "vicyanzhang",
     "team": "联盟产品",
-    "contributors": [
-      "朋哥",
-      "jx",
-      "腾飞"
-    ],
-    "category": "市场分析",
-    "businessType": "通用",
-    "status": "active",
-    "createdAt": "2025-11-15",
-    "updatedAt": "2026-05-18",
-    "demoSessionId": 2,
-    "metrics": {
-      "_source": "mock_beacon",
-      "invokeCount": 890,
-      "completionRate": 0.91,
-      "activeUsers": 15,
-      "lastSyncAt": "2026-05-20"
-    },
-    "score": 82,
-    "certified": true,
-    "certifiedAt": "2026-04-30",
-    "certificationRoundId": "round-2026-04",
-    "downloadUrl": "https://knot.woa.com/skill/traffic-forecast/download",
-    "readme": "# 流量预估助手\n\n基于历史Beacon埋点数据+季节性时间序列模型，预测联盟广告未来7/14/30天的流量趋势。\n\n## 使用方式\n\n对话中直接输入预估需求，如：\"帮我预估下周游戏行业banner位的流量\"\n支持维度：行业、广告位、时段、地域\n\n## 输入输出示例\n\n输入：\"预估未来7天厂商流量整体趋势\"\n输出：返回每日预估请求量、预计波动区间、同比/环比变化率，附带趋势图表链接\n\n## 注意事项\n\n- 模型基于近90天历史数据训练，节假日和大促期间会自动切换为特殊日历模式\n- 预估结果仅供参考，实际流量受竞价策略和预算变化影响\n- 首次使用需授权Beacon数据读取权限"
-  },
-  {
-    "id": "ad-competition-queue",
-    "slug": "tad-ad-competition-queue",
-    "name": "广告竞争队列分析",
-    "description": "实时分析广告竞争队列状态，识别出价竞争热度和排队深度，帮助运营优化投放策略和变现效率。",
-    "owner": "ken哥",
-    "team": "联盟运营",
-    "contributors": [
-      "ken哥",
-      "赵姐"
-    ],
+    "contributors": [],
     "category": "变现调优",
     "businessType": "通用",
     "status": "active",
-    "createdAt": "2026-01-10",
-    "updatedAt": "2026-05-17",
-    "demoSessionId": 2,
+    "createdAt": "2026-03-01",
+    "updatedAt": "2026-05-20",
+    "downloadUrl": "https://knot.woa.com/skills/detail/13741",
     "metrics": {
       "_source": "mock_beacon",
-      "invokeCount": 650,
-      "completionRate": 0.87,
-      "activeUsers": 11,
-      "lastSyncAt": "2026-05-20"
+      "invokeCount": 19,
+      "completionRate": 0.91,
+      "activeUsers": 8
     },
-    "score": 75,
-    "certified": true,
-    "certifiedAt": "2026-04-30",
-    "certificationRoundId": "round-2026-04",
-    "downloadUrl": "https://knot.woa.com/skill/ad-competition-queue/download",
-    "readme": "# 广告竞争队列分析\n\n实时拉取广告竞价队列快照，分析当前竞争热度、排队深度和出价分布。\n\n## 使用方式\n\n输入广告位ID或行业关键词，获取当前队列状态分析。\n支持实时查询和定时监控两种模式。\n\n## 输入输出示例\n\n输入：\"分析banner_top位置当前竞争情况\"\n输出：当前排队广告主数量、平均出价、Top3竞争者出价区间、建议出价范围、队列深度趋势\n\n## 注意事项\n\n- 数据延迟约5分钟，非严格实时\n- 出价建议基于历史胜出率计算，不保证竞得\n- 高峰时段（10:00-12:00, 20:00-22:00）队列波动较大，建议多次查询取均值"
+    "readme": "# 联盟广告数据智能分析助手\n\n整合算力业务分析、通用数据查询与预算开口诊断，一站式解决联盟广告数据分析需求。\n\n## 核心能力\n- 算力业务分析：自动拉取算力消耗数据，生成趋势报告\n- 通用数据查询：自然语言转SQL，支持联盟核心数据表\n- 预算开口诊断：识别预算消耗异常并给出归因\n\n## 使用方式\n对话中直接描述分析需求，系统自动路由到对应能力模块。\n\n## 注意事项\n- 数据权限基于RTX账号自动鉴权\n- 大数据量查询建议指定时间范围"
+  },
+  {
+    "id": "ad-competition-queue",
+    "slug": "@alliance/ad-competition-queue",
+    "name": "联盟广告竞争队列分析",
+    "description": "预算x流量，竞争队列漏斗打开&错误码分析",
+    "owner": "towelyang",
+    "team": "联盟产品",
+    "contributors": [],
+    "category": "变现调优",
+    "businessType": "通用",
+    "status": "active",
+    "createdAt": "2026-03-05",
+    "updatedAt": "2026-05-21",
+    "downloadUrl": "https://knot.woa.com/skills/detail/6013",
+    "metrics": {
+      "_source": "mock_beacon",
+      "invokeCount": 24,
+      "completionRate": 0.87,
+      "activeUsers": 10
+    },
+    "readme": "# 联盟广告竞争队列分析\n\n从预算侧和流量侧双视角，打开竞争队列漏斗，定位错误码分布和竞价失败原因。\n\n## 核心能力\n- 预算x流量交叉分析\n- 竞争队列漏斗逐层拆解\n- 错误码聚类分析与趋势追踪\n\n## 使用方式\n输入广告位或媒体维度，自动拉取队列数据并生成漏斗分析报告。\n\n## 注意事项\n- 支持按天/按小时粒度分析\n- 错误码含义参考联盟错误码文档"
+  },
+  {
+    "id": "visit-doc-generator",
+    "slug": "@alliance/visit-doc-generator",
+    "name": "开发者运营拜访文档生成",
+    "description": "根据用户提供的媒体/合作方信息，自动生成结构完整的广告联盟商业化拜访文档",
+    "owner": "kellycong",
+    "team": "联盟产品",
+    "contributors": [],
+    "category": "客户服务",
+    "businessType": "分赛道建设",
+    "status": "active",
+    "createdAt": "2026-03-10",
+    "updatedAt": "2026-05-18",
+    "downloadUrl": "https://knot.woa.com/skills/detail/12744",
+    "metrics": {
+      "_source": "mock_beacon",
+      "invokeCount": 11,
+      "completionRate": 0.89,
+      "activeUsers": 5
+    },
+    "readme": "# 开发者运营拜访文档生成\n\n输入媒体或合作方基本信息，自动生成结构完整的广告联盟商业化拜访文档。\n\n## 核心能力\n- 自动拉取媒体历史合作数据\n- 生成标准化拜访文档（含数据摘要、沟通要点、历史纪要）\n- 支持自定义模板\n\n## 使用方式\n提供媒体名称/ID + 拜访目的，即可生成文档。\n\n## 注意事项\n- 生成文档为初稿，建议人工校验关键数据\n- 支持导出为企微文档格式"
   },
   {
     "id": "ai-mentor",
-    "slug": "tad-ai-mentor",
-    "name": "联盟新人导师",
-    "description": "基于联盟知识库的AI新人导师，快速回答联盟业务、流程、工具等常见问题，加速新人融入团队。",
-    "owner": "jx",
+    "slug": "@alliance/ai-mentor",
+    "name": "新人AI导师",
+    "description": "产品运营中心的新人学习档案记录与辅导技能，包括学习记录、推荐延展材料、生成周报",
+    "owner": "maxieli",
     "team": "联盟产品",
-    "contributors": [
-      "jx",
-      "一一"
-    ],
-    "category": "客户服务",
-    "businessType": "通用",
-    "status": "active",
-    "createdAt": "2026-02-01",
-    "updatedAt": "2026-05-20",
-    "metrics": {
-      "_source": "mock_beacon",
-      "invokeCount": 780,
-      "completionRate": 0.93,
-      "activeUsers": 20,
-      "lastSyncAt": "2026-05-20"
-    },
-    "score": 88,
-    "certified": true,
-    "certifiedAt": "2026-04-30",
-    "certificationRoundId": "round-2026-04",
-    "downloadUrl": "https://knot.woa.com/skill/ai-mentor/download",
-    "readme": "# 联盟新人导师\n\n基于联盟内部知识库（KM文档、流程SOP、工具手册）构建的AI问答助手，覆盖联盟业务全流程FAQ。\n\n## 使用方式\n\n直接用自然语言提问，如：\"联盟广告的结算流程是什么？\" \"怎么申请TAPD权限？\"\n支持追问和上下文关联。\n\n## 输入输出示例\n\n输入：\"新建一个广告位需要走什么流程\"\n输出：分步骤说明流程节点、需要的审批人、预计耗时，并附上相关KM文档链接\n\n## 注意事项\n\n- 知识库每周一自动同步最新KM文档，新发布的文档可能有1-7天延迟\n- 涉及权限申请类问题会直接给出iOA申请链接\n- 回答不确定时会标注\"建议确认\"并给出可咨询的负责人"
-  },
-  {
-    "id": "datong-report",
-    "slug": "tad-datong-report-beacon",
-    "name": "大同数据报告",
-    "description": "基于Beacon埋点数据自动生成联盟广告投放效果报告，支持多维度筛选和趋势分析。无研发自闭环的标杆案例。",
-    "owner": "jx",
-    "team": "联盟产品",
-    "contributors": [
-      "jx",
-      "堂伟"
-    ],
-    "category": "市场分析",
-    "businessType": "通用",
-    "status": "active",
-    "createdAt": "2025-12-01",
-    "updatedAt": "2026-05-15",
-    "demoSessionId": 1,
-    "metrics": {
-      "_source": "mock_beacon",
-      "invokeCount": 1247,
-      "completionRate": 0.92,
-      "activeUsers": 18,
-      "lastSyncAt": "2026-05-20"
-    },
-    "score": 85,
-    "downloadUrl": "https://knot.woa.com/skill/datong-report/download",
-    "readme": "# 大同数据报告\n\n自动从Beacon埋点系统拉取联盟广告投放数据，生成标准化效果报告。产运无需研发介入即可完成数据分析闭环。\n\n## 使用方式\n\n指定时间范围和筛选维度，自动生成报告。\n示例：\"生成上周厂商流量的投放效果报告，按行业拆分\"\n\n## 输入输出示例\n\n输入：\"本月APP流量变现报告，对比上月\"\n输出：包含请求量/填充率/展示量/eCPM/收入等核心指标的结构化报告，含环比变化和异常标注\n\n## 注意事项\n\n- 数据口径对齐Beacon标准埋点，与大盘报表一致\n- 报告生成耗时约10-30秒，数据量大时可能更久\n- 支持导出为表格格式，可直接粘贴到文档/邮件"
-  },
-  {
-    "id": "formhub-demo",
-    "slug": "tad-formhub-workstation",
-    "name": "联盟样式一站式工作台",
-    "description": "联盟样式一站式工作台，集成AI对话入口+标签页模块+工作流引擎，覆盖全景总览/生产/规则配置/洞察归因/问题排查等模块",
-    "owner": "一一",
-    "team": "联盟产品",
-    "contributors": [
-      "一一",
-      "jx"
-    ],
-    "category": "流量接入",
-    "businessType": "通用",
-    "status": "active",
-    "createdAt": "2026-01-01",
-    "updatedAt": "2026-05-20",
-    "repoUrl": "https://yi0702.github.io/formhub-demo",
-    "demoSessionId": 1,
-    "metrics": {
-      "_source": "mock_beacon",
-      "invokeCount": 2100,
-      "completionRate": 0.95,
-      "activeUsers": 25,
-      "lastSyncAt": "2026-05-20"
-    },
-    "score": 92,
-    "downloadUrl": "https://knot.woa.com/skill/formhub-demo/download",
-    "readme": "# 联盟样式一站式工作台\n\n集成式工作台，将样式管理全流程（总览→生产→配置→归因→排查）整合到一个AI驱动的界面中。\n\n## 使用方式\n\n通过标签页切换不同模块，或直接在AI对话框输入需求自动路由到对应功能。\n支持自然语言触发工作流，如：\"帮我查下昨天新上线的样式效果\"\n\n## 输入输出示例\n\n输入：\"banner_v3样式在游戏行业的CTR表现如何\"\n输出：该样式近7天CTR趋势、与同类样式对比、分媒体表现明细，支持一键跳转到归因分析\n\n## 注意事项\n\n- 工作台集成了多个子skill，首次加载可能需要10秒左右\n- 规则配置模块的修改会触发审批流，非实时生效\n- AI对话入口支持多轮上下文，复杂分析建议分步提问"
-  },
-  {
-    "id": "shield-diagnose",
-    "slug": "tad-shield-diagnose-report",
-    "name": "屏蔽诊断报告",
-    "description": "自动分析广告屏蔽原因，基于jiaqi现有数据输出重新定义报告形式，生成诊断报告并给出优化建议。产品化设计中。",
-    "owner": "jx",
-    "team": "联盟产品",
-    "contributors": [
-      "jx",
-      "jiaqi",
-      "储哥"
-    ],
-    "category": "体验管理",
-    "businessType": "通用",
-    "status": "developing",
-    "createdAt": "2026-04-01",
-    "updatedAt": "2026-05-21",
-    "metrics": {
-      "_source": "manual",
-      "invokeCount": 0,
-      "completionRate": 0,
-      "activeUsers": 0
-    },
-    "downloadUrl": "https://knot.woa.com/skill/shield-diagnose/download",
-    "readme": "# 屏蔽诊断报告\n\n[开发中] 自动诊断广告被屏蔽的原因分布，基于现有屏蔽数据能力生成结构化诊断报告。\n\n## 使用方式\n\n输入媒体ID或广告位ID，获取该维度下的屏蔽原因诊断。\n计划支持：按时间段对比、Top消耗屏蔽原因排序、优化建议生成。\n\n## 输入输出示例（设计中）\n\n输入：\"诊断media_123上周的屏蔽情况\"\n输出：屏蔽原因TOP5分布、各原因占比趋势、与大盘对比的异常项、可操作的优化建议\n\n## 注意事项\n\n- 当前处于产品化设计阶段，数据能力已具备但展示形式仍在迭代\n- 底层数据由jiaqi的屏蔽分析模块提供\n- 预计6月上线第一版可用产品"
-  },
-  {
-    "id": "union-warmth",
-    "slug": "tad-union-warmth-ambassador",
-    "name": "联盟送温暖需求大使",
-    "description": "面向联盟客户的需求管理skill，自动收集整理客户反馈和需求，提升服务响应效率",
-    "owner": "堂伟",
-    "team": "联盟运营",
-    "contributors": [
-      "堂伟"
-    ],
+    "contributors": [],
     "category": "客户服务",
     "businessType": "通用",
     "status": "active",
     "createdAt": "2026-03-15",
-    "updatedAt": "2026-05-21",
-    "repoUrl": "https://t5pgokp3-281530b0ba438e0c1f1d836a93b57314e267f2e8.preview.with.woa.com/",
-    "demoSessionId": 3,
+    "updatedAt": "2026-05-22",
+    "downloadUrl": "https://knot.woa.com/skills/detail/19764",
     "metrics": {
       "_source": "mock_beacon",
-      "invokeCount": 520,
-      "completionRate": 0.88,
-      "activeUsers": 8,
-      "lastSyncAt": "2026-05-20"
+      "invokeCount": 1,
+      "completionRate": 0.92,
+      "activeUsers": 2
     },
-    "score": 72,
-    "downloadUrl": "https://knot.woa.com/skill/union-warmth/download",
-    "readme": "# 联盟送温暖需求大使\n\n自动收集、分类和跟踪联盟客户的需求和反馈，生成需求看板和响应报告。\n\n## 使用方式\n\n客户通过企微/邮件提交需求后，skill自动识别并归类。\n运营可通过对话查询需求状态：\"本周有哪些新需求？\" \"XX客户的需求处理到哪了？\"\n\n## 输入输出示例\n\n输入：\"汇总本周未处理的客户需求\"\n输出：按优先级排序的需求列表，含客户名称、需求摘要、提交时间、当前状态、建议处理人\n\n## 注意事项\n\n- 需求分类基于关键词匹配+LLM语义理解，准确率约90%\n- 紧急需求会自动触发企微通知推送给对应负责人\n- 每周五自动生成本周需求响应率报告"
+    "readme": "# 新人AI导师\n\n产品运营中心新人学习全流程辅导，从学习记录到周报生成一站式覆盖。\n\n## 核心能力\n- 学习档案记录与追踪\n- 智能推荐延展学习材料\n- 自动生成学习周报\n\n## 使用方式\n新人入职后绑定导师Skill，日常学习内容自动记录，周末自动生成周报。\n\n## 注意事项\n- 推荐材料基于联盟内部KM知识库\n- 周报模板可自定义"
   },
   {
-    "id": "vendor-visit",
-    "slug": "tad-vendor-visit-prep",
-    "name": "厂商拜访材料",
-    "description": "自动生成厂商拜访前的背景材料、数据摘要和沟通建议，提升BD拜访效率",
-    "owner": "赵姐",
-    "team": "联盟商务",
-    "contributors": [
-      "赵姐",
-      "ken哥"
-    ],
+    "id": "group-fluctuation",
+    "slug": "@alliance/group-fluctuation",
+    "name": "集团颗粒度异动分析",
+    "description": "将小马导出的集团波动数据CSV自动填入标准模板，并对Top50集团生成AI波动分析",
+    "owner": "maxieli",
+    "team": "联盟产品",
+    "contributors": [],
+    "category": "市场分析",
+    "businessType": "通用",
+    "status": "active",
+    "createdAt": "2026-03-20",
+    "updatedAt": "2026-05-19",
+    "downloadUrl": "https://knot.woa.com/skills/detail/14950",
+    "metrics": {
+      "_source": "mock_beacon",
+      "invokeCount": 4,
+      "completionRate": 0.88,
+      "activeUsers": 3
+    },
+    "readme": "# 集团颗粒度异动分析\n\n自动处理小马导出的集团波动CSV数据，填入标准模板并对Top50集团生成AI波动归因分析。\n\n## 核心能力\n- CSV数据自动解析与标准化\n- Top50集团波动AI归因\n- 标准模板自动填充\n\n## 使用方式\n上传小马导出的CSV文件，自动完成数据处理和分析报告生成。\n\n## 注意事项\n- CSV格式需符合小马标准导出格式\n- Top50按消耗降序排列"
+  },
+  {
+    "id": "media-uv-analysis",
+    "slug": "@alliance/media-uv-analysis",
+    "name": "媒体请求UV波动分析",
+    "description": "分析媒体APP DAU（UV）波动情况，支持年同比分析",
+    "owner": "maxieli",
+    "team": "联盟产品",
+    "contributors": [],
+    "category": "市场分析",
+    "businessType": "通用",
+    "status": "active",
+    "createdAt": "2026-04-01",
+    "updatedAt": "2026-05-20",
+    "downloadUrl": "https://knot.woa.com/skills/detail/19445",
+    "metrics": {
+      "_source": "mock_beacon",
+      "invokeCount": 1,
+      "completionRate": 0.86,
+      "activeUsers": 2
+    },
+    "readme": "# 媒体请求UV波动分析\n\n分析媒体APP的DAU/UV波动趋势，支持年同比和环比分析。\n\n## 核心能力\n- 媒体UV趋势追踪\n- 年同比波动分析\n- 异常波动自动标注\n\n## 使用方式\n输入媒体ID和时间范围，自动生成UV波动分析报告。\n\n## 注意事项\n- 数据源为联盟请求日志\n- 年同比需要去年同期有数据"
+  },
+  {
+    "id": "ad-style-distribution",
+    "slug": "@alliance/ad-style-distribution",
+    "name": "广告位样式分布差异对比图表",
+    "description": "生成基准值与对比值在广告位样式上的分布差异对比图表",
+    "owner": "maxieli",
+    "team": "联盟产品",
+    "contributors": [],
+    "category": "变现调优",
+    "businessType": "通用",
+    "status": "active",
+    "createdAt": "2026-04-05",
+    "updatedAt": "2026-05-18",
+    "metrics": {
+      "_source": "mock_beacon",
+      "invokeCount": 0,
+      "completionRate": 0.85,
+      "activeUsers": 2
+    },
+    "readme": "# 广告位样式分布差异对比图表\n\n对比两组条件下广告位样式的分布差异，自动生成可视化图表。\n\n## 核心能力\n- 基准值与对比值双组对比\n- 自动生成分布差异图表\n- 支持多维度筛选\n\n## 使用方式\n设定基准组和对比组的筛选条件，自动计算样式分布差异并出图。\n\n## 注意事项\n- 图表支持导出为PNG/SVG\n- 建议样本量>1000以保证统计显著性"
+  },
+  {
+    "id": "budget-penetration",
+    "slug": "@alliance/budget-penetration",
+    "name": "预算渗透差异分析",
+    "description": "分析两个不同筛选条件下的预算渗透差异，生成对比图表",
+    "owner": "maxieli",
+    "team": "联盟产品",
+    "contributors": [],
+    "category": "变现调优",
+    "businessType": "通用",
+    "status": "active",
+    "createdAt": "2026-04-08",
+    "updatedAt": "2026-05-19",
+    "metrics": {
+      "_source": "mock_beacon",
+      "invokeCount": 0,
+      "completionRate": 0.87,
+      "activeUsers": 3
+    },
+    "readme": "# 预算渗透差异分析\n\n对比不同筛选条件下的预算渗透表现差异，生成结构化对比图表。\n\n## 核心能力\n- 双条件预算渗透对比\n- 渗透率差异可视化\n- 支持按行业/媒体/时段切片\n\n## 使用方式\n设定两组筛选条件（如不同行业、不同时段），自动计算渗透差异并出图。\n\n## 注意事项\n- 预算渗透口径对齐大盘标准定义\n- 对比维度建议控制在单一变量"
+  },
+  {
+    "id": "vendor-scene-analysis",
+    "slug": "@alliance/vendor-scene-analysis",
+    "name": "厂商分场景消耗环比异动分析",
+    "description": "给定时间周期和厂商场景，分析消耗波动情况和原因",
+    "owner": "yorkyzhang",
+    "team": "联盟产品",
+    "contributors": [],
+    "category": "变现调优",
+    "businessType": "厂商流量",
+    "status": "active",
+    "createdAt": "2026-03-25",
+    "updatedAt": "2026-05-21",
+    "metrics": {
+      "_source": "mock_beacon",
+      "invokeCount": 5,
+      "completionRate": 0.90,
+      "activeUsers": 4
+    },
+    "readme": "# 厂商分场景消耗环比异动分析\n\n针对厂商流量各场景（商店/浏览器/锁屏等），分析消耗环比波动并归因。\n\n## 核心能力\n- 按厂商+场景维度拆分消耗\n- 环比异动自动检测\n- AI归因分析（预算/流量/竞争维度）\n\n## 使用方式\n输入厂商名称、场景、时间周期，自动生成异动分析报告。\n\n## 注意事项\n- 支持的厂商场景：商店、浏览器、锁屏、负一屏等\n- 环比基准默认为上一周期同时段"
+  },
+  {
+    "id": "traffic-forecast",
+    "slug": "@alliance/traffic-forecast",
+    "name": "联盟流量预估",
+    "description": "参考去年月环比流量变化，考虑节假日/大促，预估联盟流量动态，自动完成取数到写入企微文档",
+    "owner": "hongyanhyli",
+    "team": "联盟产品",
+    "contributors": [],
+    "category": "变现调优",
+    "businessType": "通用",
+    "status": "active",
+    "createdAt": "2026-03-12",
+    "updatedAt": "2026-05-22",
+    "downloadUrl": "https://knot.woa.com/skills/detail/8688",
+    "metrics": {
+      "_source": "mock_beacon",
+      "invokeCount": 10,
+      "completionRate": 0.93,
+      "activeUsers": 6
+    },
+    "readme": "# 联盟流量预估\n\n基于去年月环比变化+节假日/大促日历，预估联盟流量动态趋势，自动取数并写入企微文档。\n\n## 核心能力\n- 历史月环比参照计算\n- 节假日/大促因子自动修正\n- 取数→计算→写入企微文档全自动\n\n## 使用方式\n指定预估周期和维度，自动完成从数据拉取到文档生成的全流程。\n\n## 注意事项\n- 需要企微文档写入权限\n- 预估结果受去年基数影响，新媒体无历史数据时需人工补充"
+  },
+  {
+    "id": "revenue-fluctuation",
+    "slug": "@alliance/revenue-fluctuation",
+    "name": "联盟大盘收入波动分析",
+    "description": "支持预算侧和流量侧双角度归因，快速定位消耗波动原因",
+    "owner": "hongyanhyli",
+    "team": "联盟产品",
+    "contributors": [],
+    "category": "变现调优",
+    "businessType": "通用",
+    "status": "active",
+    "createdAt": "2026-03-18",
+    "updatedAt": "2026-05-23",
+    "downloadUrl": "https://knot.woa.com/skills/detail/17742",
+    "metrics": {
+      "_source": "mock_beacon",
+      "invokeCount": 8,
+      "completionRate": 0.91,
+      "activeUsers": 5
+    },
+    "readme": "# 联盟大盘收入波动分析\n\n从预算侧（预算充足度/消耗速率）和流量侧（请求量/填充率）双角度归因收入波动。\n\n## 核心能力\n- 预算侧归因：开口/消耗/撞线分析\n- 流量侧归因：请求/填充/展示漏斗\n- 双角度交叉定位波动根因\n\n## 使用方式\n输入波动时间段，自动完成双角度归因分析并输出结论。\n\n## 注意事项\n- 分析粒度支持天/小时级\n- 大促期间建议结合人工判断"
+  },
+  {
+    "id": "vendor-trip-material",
+    "slug": "@alliance/vendor-trip-material",
+    "name": "厂商出差材料自动化",
+    "description": "用户输入厂商+周期，自动分商店场景、分流量输出多维度完整报告",
+    "owner": "kenhlzhong",
+    "team": "联盟产品",
+    "contributors": [],
     "category": "客户服务",
     "businessType": "厂商流量",
     "status": "active",
     "createdAt": "2026-04-10",
-    "updatedAt": "2026-05-21",
-    "demoSessionId": 3,
+    "updatedAt": "2026-05-20",
     "metrics": {
       "_source": "mock_beacon",
-      "invokeCount": 380,
-      "completionRate": 0.85,
-      "activeUsers": 6,
-      "lastSyncAt": "2026-05-20"
-    },
-    "score": 65,
-    "downloadUrl": "https://knot.woa.com/skill/vendor-visit/download",
-    "readme": "# 厂商拜访材料\n\n根据厂商名称自动汇总历史合作数据、近期动态、行业对标信息，生成拜访前准备材料。\n\n## 使用方式\n\n输入厂商名称或ID，自动生成一份结构化的拜访准备文档。\n示例：\"帮我准备下周拜访OPPO的材料\"\n\n## 输入输出示例\n\n输入：\"生成vivo拜访材料\"\n输出：厂商基本信息、近3月合作数据趋势、竞品对比（同类厂商表现）、上次沟通纪要、本次建议沟通要点\n\n## 注意事项\n\n- 数据来源为CRM系统和Beacon，部分厂商可能数据不全\n- 生成的沟通建议基于历史模式，BD需根据实际情况调整\n- 敏感数据（如具体分成比例）不会出现在材料中，需单独查询"
-  },
-  {
-    "id": "game-budget-monitor",
-    "slug": "tad-game-budget-daily",
-    "name": "小游戏预算监控日报",
-    "description": "联盟小游戏赛道预算消耗自动监控，每日生成日报推送异常预警",
-    "owner": "昕昕",
-    "team": "联盟运营",
-    "contributors": [
-      "昕昕"
-    ],
-    "category": "变现调优",
-    "businessType": "APP流量",
-    "status": "developing",
-    "createdAt": "2026-05-01",
-    "updatedAt": "2026-05-21",
-    "demoSessionId": 3,
-    "metrics": {
-      "_source": "manual",
-      "invokeCount": 0,
-      "completionRate": 0,
-      "activeUsers": 0
-    },
-    "downloadUrl": "https://knot.woa.com/skill/game-budget-monitor/download",
-    "readme": "# 小游戏预算监控日报\n\n[开发中] 每日自动监控联盟小游戏赛道的预算消耗情况，异常时触发预警推送。\n\n## 使用方式\n\n配置监控规则后自动运行，每日9:00生成日报推送到企微群。\n也可手动触发：\"查看今天小游戏预算消耗情况\"\n\n## 输入输出示例（设计中）\n\n输入：自动触发/\"今日小游戏预算消耗\"\n输出：各广告主预算消耗进度、消耗速率异常标注、预计今日撞线时间、建议调整动作\n\n## 注意事项\n\n- 预警阈值默认为日预算消耗>80%且距当日结束>4小时\n- 日报包含TOP10消耗广告主明细\n- 当前开发中，预计5月底完成核心监控逻辑"
-  },
-  {
-    "id": "liufan-skill-scaffold",
-    "slug": "tad-skill-scaffold-template",
-    "name": "Skill标准脚手架",
-    "description": "研发侧skill标准包模板，提供统一的skill开发、测试、发布脚手架，降低skill制作门槛",
-    "owner": "刘凡",
-    "team": "联盟研发",
-    "contributors": [
-      "刘凡"
-    ],
-    "category": "流量接入",
-    "businessType": "通用",
-    "status": "active",
-    "createdAt": "2026-03-01",
-    "updatedAt": "2026-05-10",
-    "metrics": {
-      "_source": "mock_beacon",
-      "invokeCount": 310,
-      "completionRate": 0.9,
-      "activeUsers": 5,
-      "lastSyncAt": "2026-05-20"
-    },
-    "score": 60,
-    "downloadUrl": "https://knot.woa.com/skill/liufan-skill-scaffold/download",
-    "readme": "# Skill标准脚手架\n\n统一的skill开发模板，包含标准目录结构、配置文件模板、测试框架和发布脚本。\n\n## 使用方式\n\n下载脚手架包后，按模板填写skill.yaml配置，在src/目录开发核心逻辑。\n运行 `make test` 本地验证，`make publish` 发布到SkillHub。\n\n## 目录结构\n\nskill.yaml        # skill元信息配置\nsrc/              # 核心逻辑代码\ntests/            # 单元测试\nscripts/          # 构建和发布脚本\nREADME.md         # 使用说明模板\n\n## 注意事项\n\n- skill.yaml中的name和version字段为必填\n- 发布前必须通过lint检查（make lint）\n- 支持Python和Node.js两种运行时，在skill.yaml中指定runtime字段\n- 脚手架版本会定期更新，建议使用最新版"
-  },
-  {
-    "id": "template-review",
-    "slug": "tad-template-review",
-    "name": "素材模板智审",
-    "description": "自动审核广告素材模板的合规性和效果预估，支持图文/视频多种格式。基于联盟审核规则库做实时校验。",
-    "owner": "储哥",
-    "team": "联盟运营",
-    "contributors": [
-      "储哥",
-      "小李"
-    ],
-    "category": "形态样式",
-    "businessType": "通用",
-    "status": "active",
-    "createdAt": "2026-03-15",
-    "updatedAt": "2026-05-18",
-    "demoUrl": "https://knot.woa.com/skill/template-review/demo",
-    "docUrl": "https://km.woa.com/articles/show/620001",
-    "metrics": {
-      "_source": "mock_beacon",
-      "invokeCount": 520,
+      "invokeCount": 6,
       "completionRate": 0.88,
-      "activeUsers": 12,
-      "lastSyncAt": "2026-05-20"
+      "activeUsers": 4
     },
-    "score": 72,
-    "downloadUrl": "https://knot.woa.com/skill/template-review/download",
-    "readme": "# 素材模板智审\n\n基于联盟广告审核规则库，自动校验素材模板的合规性，并预估投放效果。\n\n## 使用方式\n\n上传素材文件（图片/视频/HTML）或提供素材URL，自动进行合规检查和效果预估。\n示例：\"审核这个banner模板\" + 附件\n\n## 输入输出示例\n\n输入：上传一个750x1334的开屏广告图片\n输出：合规检查结果（通过/不通过+原因）、各规则命中详情、预估CTR区间、优化建议\n\n## 注意事项\n\n- 支持格式：PNG/JPG/GIF/MP4/HTML，单文件不超过10MB\n- 规则库每月更新，新规则生效前会有邮件通知\n- 效果预估基于同类素材历史表现，仅供参考\n- 视频素材审核耗时较长（约30秒），图片约5秒"
+    "readme": "# 厂商出差材料自动化\n\n输入厂商名称和周期，自动按商店场景和流量维度输出完整出差报告材料。\n\n## 核心能力\n- 分商店场景数据汇总\n- 分流量维度多角度分析\n- 自动生成结构化出差报告\n\n## 使用方式\n输入厂商名+时间周期，一键生成包含各场景数据的完整出差材料。\n\n## 注意事项\n- 报告包含：场景概览、流量趋势、收入对比、沟通建议\n- 支持导出PPT格式"
   },
   {
     "id": "market-insight",
-    "slug": "tad-market-insight",
-    "name": "市场洞察助手",
-    "description": "聚合行业报告和竞品数据，生成联盟广告市场分析摘要。支持按行业/地域/时间维度筛选，辅助投放策略决策。",
-    "owner": "jiaqi",
-    "team": "联盟策略",
-    "contributors": [
-      "jiaqi",
-      "腾飞"
-    ],
+    "slug": "@alliance/market-insight",
+    "name": "流量市场洞察",
+    "description": "进行特定场域/赛道调研，识别新兴场域机会或锁定存量场域高潜媒体",
+    "owner": "linusfliu",
+    "team": "联盟产品",
+    "contributors": [],
+    "category": "市场分析",
+    "businessType": "APP流量",
+    "status": "active",
+    "createdAt": "2026-04-15",
+    "updatedAt": "2026-05-21",
+    "downloadUrl": "https://knot.woa.com/skills/detail/16605",
+    "metrics": {
+      "_source": "mock_beacon",
+      "invokeCount": 3,
+      "completionRate": 0.86,
+      "activeUsers": 3
+    },
+    "readme": "# 流量市场洞察\n\n针对特定场域/赛道进行深度调研，发现新兴场域机会或锁定存量高潜媒体。\n\n## 核心能力\n- 场域/赛道全景扫描\n- 新兴场域机会识别\n- 存量场域高潜媒体锁定\n\n## 使用方式\n指定目标场域或赛道，自动完成调研并输出洞察报告。\n\n## 注意事项\n- 数据来源含公开市场报告+内部数据\n- 新兴场域判定标准：增速>30%且绝对量达阈值"
+  },
+  {
+    "id": "visit-summary",
+    "slug": "@alliance/visit-summary",
+    "name": "开发者拜访纪要",
+    "description": "将腾讯会议总结长文本整理为企业微信智能表格，自动提取TODO",
+    "owner": "tangweiguo",
+    "team": "联盟产品",
+    "contributors": [],
+    "category": "客户服务",
+    "businessType": "分赛道建设",
+    "status": "active",
+    "createdAt": "2026-04-02",
+    "updatedAt": "2026-05-19",
+    "downloadUrl": "https://knot.woa.com/skills/detail/14918",
+    "metrics": {
+      "_source": "mock_beacon",
+      "invokeCount": 7,
+      "completionRate": 0.94,
+      "activeUsers": 6
+    },
+    "readme": "# 开发者拜访纪要\n\n将腾讯会议总结的长文本自动整理为企微智能表格，提取TODO和跟进事项。\n\n## 核心能力\n- 会议纪要结构化提取\n- 自动识别TODO和负责人\n- 写入企微智能表格\n\n## 使用方式\n粘贴腾讯会议总结文本，自动解析并写入指定的企微智能表格。\n\n## 注意事项\n- 需要企微智能表格写入权限\n- TODO提取基于关键词+语义理解，建议人工确认"
+  },
+  {
+    "id": "roi-filter-release",
+    "slug": "@alliance/roi-filter-release",
+    "name": "ROI过滤放开提报",
+    "description": "新流量冷启/新场域冷启/媒体冲收入场景的全流程自动化提报工具",
+    "owner": "faintang",
+    "team": "联盟产品",
+    "contributors": [],
+    "category": "流量接入",
+    "businessType": "APP流量",
+    "status": "active",
+    "createdAt": "2026-04-12",
+    "updatedAt": "2026-05-22",
+    "metrics": {
+      "_source": "mock_beacon",
+      "invokeCount": 12,
+      "completionRate": 0.90,
+      "activeUsers": 7
+    },
+    "readme": "# ROI过滤放开提报\n\n覆盖新流量冷启、新场域冷启、媒体冲收入三大场景的ROI过滤放开全流程自动化提报。\n\n## 核心能力\n- 自动判断放开场景类型\n- 生成标准化提报单\n- 对接审批流自动提交\n\n## 使用方式\n输入媒体/场域信息和放开诉求，自动生成提报单并提交审批。\n\n## 注意事项\n- 放开审批需相关负责人确认\n- 冷启期间数据波动属正常现象"
+  },
+  {
+    "id": "ad-slot-query",
+    "slug": "@alliance/ad-slot-query",
+    "name": "广告位跨天曝光/点击查询",
+    "description": "分析广告位的跨天曝光和点击情况，自动生成分析报告",
+    "owner": "ymzhao",
+    "team": "联盟产品",
+    "contributors": [],
+    "category": "变现调优",
+    "businessType": "厂商流量",
+    "status": "active",
+    "createdAt": "2026-04-18",
+    "updatedAt": "2026-05-23",
+    "downloadUrl": "https://knot.woa.com/skills/detail/26154",
+    "metrics": {
+      "_source": "mock_beacon",
+      "invokeCount": 5,
+      "completionRate": 0.89,
+      "activeUsers": 4
+    },
+    "readme": "# 广告位跨天曝光/点击查询\n\n查询指定广告位的跨天曝光和点击数据，自动生成趋势分析报告。\n\n## 核心能力\n- 跨天曝光/点击趋势查询\n- 自动生成趋势图表\n- 异常波动标注\n\n## 使用方式\n输入广告位ID和时间范围，自动拉取数据并生成分析报告。\n\n## 注意事项\n- 数据延迟约T+1\n- 支持批量广告位同时查询"
+  },
+  {
+    "id": "template-query",
+    "slug": "@alliance/template-query",
+    "name": "模板相关查询",
+    "description": "模板样式、关联规则、标签、媒体id、广告位id全关联查询",
+    "owner": "aaroncxu",
+    "team": "联盟产品",
+    "contributors": [],
+    "category": "形态样式",
+    "businessType": "APP流量",
+    "status": "active",
+    "createdAt": "2026-04-20",
+    "updatedAt": "2026-05-24",
+    "downloadUrl": "https://knot.woa.com/skills/detail/26901",
+    "metrics": {
+      "_source": "mock_beacon",
+      "invokeCount": 8,
+      "completionRate": 0.92,
+      "activeUsers": 6
+    },
+    "readme": "# 模板相关查询\n\n一站式查询模板样式、关联规则、标签、媒体ID、广告位ID的全关联关系。\n\n## 核心能力\n- 模板→样式→规则→标签全链路查询\n- 媒体ID/广告位ID反查关联模板\n- 支持模糊搜索和精确匹配\n\n## 使用方式\n输入模板ID/名称/媒体ID/广告位ID中的任一，自动展示全关联信息。\n\n## 注意事项\n- 数据实时同步配置系统\n- 支持批量查询"
+  },
+  {
+    "id": "monthly-report",
+    "slug": "@alliance/monthly-report",
+    "name": "开发者运营月报",
+    "description": "基于上期月报续写新一期，更新动态进展，修复表格错位，回写iWiki",
+    "owner": "yadongnie",
+    "team": "联盟产品",
+    "contributors": [],
     "category": "市场分析",
     "businessType": "通用",
     "status": "active",
-    "createdAt": "2026-02-20",
-    "updatedAt": "2026-05-16",
-    "demoUrl": "https://knot.woa.com/skill/market-insight/demo",
-    "docUrl": "https://km.woa.com/articles/show/620002",
+    "createdAt": "2026-04-25",
+    "updatedAt": "2026-05-24",
+    "downloadUrl": "https://knot.woa.com/skills/detail/22788",
     "metrics": {
       "_source": "mock_beacon",
-      "invokeCount": 380,
-      "completionRate": 0.85,
-      "activeUsers": 9,
-      "lastSyncAt": "2026-05-20"
+      "invokeCount": 3,
+      "completionRate": 0.88,
+      "activeUsers": 3
     },
-    "score": 68,
-    "downloadUrl": "https://knot.woa.com/skill/market-insight/download",
-    "readme": "# 市场洞察助手\n\n聚合内外部数据源（行业报告、竞品监测、大盘趋势），生成联盟广告市场分析摘要。\n\n## 使用方式\n\n按需查询市场信息，支持行业/地域/时间维度组合筛选。\n示例：\"游戏行业Q2广告市场趋势如何\" \"竞品穿山甲最近有什么动作\"\n\n## 输入输出示例\n\n输入：\"对比联盟和穿山甲在短视频行业的份额变化\"\n输出：近3个月市场份额趋势对比、关键变化节点标注、可能的原因分析、建议关注点\n\n## 注意事项\n\n- 外部数据来源于公开报告和爬虫监测，更新频率为周级别\n- 竞品数据为估算值，存在误差，适合看趋势不适合看绝对值\n- 内部大盘数据实时性较高（T+1）"
+    "readme": "# 开发者运营月报\n\n基于上期月报自动续写新一期，更新动态进展数据，修复表格格式并回写iWiki。\n\n## 核心能力\n- 自动继承上期月报结构\n- 动态进展数据自动更新\n- 表格格式自动修复\n- 一键回写iWiki\n\n## 使用方式\n指定月报期数，自动拉取上期模板并填充本期数据。\n\n## 注意事项\n- 需要iWiki读写权限\n- 首次使用需指定月报模板页面"
   },
   {
-    "id": "budget-diagnose",
-    "slug": "tad-budget-diagnose",
-    "name": "预算诊断工具",
-    "description": "对联盟广告主的预算消耗异常进行自动诊断，定位消耗过快/过慢的根因，给出调整建议。",
-    "owner": "朋哥",
+    "id": "ad-style-capture",
+    "slug": "@alliance/ad-style-capture",
+    "name": "开/插屏广告样式收集",
+    "description": "给到应用list即可开启样式采集，支持电脑外连手机和云手机平台",
+    "owner": "aaroncxu",
     "team": "联盟产品",
-    "contributors": [
-      "朋哥",
-      "jx"
-    ],
-    "category": "变现调优",
+    "contributors": [],
+    "category": "形态样式",
     "businessType": "APP流量",
     "status": "active",
-    "createdAt": "2026-04-01",
-    "updatedAt": "2026-05-19",
-    "demoUrl": "https://knot.woa.com/skill/budget-diagnose/demo",
-    "docUrl": "https://km.woa.com/articles/show/620003",
+    "createdAt": "2026-05-01",
+    "updatedAt": "2026-05-25",
+    "downloadUrl": "https://knot.woa.com/skills/detail/26606",
     "metrics": {
       "_source": "mock_beacon",
-      "invokeCount": 210,
-      "completionRate": 0.91,
-      "activeUsers": 7,
-      "lastSyncAt": "2026-05-20"
+      "invokeCount": 6,
+      "completionRate": 0.87,
+      "activeUsers": 4
     },
-    "score": 65,
-    "downloadUrl": "https://knot.woa.com/skill/budget-diagnose/download",
-    "readme": "# 预算诊断工具\n\n输入广告主ID，自动诊断预算消耗异常（过快/过慢），定位根因并给出调整建议。\n\n## 使用方式\n\n输入广告主ID或名称，指定诊断时间范围。\n示例：\"诊断广告主A123456昨天预算消耗过快的原因\"\n\n## 输入输出示例\n\n输入：\"A789012今天消耗只有预算的30%，为什么\"\n输出：消耗不足根因分析（竞价失败率高/出价低于市场均值/定向过窄），各因素贡献占比，建议调整参数和预期效果\n\n## 注意事项\n\n- 诊断逻辑基于漏斗分析：预算→出价→竞价→曝光→消耗，逐层定位卡点\n- 建议仅供参考，调整预算/出价前建议与客户确认\n- 支持批量诊断，一次最多10个广告主"
+    "readme": "# 开/插屏广告样式收集\n\n提供应用列表即可自动采集开屏和插屏广告样式，支持实体手机和云手机双平台。\n\n## 核心能力\n- 批量应用样式自动采集\n- 电脑外连手机采集\n- 云手机平台采集\n- 样式截图自动归档\n\n## 使用方式\n输入应用列表（包名或应用名），选择采集平台，自动开始样式收集。\n\n## 注意事项\n- 云手机采集无需本地设备\n- 采集结果自动分类存储"
+  },
+  {
+    "id": "template-rule-check",
+    "slug": "@alliance/template-rule-check",
+    "name": "模板规则审查",
+    "description": "辅助判断形态模板业务诉求的配置逻辑是否正确及给与风险提示",
+    "owner": "aaroncxu",
+    "team": "联盟产品",
+    "contributors": [],
+    "category": "形态样式",
+    "businessType": "APP流量",
+    "status": "active",
+    "createdAt": "2026-05-05",
+    "updatedAt": "2026-05-25",
+    "downloadUrl": "https://knot.woa.com/skills/detail/26901",
+    "metrics": {
+      "_source": "mock_beacon",
+      "invokeCount": 4,
+      "completionRate": 0.91,
+      "activeUsers": 3
+    },
+    "readme": "# 模板规则审查\n\n自动审查形态模板的配置逻辑是否正确，识别潜在风险并给出提示。\n\n## 核心能力\n- 配置逻辑正确性校验\n- 业务诉求与配置一致性检查\n- 风险识别与提示\n\n## 使用方式\n输入模板配置或业务诉求描述，自动分析配置逻辑并输出审查结果。\n\n## 注意事项\n- 审查规则基于联盟模板配置规范\n- 风险提示分为：高危/中危/低危三级"
+  },
+  {
+    "id": "material-experience",
+    "slug": "@alliance/material-experience",
+    "name": "联盟素材体验百晓生",
+    "description": "了解AMS审核策略/联盟一审准入策略，一键生成素材体验介绍，配置屏蔽规则等",
+    "owner": "mikelcwang",
+    "team": "联盟产品",
+    "contributors": [],
+    "category": "体验管理",
+    "businessType": "通用",
+    "status": "active",
+    "createdAt": "2026-05-10",
+    "updatedAt": "2026-05-25",
+    "downloadUrl": "https://knot.woa.com/skills/detail/30221",
+    "metrics": {
+      "_source": "mock_beacon",
+      "invokeCount": 9,
+      "completionRate": 0.93,
+      "activeUsers": 5
+    },
+    "readme": "# 联盟素材体验百晓生\n\n覆盖AMS审核策略、联盟一审准入策略查询，素材体验介绍生成，屏蔽规则配置等能力。\n\n## 核心能力\n- AMS审核策略查询\n- 联盟一审准入策略查询\n- 一键生成素材体验介绍\n- 屏蔽规则配置辅助\n\n## 使用方式\n直接提问审核/准入相关问题，或要求生成素材体验介绍文档。\n\n## 注意事项\n- 策略信息实时同步审核系统\n- 屏蔽规则配置需二次确认生效"
   }
 ]
