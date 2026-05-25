@@ -1,0 +1,9 @@
+1:"$Sreact.fragment"
+2:I[47257,["/skillhub-portal/_next/static/chunks/17mk.qye9knw_.js","/skillhub-portal/_next/static/chunks/0n4z.7yu76je-.js","/skillhub-portal/_next/static/chunks/131qm6nqrg5tg.js"],"ClientPageRoot"]
+3:I[52683,["/skillhub-portal/_next/static/chunks/17mk.qye9knw_.js","/skillhub-portal/_next/static/chunks/0n4z.7yu76je-.js","/skillhub-portal/_next/static/chunks/131qm6nqrg5tg.js","/skillhub-portal/_next/static/chunks/058~9xxf9~q1h.js","/skillhub-portal/_next/static/chunks/0b-.ci9~q18vr.js","/skillhub-portal/_next/static/chunks/1657b21j78k49.js","/skillhub-portal/_next/static/chunks/00imc9exp6bvq.js"],"default"]
+6:I[97367,["/skillhub-portal/_next/static/chunks/17mk.qye9knw_.js","/skillhub-portal/_next/static/chunks/0n4z.7yu76je-.js","/skillhub-portal/_next/static/chunks/131qm6nqrg5tg.js"],"OutletBoundary"]
+7:"$Sreact.suspense"
+0:{"rsc":["$","$1","c",{"children":[["$","$L2",null,{"Component":"$3","serverProvidedParams":{"searchParams":{},"params":{},"promises":["$@4","$@5"]}}],[["$","script","script-0",{"src":"/skillhub-portal/_next/static/chunks/058~9xxf9~q1h.js","async":true}],["$","script","script-1",{"src":"/skillhub-portal/_next/static/chunks/0b-.ci9~q18vr.js","async":true}],["$","script","script-2",{"src":"/skillhub-portal/_next/static/chunks/1657b21j78k49.js","async":true}],["$","script","script-3",{"src":"/skillhub-portal/_next/static/chunks/00imc9exp6bvq.js","async":true}]],["$","$L6",null,{"children":["$","$7",null,{"name":"Next.MetadataOutlet","children":"$@8"}]}]]}],"isPartial":false,"staleTime":300,"varyParams":null,"buildId":"mDCyj3egIWvpHRGwEf75Q"}
+4:{}
+5:"$0:rsc:props:children:0:props:serverProvidedParams:params"
+8:null
