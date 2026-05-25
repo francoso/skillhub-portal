@@ -1,7 +1,9 @@
 import { getStats, getMetrics } from "@/lib/data";
 import { KpiCard } from "@/components/shared/kpi-card";
 import { TrendChart } from "@/components/charts/trend-chart";
+import { GrowthChart } from "@/components/charts/growth-chart";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { TrendingUp } from "lucide-react";
 
 export default function DashboardPage() {
   const stats = getStats();
@@ -51,7 +53,23 @@ export default function DashboardPage() {
         <KpiCard title="活跃Skill" value={stats.activeSkills} icon="active" />
       </div>
 
-      {/* Trend Chart */}
+      {/* Growth Trend Chart */}
+      <Card>
+        <CardHeader>
+          <div className="flex items-center gap-2">
+            <TrendingUp className="h-5 w-5 text-blue-500" />
+            <CardTitle className="text-base">生态增长趋势</CardTitle>
+          </div>
+          <p className="text-xs text-gray-400">
+            Skill 总量与认证数随时间累计增长
+          </p>
+        </CardHeader>
+        <CardContent>
+          <GrowthChart data={metrics.growthTrend} />
+        </CardContent>
+      </Card>
+
+      {/* Daily Trend Chart */}
       <Card>
         <CardHeader>
           <CardTitle className="text-base">使用趋势（近30天）</CardTitle>

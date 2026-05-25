@@ -100,11 +100,18 @@ export interface DailyMetric {
   activeSkills: number;
 }
 
+export interface GrowthDataPoint {
+  week: string;
+  totalSkills: number;
+  certified: number;
+}
+
 export interface DashboardMetrics {
   _source: "manual" | "mock_beacon" | "beacon_api";
   totalInvokes: number;
   monthlyInvokes: number;
   activeSkillCount: number;
+  growthTrend: GrowthDataPoint[];
   dailyTrend: DailyMetric[];
 }
 
