@@ -49,6 +49,8 @@
 }
 
 :root {
+  --font-sans: "Plus Jakarta Sans", "PingFang SC", "Noto Sans SC", "Helvetica Neue", Arial, sans-serif;
+  --font-geist-mono: "SFMono-Regular", "JetBrains Mono", "Menlo", "Monaco", monospace;
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);

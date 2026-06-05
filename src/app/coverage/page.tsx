@@ -1,154 +1,214 @@
+"use client";
+
+import { useMemo, useState } from "react";
 import Link from "next/link";
-import coverageData from "@/data/coverage.json";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
+import { getCapabilityMap, getOfficialSkills } from "@/lib/data";
+import type { CapabilityItem, CapabilityStage, SkillDomain } from "@/lib/types";
 
-interface Task {
-  content: string;
-  businessType: string;
-  status: "covered" | "building" | "unclaimed";
-  skillId: string | null;
-}
+const domainOptions: Array<SkillDomain | "全部"> = ["全部", "APP流量", "平台", "预算", "厂商"];
 
-interface Module {
-  name: string;
-  tasks: Task[];
-}
-
-interface Workflow {
-  workflow: string;
-  modules: Module[];
-}
-
-const statusConfig = {
-  covered: { label: "已覆盖", color: "bg-green-500", chipColor: "bg-green-100 text-green-700 border-green-200" },
-  building: { label: "建设中", color: "bg-orange-400", chipColor: "bg-orange-100 text-orange-700 border-orange-200" },
-  unclaimed: { label: "待认领", color: "bg-gray-300", chipColor: "bg-gray-100 text-gray-500 border-gray-200" },
+const statusConfig: Record<
+  CapabilityItem["status"],
+  { label: string; dot: string; chip: string }
+> = {
+  covered: {
+    label: "已覆盖",
+    dot: "bg-green-500",
+    chip: "bg-green-100 text-green-700 border-green-200",
+  },
+  building: {
+    label: "建设中",
+    dot: "bg-orange-400",
+    chip: "bg-orange-100 text-orange-700 border-orange-200",
+  },
+  gap: {
+    label: "缺口",
+    dot: "bg-gray-300",
+    chip: "bg-gray-100 text-gray-500 border-gray-200",
+  },
 };
 
-const workflowColors: Record<string, string> = {
-  "市场分析": "border-blue-200 bg-blue-50/50",
-  "变现调优": "border-purple-200 bg-purple-50/50",
-  "客户服务": "border-green-200 bg-green-50/50",
-  "流量接入": "border-orange-200 bg-orange-50/50",
-  "形态样式": "border-pink-200 bg-pink-50/50",
-  "体验管理": "border-cyan-200 bg-cyan-50/50",
+const domainStyles: Record<SkillDomain, string> = {
+  "APP流量": "bg-cyan-100 text-cyan-700 border-cyan-200",
+  "平台": "bg-violet-100 text-violet-700 border-violet-200",
+  "预算": "bg-amber-100 text-amber-700 border-amber-200",
+  "厂商": "bg-emerald-100 text-emerald-700 border-emerald-200",
 };
+
+function stageMatchesDomain(stage: CapabilityStage, domain: SkillDomain | "全部") {
+  if (domain === "全部") return true;
+  return stage.modules.some((module) =>
+    module.capabilities.some((capability) => capability.domains.includes(domain))
+  );
+}
 
 export default function CoveragePage() {
-  const data = coverageData as Workflow[];
+  const [selectedDomain, setSelectedDomain] = useState<SkillDomain | "全部">("全部");
+  const stages = getCapabilityMap();
+  const officialSkills = getOfficialSkills();
+  const officialIds = new Set(officialSkills.map((skill) => skill.id));
 
-  // Calculate stats
-  const allTasks = data.flatMap((w) => w.modules.flatMap((m) => m.tasks));
-  const coveredCount = allTasks.filter((t) => t.status === "covered").length;
-  const buildingCount = allTasks.filter((t) => t.status === "building").length;
-  const unclaimedCount = allTasks.filter((t) => t.status === "unclaimed").length;
-  const totalCount = allTasks.length;
+  const filteredStages = useMemo(
+    () =>
+      stages
+        .filter((stage) => stageMatchesDomain(stage, selectedDomain))
+        .map((stage) => ({
+          ...stage,
+          modules: stage.modules
+            .map((module) => ({
+              ...module,
+              capabilities: module.capabilities.filter((capability) =>
+                selectedDomain === "全部"
+                  ? true
+                  : capability.domains.includes(selectedDomain)
+              ),
+            }))
+            .filter((module) => module.capabilities.length > 0),
+        })),
+    [selectedDomain, stages]
+  );
+
+  const allCapabilities = filteredStages.flatMap((stage) =>
+    stage.modules.flatMap((module) => module.capabilities)
+  );
+  const coveredCount = allCapabilities.filter((item) => item.status === "covered").length;
+  const buildingCount = allCapabilities.filter((item) => item.status === "building").length;
+  const gapCount = allCapabilities.filter((item) => item.status === "gap").length;
 
   return (
-    <div className="space-y-6">
-      {/* Header */}
+    <div className="space-y-8">
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">建设地图</h1>
+        <p className="text-xs font-medium text-gray-400 uppercase tracking-widest">
+          CAPABILITY MAP
+        </p>
+        <h1 className="text-2xl font-bold text-gray-900 mt-1">能力地图</h1>
         <p className="text-sm text-gray-500 mt-1">
-          联盟 Skill 工作流覆盖全景
+          主结构按服务环节展开，四大域作为管理维度筛选，用来看清覆盖现状和缺口。
         </p>
       </div>
 
-      {/* Summary Stats */}
       <Card>
-        <CardContent className="p-5">
+        <CardContent className="p-5 space-y-4">
           <div className="flex items-center justify-between flex-wrap gap-4">
             <div>
-              <p className="text-sm text-gray-500">覆盖率</p>
+              <p className="text-sm text-gray-500">当前视图覆盖率</p>
               <p className="text-2xl font-bold text-gray-900">
-                {coveredCount}/{totalCount}{" "}
-                <span className="text-sm font-normal text-gray-500">
-                  个工作内容已有 Skill
-                </span>
+                {coveredCount}/{allCapabilities.length}
+                <span className="text-sm font-normal text-gray-500 ml-2">个能力点已被 Skill 覆盖</span>
               </p>
-              <div className="w-64 h-2 bg-gray-100 rounded-full mt-2 overflow-hidden">
+              <div className="w-72 h-2 bg-gray-100 rounded-full mt-2 overflow-hidden">
                 <div
                   className="h-full bg-green-500 rounded-full"
-                  style={{ width: `${(coveredCount / totalCount) * 100}%` }}
+                  style={{ width: `${allCapabilities.length ? (coveredCount / allCapabilities.length) * 100 : 0}%` }}
                 />
               </div>
             </div>
-            <div className="flex items-center gap-6 text-sm">
-              <div className="flex items-center gap-2">
-                <div className="w-3 h-3 rounded-full bg-green-500" />
-                <span className="text-gray-600">已覆盖 {coveredCount}</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <div className="w-3 h-3 rounded-full bg-orange-400" />
-                <span className="text-gray-600">建设中 {buildingCount}</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <div className="w-3 h-3 rounded-full bg-gray-300" />
-                <span className="text-gray-600">待认领 {unclaimedCount}</span>
-              </div>
+            <div className="flex gap-5 text-sm text-gray-600">
+              <span>已覆盖 {coveredCount}</span>
+              <span>建设中 {buildingCount}</span>
+              <span>缺口 {gapCount}</span>
             </div>
+          </div>
+
+          <div className="flex gap-2 flex-wrap">
+            {domainOptions.map((domain) => (
+              <button
+                key={domain}
+                onClick={() => setSelectedDomain(domain)}
+                className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
+                  selectedDomain === domain
+                    ? "bg-gray-900 text-white"
+                    : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                }`}
+              >
+                {domain}
+              </button>
+            ))}
           </div>
         </CardContent>
       </Card>
 
-      {/* Workflow Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4">
-        {data.map((workflow) => {
-          const wfTasks = workflow.modules.flatMap((m) => m.tasks);
-          const wfCovered = wfTasks.filter((t) => t.status === "covered").length;
-          const wfTotal = wfTasks.length;
-
+      <div className="space-y-5">
+        {filteredStages.map((stage) => {
+          const stageCapabilities = stage.modules.flatMap((module) => module.capabilities);
+          const stageCovered = stageCapabilities.filter((item) => item.status === "covered").length;
           return (
-            <Card
-              key={workflow.workflow}
-              className={`border ${workflowColors[workflow.workflow] || "border-gray-200"}`}
-            >
-              <CardContent className="p-4">
-                {/* Workflow Header */}
-                <div className="flex items-center justify-between mb-3">
-                  <h2 className="text-sm font-semibold text-gray-900">
-                    {workflow.workflow}
-                  </h2>
-                  <span className="text-xs text-gray-400">
-                    {wfCovered}/{wfTotal}
-                  </span>
+            <Card key={stage.serviceStage} className="border-gray-100">
+              <CardContent className="p-5 space-y-5">
+                <div className="flex items-start justify-between gap-4">
+                  <div>
+                    <h2 className="text-lg font-semibold text-gray-900">{stage.serviceStage}</h2>
+                    <p className="text-sm text-gray-500 mt-1">{stage.description}</p>
+                  </div>
+                  <div className="text-right shrink-0">
+                    <p className="text-sm text-gray-400">覆盖情况</p>
+                    <p className="text-lg font-semibold text-gray-900">
+                      {stageCovered}/{stageCapabilities.length}
+                    </p>
+                  </div>
                 </div>
 
-                {/* Modules */}
-                <div className="space-y-3">
-                  {workflow.modules.map((mod) => (
-                    <div key={mod.name}>
-                      <p className="text-xs font-medium text-gray-500 mb-1.5">
-                        {mod.name}
-                      </p>
-                      <div className="flex flex-wrap gap-1.5">
-                        {mod.tasks.map((task) => {
-                          const config = statusConfig[task.status];
-                          const inner = (
-                            <span
-                              className={`inline-flex items-center gap-1 px-2 py-1 rounded text-xs border ${config.chipColor} ${
-                                task.skillId ? "cursor-pointer hover:shadow-sm transition-shadow" : ""
-                              }`}
-                            >
-                              <span
-                                className={`w-1.5 h-1.5 rounded-full ${config.color} shrink-0`}
-                              />
-                              {task.content}
-                            </span>
-                          );
+                <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
+                  {stage.modules.map((module) => (
+                    <div key={module.name} className="rounded-xl border border-gray-100 bg-gray-50/70 p-4 space-y-3">
+                      <div className="flex items-center justify-between gap-3">
+                        <h3 className="text-sm font-semibold text-gray-800">{module.name}</h3>
+                        <span className="text-xs text-gray-400">{module.capabilities.length} 个能力点</span>
+                      </div>
 
-                          if (task.skillId) {
-                            return (
-                              <Link
-                                key={task.content}
-                                href={`/skills/${task.skillId}`}
-                              >
-                                {inner}
-                              </Link>
-                            );
-                          }
-                          return <span key={task.content}>{inner}</span>;
+                      <div className="space-y-3">
+                        {module.capabilities.map((capability) => {
+                          const config = statusConfig[capability.status];
+                          const hasOfficial = capability.skillIds.some((skillId) => officialIds.has(skillId));
+
+                          return (
+                            <div key={capability.id} className="rounded-lg bg-white border border-gray-100 p-3 space-y-2">
+                              <div className="flex items-start justify-between gap-3">
+                                <div>
+                                  <p className="text-sm font-medium text-gray-900">{capability.title}</p>
+                                  <p className="text-xs text-gray-500 mt-1 leading-relaxed">
+                                    {capability.description}
+                                  </p>
+                                </div>
+                                <Badge variant="outline" className={config.chip}>
+                                  {config.label}
+                                </Badge>
+                              </div>
+
+                              <div className="flex flex-wrap gap-1.5">
+                                {capability.domains.map((domain) => (
+                                  <Badge key={domain} variant="outline" className={domainStyles[domain]}>
+                                    {domain}
+                                  </Badge>
+                                ))}
+                                {hasOfficial && (
+                                  <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
+                                    含官方 Skill
+                                  </Badge>
+                                )}
+                              </div>
+
+                              {capability.skillIds.length > 0 ? (
+                                <div className="flex flex-wrap gap-2 pt-1">
+                                  {capability.skillIds.map((skillId) => (
+                                    <Link key={skillId} href={`/skills/${skillId}`}>
+                                      <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-gray-900 text-white text-xs hover:opacity-90 transition-opacity">
+                                        已有 Skill
+                                      </span>
+                                    </Link>
+                                  ))}
+                                </div>
+                              ) : (
+                                capability.examples?.length ? (
+                                  <p className="text-xs text-gray-400 pt-1">
+                                    参考案例：{capability.examples.join(" / ")}
+                                  </p>
+                                ) : null
+                              )}
+                            </div>
+                          );
                         })}
                       </div>
                     </div>
@@ -158,11 +218,6 @@ export default function CoveragePage() {
             </Card>
           );
         })}
-      </div>
-
-      {/* Legend */}
-      <div className="text-xs text-gray-400 text-center pt-4">
-        点击绿色标签可跳转到对应 Skill 详情页
       </div>
     </div>
   );

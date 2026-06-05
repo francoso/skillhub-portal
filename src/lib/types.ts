@@ -31,6 +31,19 @@ export interface Skill {
   certifiedAt?: string;
   certificationRoundId?: string;
   readme?: string;
+  domains?: SkillDomain[];
+  capabilityIds?: string[];
+  official?: OfficialSkillMeta;
+}
+
+export type SkillDomain = "APP流量" | "平台" | "预算" | "厂商";
+
+export interface OfficialSkillMeta {
+  status: "official" | "candidate";
+  reviewerGroup: string;
+  certifiedBy: string;
+  certifiedAt?: string;
+  note?: string;
 }
 
 // === Contributor ===
@@ -197,4 +210,33 @@ export interface SkillAssessment {
   grade: "excellent" | "good" | "needsWork";
   suggestions: string[];
   analyzedFiles: string[];
+}
+
+export interface CapabilityItem {
+  id: string;
+  title: string;
+  description: string;
+  domains: SkillDomain[];
+  status: "covered" | "building" | "gap";
+  skillIds: string[];
+  examples?: string[];
+}
+
+export interface CapabilityModule {
+  name: string;
+  capabilities: CapabilityItem[];
+}
+
+export interface CapabilityStage {
+  serviceStage: string;
+  description: string;
+  modules: CapabilityModule[];
+}
+
+export interface OfficialSkillRecord {
+  skillId: string;
+  reviewerGroup: string;
+  certifiedBy: string;
+  certifiedAt: string;
+  note: string;
 }

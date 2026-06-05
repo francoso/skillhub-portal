@@ -290,7 +290,7 @@ function UploadWizard() {
               Skill 规范评测器
             </h2>
             <p className="text-sm text-gray-500 mt-1">
-              拖入压缩包 → 五维评测 → 自动埋点 → 上线
+              拖入压缩包 → 结构评测演示 → 埋点能力待接入
             </p>
             <p className="text-xs text-gray-400 mt-3">
               支持 .skill / .zip 压缩包格式
@@ -497,11 +497,12 @@ function UploadWizard() {
               </Link>
             </div>
             <p className="text-xs text-gray-400 mt-6">
-              涉及联盟业务场景？可{" "}
-              <Link href="/rules#certification" className="text-blue-600 hover:underline">
-                申请参与联盟认证
+              涉及联盟业务场景？经各组 PM 评审通过后，会进入
+              {" "}
+              <Link href="/certification" className="text-blue-600 hover:underline">
+                联盟认证馆
               </Link>
-              {" "}→ 获得官方推荐
+              {" "}并获得官方推荐
             </p>
           </div>
         )}
@@ -523,17 +524,17 @@ export default function HomePage() {
         </p>
       </div>
 
-      {/* 评价邀请通知 */}
+      {/* 官方认证提示 */}
       {pendingReviewCount > 0 && (
         <div className="flex items-center justify-between px-4 py-3 bg-blue-50 border border-blue-200 rounded-lg">
           <p className="text-sm text-blue-800">
-            本月你被选为大众点评官，待评价 <strong>{pendingReviewCount}</strong> 个 Skill
+            当前有 <strong>{pendingReviewCount}</strong> 个 Skill 进入待确认池，等待各组 PM 完成官方认证确认
           </p>
           <Link
-            href="/review"
+            href="/certification"
             className="text-sm font-medium text-blue-600 hover:text-blue-700"
           >
-            去评价 →
+            去认证馆 →
           </Link>
         </div>
       )}
@@ -564,22 +565,22 @@ export default function HomePage() {
                 <Shield className="w-5 h-5 text-green-600" />
               </div>
               <div>
-                <p className="text-sm font-medium text-gray-900">本月认证</p>
-                <p className="text-xs text-gray-500">评价进度与结果</p>
+                <p className="text-sm font-medium text-gray-900">联盟认证馆</p>
+                <p className="text-xs text-gray-500">查看所有官方认证 Skill</p>
               </div>
             </CardContent>
           </Card>
         </Link>
 
-        <Link href="/demo">
+        <Link href="/coverage">
           <Card className="hover:shadow-md transition-shadow cursor-pointer group">
             <CardContent className="p-5 flex items-center gap-4">
               <div className="w-10 h-10 rounded-lg bg-orange-50 flex items-center justify-center group-hover:bg-orange-100 transition-colors">
                 <Presentation className="w-5 h-5 text-orange-600" />
               </div>
               <div>
-                <p className="text-sm font-medium text-gray-900">Demo 会</p>
-                <p className="text-xs text-gray-500">近期分享与回放</p>
+                <p className="text-sm font-medium text-gray-900">能力地图</p>
+                <p className="text-xs text-gray-500">按服务环节看覆盖和缺口</p>
               </div>
             </CardContent>
           </Card>

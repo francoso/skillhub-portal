@@ -114,7 +114,7 @@ export default function ContributionPage() {
   const skills = getSkills();
   const activities = getActivities();
   const [detailOpen, setDetailOpen] = useState(false);
-  const [viewMode, setViewMode] = useState<ViewMode>("all");
+  const [, setViewMode] = useState<ViewMode>("all");
 
   // 用第一个用户作为"当前用户"展示 Hero（实际接通登录后替换）
   const currentUser = contributors[0];

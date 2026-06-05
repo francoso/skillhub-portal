@@ -1,0 +1,358 @@
+[
+  {
+    "serviceStage": "市场分析",
+    "description": "围绕基本面盘点、竞品对标、拓客扫描和经营报告，明确机会与优先级。",
+    "modules": [
+      {
+        "name": "基本面分析",
+        "capabilities": [
+          {
+            "id": "fundamentals-industry",
+            "title": "行业/媒体基本面盘点",
+            "description": "结合行业、媒体和项目现状，完成基本面盘点并明确项目推进 OKR。",
+            "domains": ["APP流量", "预算", "厂商"],
+            "status": "building",
+            "skillIds": [],
+            "examples": ["【25年】-APP生态开发者运营项目管理-周会", "荣耀商业分析"]
+          },
+          {
+            "id": "market-expansion-scan",
+            "title": "拓客地图扫描",
+            "description": "基于竞对、厂商和客户数据识别可拓展客户，并输出拓展方案。",
+            "domains": ["APP流量", "厂商"],
+            "status": "covered",
+            "skillIds": ["market-insight"],
+            "examples": ["26Q1长尾媒体覆盖"]
+          }
+        ]
+      },
+      {
+        "name": "竞品对标",
+        "capabilities": [
+          {
+            "id": "competitive-benchmark",
+            "title": "竞品份额与动作调研",
+            "description": "回收竞品份额、OKR 与数据表现，形成对标结论。",
+            "domains": ["APP流量", "平台", "预算", "厂商"],
+            "status": "gap",
+            "skillIds": []
+          }
+        ]
+      },
+      {
+        "name": "经营报告",
+        "capabilities": [
+          {
+            "id": "weekly-monthly-report",
+            "title": "周报/月报自动化",
+            "description": "自动整合关键经营指标与动作纪要，生成标准化经营报告。",
+            "domains": ["APP流量", "平台", "预算"],
+            "status": "covered",
+            "skillIds": ["monthly-report"]
+          },
+          {
+            "id": "business-fluctuation-analysis",
+            "title": "波动归因分析",
+            "description": "围绕集团、媒体、收入等核心指标定位波动原因并输出归因。",
+            "domains": ["APP流量", "预算", "厂商"],
+            "status": "covered",
+            "skillIds": ["group-fluctuation", "media-uv-analysis", "revenue-fluctuation"]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "serviceStage": "流量接入",
+    "description": "覆盖拓客建联、接入支持和从 0 到 1 / 从 1 到 10 的放量推进。",
+    "modules": [
+      {
+        "name": "拓客建联",
+        "capabilities": [
+          {
+            "id": "lead-contact-discovery",
+            "title": "建联方式与关键人定位",
+            "description": "定位开发者或厂商关键人，沉淀建联路径和触达方式。",
+            "domains": ["APP流量", "厂商"],
+            "status": "gap",
+            "skillIds": [],
+            "examples": ["百度架构 26.01更新", "华为架构（2）"]
+          }
+        ]
+      },
+      {
+        "name": "从0到1接入",
+        "capabilities": [
+          {
+            "id": "access-solution-design",
+            "title": "接入方案与顾虑拆解",
+            "description": "根据媒体类型输出商业化方案、收益空间和定制化接入建议。",
+            "domains": ["APP流量", "厂商", "平台"],
+            "status": "building",
+            "skillIds": []
+          },
+          {
+            "id": "access-support",
+            "title": "SDK / API / RTB 接入支持",
+            "description": "承接 SDK、API、RTB 等接入支持与规格匹配。",
+            "domains": ["APP流量", "平台", "厂商"],
+            "status": "building",
+            "skillIds": [],
+            "examples": ["厂商协议汇总", "VIVO广告位绑定流程"]
+          }
+        ]
+      },
+      {
+        "name": "从1到10放量",
+        "capabilities": [
+          {
+            "id": "traffic-ramp-up",
+            "title": "冷启放开与流量放量",
+            "description": "推进 ROI 过滤放开、冷启扶持和灰度验收，提升媒体放量效率。",
+            "domains": ["APP流量", "平台"],
+            "status": "covered",
+            "skillIds": ["roi-filter-release"]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "serviceStage": "形态样式",
+    "description": "围绕模板调研、规则配置、样式抓取和效果优化，支撑广告形态迭代。",
+    "modules": [
+      {
+        "name": "模板规则",
+        "capabilities": [
+          {
+            "id": "template-query",
+            "title": "模板查询与规则关联",
+            "description": "快速识别模板样式、定位规则关系并给出查询结果。",
+            "domains": ["APP流量", "平台"],
+            "status": "covered",
+            "skillIds": ["template-query"]
+          },
+          {
+            "id": "template-rule-review",
+            "title": "模板规则审查",
+            "description": "检查联盟模板规则创建逻辑并提示风险。",
+            "domains": ["APP流量", "平台"],
+            "status": "covered",
+            "skillIds": ["template-rule-check"]
+          }
+        ]
+      },
+      {
+        "name": "样式采集",
+        "capabilities": [
+          {
+            "id": "style-capture",
+            "title": "联盟/竞品样式抓取",
+            "description": "按场景抓取联盟与竞品模板样式，支持后续对标分析。",
+            "domains": ["APP流量", "平台"],
+            "status": "covered",
+            "skillIds": ["ad-style-capture"]
+          }
+        ]
+      },
+      {
+        "name": "模板优化",
+        "capabilities": [
+          {
+            "id": "template-effect-feedback",
+            "title": "模板效果回收与优化方向",
+            "description": "回收模板效果数据并明确优化方向，联动媒体侧问题反馈。",
+            "domains": ["APP流量", "平台"],
+            "status": "gap",
+            "skillIds": [],
+            "examples": ["七猫插页激励化接入问题整理"]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "serviceStage": "变现调优",
+    "description": "围绕收入、预算、流量、场景和链路问题做诊断与调优。",
+    "modules": [
+      {
+        "name": "诊断分析",
+        "capabilities": [
+          {
+            "id": "alliance-data-analysis",
+            "title": "联盟广告数据智能分析",
+            "description": "整合核心数据查询、经营分析和预算问题诊断。",
+            "domains": ["APP流量", "平台", "预算"],
+            "status": "covered",
+            "skillIds": ["data-analysis-assistant"]
+          },
+          {
+            "id": "queue-funnel-analysis",
+            "title": "竞争队列与漏斗归因",
+            "description": "从预算 x 流量视角拆解竞争队列、错误码和漏斗问题。",
+            "domains": ["平台", "预算"],
+            "status": "covered",
+            "skillIds": ["ad-competition-queue"]
+          },
+          {
+            "id": "budget-penetration-gap",
+            "title": "预算渗透与 benchmark 分析",
+            "description": "定位预算渗透问题并完成预算 x 流量链路漏斗分析。",
+            "domains": ["预算"],
+            "status": "covered",
+            "skillIds": ["budget-penetration"]
+          }
+        ]
+      },
+      {
+        "name": "流量与场景",
+        "capabilities": [
+          {
+            "id": "traffic-forecast",
+            "title": "联盟流量预估",
+            "description": "按月预估联盟整体与分场景流量趋势，并给出投放建议。",
+            "domains": ["APP流量", "预算"],
+            "status": "covered",
+            "skillIds": ["traffic-forecast"]
+          },
+          {
+            "id": "vendor-scene-diagnosis",
+            "title": "厂商场景消耗异动分析",
+            "description": "按厂商和场景定位消耗波动，输出原因与建议。",
+            "domains": ["厂商"],
+            "status": "covered",
+            "skillIds": ["vendor-scene-analysis", "ad-slot-query"]
+          }
+        ]
+      },
+      {
+        "name": "策略调优",
+        "capabilities": [
+          {
+            "id": "support-strategy-design",
+            "title": "扶持策略设计与效果分析",
+            "description": "围绕人货场机会设计扶持策略，并阶段性评估效果。",
+            "domains": ["预算", "平台"],
+            "status": "building",
+            "skillIds": []
+          },
+          {
+            "id": "quality-traffic-penetration",
+            "title": "优质流量提渗",
+            "description": "分析优质场景和人群渗透机会，联动人工配置推进提渗。",
+            "domains": ["预算", "APP流量", "厂商"],
+            "status": "building",
+            "skillIds": []
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "serviceStage": "体验管理",
+    "description": "覆盖素材体验、预算屏蔽、性能和风险排查相关能力。",
+    "modules": [
+      {
+        "name": "素材体验",
+        "capabilities": [
+          {
+            "id": "material-experience-ops",
+            "title": "素材体验知识库与 SOP",
+            "description": "承接素材审核、体验放宽、售后退款、屏蔽排查等问题。",
+            "domains": ["平台", "APP流量", "预算"],
+            "status": "covered",
+            "skillIds": ["material-experience"]
+          }
+        ]
+      },
+      {
+        "name": "预算屏蔽",
+        "capabilities": [
+          {
+            "id": "budget-blocking-plan",
+            "title": "预算屏蔽沟通与方案制定",
+            "description": "评估屏蔽合理性、制定放开或屏蔽方案并推进沟通。",
+            "domains": ["预算", "平台"],
+            "status": "building",
+            "skillIds": []
+          },
+          {
+            "id": "budget-blocking-config",
+            "title": "预算屏蔽配置与审批",
+            "description": "承接保护伞等配置动作与审批过程。",
+            "domains": ["预算", "平台"],
+            "status": "gap",
+            "skillIds": []
+          }
+        ]
+      },
+      {
+        "name": "性能优化",
+        "capabilities": [
+          {
+            "id": "sdk-performance",
+            "title": "SDK 性能优化",
+            "description": "处理 SDK 数据获取、崩溃、卡顿等体验问题。",
+            "domains": ["APP流量", "平台"],
+            "status": "gap",
+            "skillIds": []
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "serviceStage": "客户服务",
+    "description": "支撑客户拜访、日常答疑、结算沟通和沙龙运营。",
+    "modules": [
+      {
+        "name": "客户拜访",
+        "capabilities": [
+          {
+            "id": "visit-docs",
+            "title": "拜访文档与路线规划",
+            "description": "生成拜访文档、规划路线并沉淀会前材料。",
+            "domains": ["APP流量", "厂商"],
+            "status": "covered",
+            "skillIds": ["visit-doc-generator", "vendor-trip-material"]
+          },
+          {
+            "id": "visit-followup",
+            "title": "拜访纪要与待办跟进",
+            "description": "输出纪要、形成需求并推进 todo 跟进。",
+            "domains": ["APP流量", "厂商"],
+            "status": "covered",
+            "skillIds": ["visit-summary"]
+          }
+        ]
+      },
+      {
+        "name": "日常服务",
+        "capabilities": [
+          {
+            "id": "daily-qa",
+            "title": "联盟特色知识问答 / 新人辅导",
+            "description": "承接日常答疑、新人学习和知识问答场景。",
+            "domains": ["平台", "预算"],
+            "status": "covered",
+            "skillIds": ["ai-mentor"]
+          }
+        ]
+      },
+      {
+        "name": "活动运营",
+        "capabilities": [
+          {
+            "id": "salon-ops",
+            "title": "沙龙材料、邀约与纪要",
+            "description": "支撑沙龙主题规划、材料输出、客户邀约和会后纪要。",
+            "domains": ["APP流量"],
+            "status": "gap",
+            "skillIds": [],
+            "examples": ["2025联盟内容建设-沙龙&直播SOP"]
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,207 +1,191 @@
-import { getCertificationRounds, getResultsByRound, getReviewsByRound } from "@/lib/data";
+import Link from "next/link";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Shield, Users, Star, CheckCircle, XCircle } from "lucide-react";
+import {
+  getCertificationRounds,
+  getOfficialSkills,
+  getOfficialSkillRecords,
+  getSkillById,
+} from "@/lib/data";
+import type { Skill, SkillDomain } from "@/lib/types";
+import { ArrowRight, CheckCircle2, Shield, Users } from "lucide-react";
 
-const statusConfig = {
-  collecting: { label: "征集中", color: "bg-yellow-100 text-yellow-800" },
-  reviewing: { label: "评价中", color: "bg-blue-100 text-blue-800" },
-  completed: { label: "已完成", color: "bg-green-100 text-green-800" },
+const domainOrder: SkillDomain[] = ["APP流量", "平台", "预算", "厂商"];
+
+const domainStyles: Record<SkillDomain, string> = {
+  "APP流量": "bg-cyan-100 text-cyan-700 border-cyan-200",
+  "平台": "bg-violet-100 text-violet-700 border-violet-200",
+  "预算": "bg-amber-100 text-amber-700 border-amber-200",
+  "厂商": "bg-emerald-100 text-emerald-700 border-emerald-200",
 };
 
-const dimensionLabels: Record<string, string> = {
-  normative: "规范性",
-  applicability: "适用范围",
-  unionFeature: "联盟特色",
-  sustainability: "可持续性",
-  effectiveness: "使用效果",
-};
+function groupSkillsByDomain(skills: Skill[]) {
+  const result = new Map<SkillDomain, Skill[]>();
+  for (const domain of domainOrder) result.set(domain, []);
+
+  for (const skill of skills) {
+    const domains: SkillDomain[] = skill.domains?.length ? skill.domains : ["平台"];
+    for (const domain of domains) {
+      result.get(domain)?.push(skill);
+    }
+  }
+
+  return result;
+}
 
 export default function CertificationPage() {
-  const rounds = getCertificationRounds();
-  const sortedRounds = [...rounds].sort((a, b) => b.month.localeCompare(a.month));
-  const currentRound = sortedRounds[0];
-  const historyRounds = sortedRounds.slice(1);
+  const officialSkills = getOfficialSkills();
+  const officialRecords = new Map(
+    getOfficialSkillRecords().map((item) => [item.skillId, item])
+  );
+  const grouped = groupSkillsByDomain(officialSkills);
+  const currentRound = getCertificationRounds().find((round) => round.status === "reviewing");
+  const candidateSkills =
+    currentRound?.skills
+      .map((skillId) => getSkillById(skillId))
+      .filter((skill): skill is Skill => Boolean(skill))
+      .filter((skill) => !skill.official) ?? [];
 
   return (
     <div className="space-y-8">
-      {/* Header */}
       <div>
         <p className="text-xs font-medium text-gray-400 uppercase tracking-widest">
-          CERTIFICATION
+          OFFICIAL SKILLS
         </p>
-        <h1 className="text-2xl font-bold text-gray-900 mt-1">联盟认证</h1>
+        <h1 className="text-2xl font-bold text-gray-900 mt-1">联盟认证馆</h1>
         <p className="text-sm text-gray-500 mt-1">
-          双轨评价机制：大众点评官 + 专家评价，共同把关 Skill 质量
+          这里展示已经由各组 PM 评审通过、明确作为联盟官方推荐的 Skill。
         </p>
       </div>
 
-      {/* 认证通过标准 */}
-      <Card className="border-blue-100 bg-blue-50/30">
+      <Card className="border-blue-100 bg-blue-50/40">
         <CardContent className="p-5">
           <div className="flex items-center gap-2 mb-3">
             <Shield className="w-4 h-4 text-blue-600" />
-            <h3 className="text-sm font-semibold text-gray-800">认证通过标准</h3>
+            <h2 className="text-sm font-semibold text-gray-800">认证口径</h2>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs text-gray-600">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-gray-600">
             <div className="space-y-1.5">
-              <p className="font-medium text-gray-700">大众点评官（每月 2 人）</p>
-              <p>• 从联盟产运同学中抽选</p>
-              <p>• 对当期 Skill 打分（1-5）+ 写评语</p>
-              <p>• 通过条件：均分 ≥ 3.5 且 ≥ 2 人提交</p>
+              <p>认证本质不是系统自动打分，而是各组 PM 内部评审通过后的业务认定。</p>
+              <p>平台不管理具体评审过程，只承接结果展示和官方标识透出。</p>
             </div>
             <div className="space-y-1.5">
-              <p className="font-medium text-gray-700">专家评价（各组 PM/老板）</p>
-              <p>• 测试验证 + 五维度打分</p>
-              <p>• 维度：规范性 / 适用范围 / 联盟特色 / 可持续性 / 使用效果</p>
-              <p>• 通过条件：均分 ≥ 3.0 且至少 1 位标记"通过"</p>
+              <p>官方 Skill 会在 Skill 市场、能力地图、详情页里同步展示。</p>
+              <p>单独设馆的目的，是让“官方推荐”从一个标签变成一个清晰的资产池。</p>
             </div>
-          </div>
-          <div className="mt-3 pt-3 border-t border-blue-100">
-            <p className="text-xs text-blue-700 font-medium">
-              两者同时满足 → 获得联盟认证 🎖️
-            </p>
           </div>
         </CardContent>
       </Card>
 
-      {/* 当前轮次 */}
-      {currentRound && (
-        <div className="space-y-4">
-          <div className="flex items-center gap-3">
-            <h2 className="text-lg font-semibold text-gray-800">当前轮次</h2>
-            <Badge className={statusConfig[currentRound.status].color} variant="secondary">
-              {statusConfig[currentRound.status].label}
-            </Badge>
-          </div>
-
-          <Card>
-            <CardContent className="p-5 space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div>
-                  <p className="text-xs text-gray-500 mb-1">轮次</p>
-                  <p className="text-sm font-medium">{currentRound.month} 期</p>
-                </div>
-                <div>
-                  <p className="text-xs text-gray-500 mb-1">参评 Skill</p>
-                  <div className="flex flex-wrap gap-1">
-                    {currentRound.skills.map((s) => (
-                      <Badge key={s} variant="secondary" className="text-[11px] bg-gray-100">
-                        {s}
-                      </Badge>
-                    ))}
-                  </div>
-                </div>
-                <div>
-                  <p className="text-xs text-gray-500 mb-1">评价团</p>
-                  <div className="flex items-center gap-3 text-xs text-gray-600">
-                    <span className="flex items-center gap-1">
-                      <Users className="w-3 h-3" />
-                      大众 {currentRound.publicReviewers.length} 人
-                    </span>
-                    <span className="flex items-center gap-1">
-                      <Star className="w-3 h-3" />
-                      专家 {currentRound.expertReviewers.length} 人
-                    </span>
-                  </div>
-                </div>
-              </div>
-
-              {/* 如果已完成，显示结果 */}
-              {currentRound.status === "completed" && (
-                <ResultsTable roundId={currentRound.id} />
-              )}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        {domainOrder.map((domain) => (
+          <Card key={domain}>
+            <CardContent className="p-5">
+              <Badge variant="outline" className={domainStyles[domain]}>
+                {domain}
+              </Badge>
+              <p className="mt-3 text-2xl font-bold text-gray-900">
+                {grouped.get(domain)?.length ?? 0}
+              </p>
+              <p className="text-sm text-gray-500 mt-1">已认证官方 Skill</p>
             </CardContent>
           </Card>
-        </div>
-      )}
+        ))}
+      </div>
 
-      {/* 历史轮次 */}
-      {historyRounds.length > 0 && (
-        <div className="space-y-4">
-          <h2 className="text-lg font-semibold text-gray-800">历史轮次</h2>
-          {historyRounds.map((round) => (
-            <Card key={round.id}>
-              <CardContent className="p-5 space-y-4">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <h3 className="text-sm font-semibold text-gray-700">
-                      {round.month} 期
-                    </h3>
-                    <Badge className={statusConfig[round.status].color} variant="secondary">
-                      {statusConfig[round.status].label}
-                    </Badge>
-                  </div>
-                  <div className="flex items-center gap-3 text-xs text-gray-500">
-                    <span>{round.skills.length} 个 Skill 参评</span>
-                    <span>{round.publicReviewers.length + round.expertReviewers.length} 位评价</span>
-                  </div>
+      <div className="space-y-5">
+        <div className="flex items-center justify-between">
+          <h2 className="text-lg font-semibold text-gray-800">官方认证 Skill</h2>
+          <span className="text-sm text-gray-400">{officialSkills.length} 个 Skill</span>
+        </div>
+
+        {domainOrder.map((domain) => {
+          const skills = grouped.get(domain) ?? [];
+          if (skills.length === 0) return null;
+
+          return (
+            <div key={domain} className="space-y-3">
+              <div className="flex items-center gap-2">
+                <Badge variant="outline" className={domainStyles[domain]}>
+                  {domain}
+                </Badge>
+                <span className="text-sm text-gray-400">{skills.length} 个</span>
+              </div>
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                {skills.map((skill) => {
+                  const record = officialRecords.get(skill.id);
+                  return (
+                    <Link key={`${domain}-${skill.id}`} href={`/skills/${skill.id}`}>
+                      <Card className="h-full hover:shadow-md transition-shadow border-gray-100">
+                        <CardContent className="p-5 space-y-3">
+                          <div className="flex items-start justify-between gap-3">
+                            <div>
+                              <h3 className="font-semibold text-gray-900">{skill.name}</h3>
+                              <p className="text-xs text-gray-400 mt-1">{skill.category}</p>
+                            </div>
+                            <span className="inline-flex items-center gap-1 text-xs text-green-700 bg-green-50 px-2 py-1 rounded-full shrink-0">
+                              <CheckCircle2 className="w-3 h-3" />
+                              官方认证
+                            </span>
+                          </div>
+                          <p className="text-sm text-gray-600 leading-relaxed">{skill.description}</p>
+                          <div className="flex flex-wrap gap-1.5">
+                            {(skill.domains ?? []).map((item) => (
+                              <Badge key={item} variant="outline" className={domainStyles[item]}>
+                                {item}
+                              </Badge>
+                            ))}
+                          </div>
+                          <div className="text-xs text-gray-500 space-y-1">
+                            <p>评审归属：{record?.reviewerGroup}</p>
+                            <p>确认方式：{record?.certifiedBy}</p>
+                            <p>确认时间：{record?.certifiedAt}</p>
+                          </div>
+                          {record?.note && (
+                            <div className="pt-3 border-t border-gray-100 text-sm text-gray-600">
+                              {record.note}
+                            </div>
+                          )}
+                        </CardContent>
+                      </Card>
+                    </Link>
+                  );
+                })}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      <div className="space-y-4">
+        <div className="flex items-center gap-2">
+          <Users className="w-4 h-4 text-gray-400" />
+          <h2 className="text-lg font-semibold text-gray-800">待各组确认</h2>
+        </div>
+        <Card>
+          <CardContent className="p-5">
+            {candidateSkills.length > 0 ? (
+              <div className="space-y-3">
+                <p className="text-sm text-gray-500">
+                  这部分 Skill 已进入组内评审视野，但还没有形成最终的官方认证结果。
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  {candidateSkills.map((skill) => (
+                    <Link key={skill.id} href={`/skills/${skill.id}`}>
+                      <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-orange-50 text-orange-700 text-sm border border-orange-100 hover:shadow-sm transition-shadow">
+                        {skill.name}
+                        <ArrowRight className="w-3 h-3" />
+                      </span>
+                    </Link>
+                  ))}
                 </div>
-
-                {round.status === "completed" && (
-                  <ResultsTable roundId={round.id} />
-                )}
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-      )}
-    </div>
-  );
-}
-
-function ResultsTable({ roundId }: { roundId: string }) {
-  const results = getResultsByRound(roundId);
-  const reviews = getReviewsByRound(roundId);
-
-  if (results.length === 0) return null;
-
-  return (
-    <div className="border rounded-lg overflow-hidden">
-      <table className="w-full text-sm">
-        <thead className="bg-gray-50">
-          <tr>
-            <th className="px-4 py-2.5 text-left text-xs font-medium text-gray-500">Skill</th>
-            <th className="px-4 py-2.5 text-center text-xs font-medium text-gray-500">大众评分</th>
-            <th className="px-4 py-2.5 text-center text-xs font-medium text-gray-500">专家评分</th>
-            <th className="px-4 py-2.5 text-center text-xs font-medium text-gray-500">认证结果</th>
-          </tr>
-        </thead>
-        <tbody className="divide-y divide-gray-100">
-          {results.map((result) => (
-            <tr key={result.skillId} className="hover:bg-gray-50/50">
-              <td className="px-4 py-3">
-                <p className="font-medium text-gray-800">{result.skillId}</p>
-                <p className="text-xs text-gray-500 mt-0.5">{result.summary}</p>
-              </td>
-              <td className="px-4 py-3 text-center">
-                <span className={`text-sm font-semibold ${result.publicScore >= 3.5 ? "text-green-600" : "text-red-500"}`}>
-                  {result.publicScore.toFixed(1)}
-                </span>
-                <p className="text-[11px] text-gray-400">{result.publicCount} 人评价</p>
-              </td>
-              <td className="px-4 py-3 text-center">
-                <span className={`text-sm font-semibold ${result.expertScore >= 3.0 ? "text-green-600" : "text-red-500"}`}>
-                  {result.expertScore.toFixed(1)}
-                </span>
-              </td>
-              <td className="px-4 py-3 text-center">
-                {result.passed ? (
-                  <span className="inline-flex items-center gap-1 text-xs text-green-700 bg-green-50 px-2 py-1 rounded-full">
-                    <CheckCircle className="w-3 h-3" />
-                    已认证
-                  </span>
-                ) : (
-                  <span className="inline-flex items-center gap-1 text-xs text-red-600 bg-red-50 px-2 py-1 rounded-full">
-                    <XCircle className="w-3 h-3" />
-                    未通过
-                  </span>
-                )}
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+              </div>
+            ) : (
+              <p className="text-sm text-gray-500">当前没有待确认的官方 Skill。</p>
+            )}
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
 }

@@ -1,23 +1,15 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useMemo, useState } from "react";
 import Link from "next/link";
-import { getSkills, getSkillStage } from "@/lib/data";
-import type { SkillStage } from "@/lib/data";
-import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Search, ShieldCheck, Clock, Download } from "lucide-react";
-import type { Skill } from "@/lib/types";
+import { getSkills, getSkillStage } from "@/lib/data";
+import type { Skill, SkillDomain } from "@/lib/types";
+import { Download, Search, ShieldCheck } from "lucide-react";
 
-const workflowCategories = ["市场分析", "流量接入", "形态样式", "变现调优", "体验管理", "客户服务"] as const;
-
-const businessTypeColors: Record<string, string> = {
-  "分赛道建设": "bg-pink-100 text-pink-700",
-  "厂商流量": "bg-emerald-100 text-emerald-700",
-  "APP流量": "bg-cyan-100 text-cyan-700",
-  "通用": "bg-gray-100 text-gray-600",
-};
+const domainOptions: Array<SkillDomain | "全部"> = ["全部", "APP流量", "平台", "预算", "厂商"];
 
 const statusLabels: Record<Skill["status"], string> = {
   developing: "开发中",
@@ -31,267 +23,188 @@ const statusColors: Record<Skill["status"], string> = {
   deprecated: "bg-gray-100 text-gray-600",
 };
 
-// 团队颜色映射
-const teamColors: Record<string, string> = {
-  联盟产品: "bg-blue-100 text-blue-700",
-  联盟运营: "bg-orange-100 text-orange-700",
-  联盟商务: "bg-emerald-100 text-emerald-700",
-  联盟研发: "bg-purple-100 text-purple-700",
+const domainStyles: Record<SkillDomain, string> = {
+  "APP流量": "bg-cyan-100 text-cyan-700",
+  "平台": "bg-violet-100 text-violet-700",
+  "预算": "bg-amber-100 text-amber-700",
+  "厂商": "bg-emerald-100 text-emerald-700",
 };
-
-function getTeamColor(team: string): string {
-  return teamColors[team] || "bg-gray-100 text-gray-600";
-}
-
-type SortKey = "score" | "invokes" | "updatedAt";
-
-const sortLabels: Record<SortKey, string> = {
-  score: "按评分",
-  invokes: "按调用量",
-  updatedAt: "按更新时间",
-};
-
-const stageOrder: Record<SkillStage, number> = {
-  certified: 0,
-  reviewing: 1,
-  personal: 2,
-};
-
-function StageBadge({ stage }: { stage: SkillStage }) {
-  if (stage === "certified") {
-    return (
-      <Badge className="bg-green-100 text-green-700 border-green-200 text-xs gap-1" variant="outline">
-        <ShieldCheck className="w-3 h-3" />
-        联盟认证
-      </Badge>
-    );
-  }
-  if (stage === "reviewing") {
-    return (
-      <Badge className="bg-orange-100 text-orange-700 border-orange-200 text-xs gap-1" variant="outline">
-        <Clock className="w-3 h-3" />
-        评价中
-      </Badge>
-    );
-  }
-  return null;
-}
 
 export default function SkillsPage() {
   const skills = getSkills();
-  const [search, setSearch] = useState("");
-  const [filterStatus, setFilterStatus] = useState<string>("all");
-  const [filterCategory, setFilterCategory] = useState<string>("all");
-  const [sortBy, setSortBy] = useState<SortKey>("updatedAt");
+  const serviceStages = Array.from(new Set(skills.map((skill) => skill.category)));
 
-  // 计算每个工作流分类的数量
-  const categoryCounts = useMemo(() => {
-    const counts: Record<string, number> = {};
-    skills.forEach((s) => {
-      counts[s.category] = (counts[s.category] || 0) + 1;
-    });
-    return counts;
-  }, [skills]);
+  const [keyword, setKeyword] = useState("");
+  const [selectedDomain, setSelectedDomain] = useState<SkillDomain | "全部">("全部");
+  const [selectedStage, setSelectedStage] = useState<string>("全部");
+  const [officialOnly, setOfficialOnly] = useState(false);
 
   const filtered = useMemo(() => {
-    let result = skills.filter((s) => {
-      const matchSearch =
-        s.name.toLowerCase().includes(search.toLowerCase()) ||
-        s.description.toLowerCase().includes(search.toLowerCase()) ||
-        s.owner.toLowerCase().includes(search.toLowerCase()) ||
-        s.slug.toLowerCase().includes(search.toLowerCase());
-      const matchStatus = filterStatus === "all" || s.status === filterStatus;
-      const matchCategory =
-        filterCategory === "all" || s.category === filterCategory;
-      return matchSearch && matchStatus && matchCategory;
-    });
-
-    // 先按阶段排序（认证 > 评审中 > 个人），再按选定排序维度
-    result = [...result].sort((a, b) => {
-      const stageA = stageOrder[getSkillStage(a.id)];
-      const stageB = stageOrder[getSkillStage(b.id)];
-      if (stageA !== stageB) return stageA - stageB;
-
-      switch (sortBy) {
-        case "score":
-          return (b.score || 0) - (a.score || 0);
-        case "invokes":
-          return b.metrics.invokeCount - a.metrics.invokeCount;
-        case "updatedAt":
-          return (
-            new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
-          );
-      }
-    });
-
-    return result;
-  }, [skills, search, filterStatus, filterCategory, sortBy]);
+    return skills
+      .filter((skill) => {
+        const query = keyword.trim().toLowerCase();
+        const matchKeyword =
+          !query ||
+          skill.name.toLowerCase().includes(query) ||
+          skill.description.toLowerCase().includes(query) ||
+          skill.owner.toLowerCase().includes(query) ||
+          skill.slug.toLowerCase().includes(query);
+        const matchDomain =
+          selectedDomain === "全部" ||
+          (skill.domains ?? []).includes(selectedDomain);
+        const matchStage = selectedStage === "全部" || skill.category === selectedStage;
+        const matchOfficial = !officialOnly || skill.official?.status === "official";
+        return matchKeyword && matchDomain && matchStage && matchOfficial;
+      })
+      .sort((a, b) => {
+        const stageOrder = getSkillStage(a.id) === "certified" ? -1 : 0;
+        const compareOrder = getSkillStage(b.id) === "certified" ? -1 : 0;
+        if (stageOrder !== compareOrder) return stageOrder - compareOrder;
+        return new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime();
+      });
+  }, [keyword, officialOnly, selectedDomain, selectedStage, skills]);
 
   return (
     <div className="space-y-8">
-      {/* Page Title — ADesign Style */}
       <div>
         <p className="text-xs font-medium text-gray-400 uppercase tracking-widest">
-          SKILL LIBRARY
+          SKILL MARKET
         </p>
         <h1 className="text-2xl font-bold text-gray-900 mt-1">Skill 库</h1>
         <p className="text-sm text-gray-500 mt-1">
-          联盟 AI Skill 生态的核心资产，共 {skills.length} 个 Skill
+          不只是看 Skill 名单，还能直接看到它覆盖哪个服务环节、属于哪个域、是否已经成为官方推荐。
         </p>
       </div>
 
-      {/* Search + Status Filter */}
-      <div className="flex items-center gap-4 flex-wrap">
-        <div className="relative flex-1 max-w-sm">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-          <Input
-            placeholder="搜索名称、slug、描述、owner..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="pl-9"
-          />
-        </div>
-        <div className="flex gap-2">
-          {["all", "active", "developing", "deprecated"].map((status) => (
-            <button
-              key={status}
-              onClick={() => setFilterStatus(status)}
-              className={`px-3 py-1.5 text-xs rounded-lg font-medium transition-colors ${
-                filterStatus === status
-                  ? "bg-blue-100 text-blue-700"
-                  : "bg-gray-100 text-gray-600 hover:bg-gray-200"
-              }`}
-            >
-              {status === "all"
-                ? "全部"
-                : statusLabels[status as Skill["status"]]}
-            </button>
-          ))}
-        </div>
+      <Card>
+        <CardContent className="p-5 space-y-4">
+          <div className="relative max-w-md">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+            <Input
+              value={keyword}
+              onChange={(event) => setKeyword(event.target.value)}
+              placeholder="搜索名称、描述、owner、slug..."
+              className="pl-9"
+            />
+          </div>
+
+          <div className="space-y-3">
+            <div className="flex gap-2 flex-wrap">
+              {domainOptions.map((domain) => (
+                <button
+                  key={domain}
+                  onClick={() => setSelectedDomain(domain)}
+                  className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
+                    selectedDomain === domain
+                      ? "bg-gray-900 text-white"
+                      : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                  }`}
+                >
+                  {domain}
+                </button>
+              ))}
+            </div>
+
+            <div className="flex gap-2 flex-wrap">
+              <button
+                onClick={() => setSelectedStage("全部")}
+                className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
+                  selectedStage === "全部"
+                    ? "bg-blue-100 text-blue-700"
+                    : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                }`}
+              >
+                全部环节
+              </button>
+              {serviceStages.map((stage) => (
+                <button
+                  key={stage}
+                  onClick={() => setSelectedStage(stage)}
+                  className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
+                    selectedStage === stage
+                      ? "bg-blue-100 text-blue-700"
+                      : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                  }`}
+                >
+                  {stage}
+                </button>
+              ))}
+              <button
+                onClick={() => setOfficialOnly((value) => !value)}
+                className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
+                  officialOnly
+                    ? "bg-green-100 text-green-700"
+                    : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                }`}
+              >
+                仅看官方认证
+              </button>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      <div className="flex items-center justify-between">
+        <p className="text-sm text-gray-500">当前结果 {filtered.length} 个 Skill</p>
       </div>
 
-      {/* Category Filter with Counts + Sort */}
-      <div className="flex items-center justify-between flex-wrap gap-3">
-        <div className="flex gap-2 flex-wrap">
-          <button
-            onClick={() => setFilterCategory("all")}
-            className={`px-3 py-1.5 text-xs rounded-lg font-medium transition-colors ${
-              filterCategory === "all"
-                ? "bg-purple-100 text-purple-700"
-                : "bg-gray-100 text-gray-600 hover:bg-gray-200"
-            }`}
-          >
-            全部 {skills.length}
-          </button>
-          {workflowCategories.map((cat) => (
-            <button
-              key={cat}
-              onClick={() => setFilterCategory(cat)}
-              className={`px-3 py-1.5 text-xs rounded-lg font-medium transition-colors ${
-                filterCategory === cat
-                  ? "bg-purple-100 text-purple-700"
-                  : "bg-gray-100 text-gray-600 hover:bg-gray-200"
-              }`}
-            >
-              {cat} {categoryCounts[cat] || 0}
-            </button>
-          ))}
-        </div>
-        <div className="flex gap-1 items-center">
-          <span className="text-xs text-gray-400 mr-1">排序:</span>
-          {(Object.keys(sortLabels) as SortKey[]).map((key) => (
-            <button
-              key={key}
-              onClick={() => setSortBy(key)}
-              className={`px-2.5 py-1 text-xs rounded font-medium transition-colors ${
-                sortBy === key
-                  ? "bg-gray-800 text-white"
-                  : "bg-gray-100 text-gray-600 hover:bg-gray-200"
-              }`}
-            >
-              {sortLabels[key]}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* Skill Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-        {filtered.map((skill) => {
-          const stage = getSkillStage(skill.id);
-          return (
-            <Link key={skill.id} href={`/skills/${skill.id}`}>
-              <Card className="hover:shadow-md transition-shadow cursor-pointer h-full border-gray-100">
-                <CardContent className="p-6">
-                  <div className="flex items-start justify-between mb-2">
-                    <div className="flex-1 min-w-0">
-                      <h3 className="font-semibold text-gray-900 text-base">
-                        {skill.name}
-                      </h3>
-                      <p className="text-xs text-gray-400 mt-0.5 font-mono truncate">
-                        {skill.slug}
-                      </p>
-                    </div>
-                    <div className="flex flex-col items-end gap-1 ml-2 shrink-0">
-                      <Badge
-                        className={`text-xs ${statusColors[skill.status]}`}
-                        variant="secondary"
-                      >
-                        {statusLabels[skill.status]}
-                      </Badge>
-                      <StageBadge stage={stage} />
-                    </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
+        {filtered.map((skill) => (
+          <Link key={skill.id} href={`/skills/${skill.id}`}>
+            <Card className="h-full border-gray-100 hover:shadow-md transition-shadow">
+              <CardContent className="p-5 space-y-4">
+                <div className="flex items-start justify-between gap-3">
+                  <div className="min-w-0">
+                    <h3 className="font-semibold text-gray-900">{skill.name}</h3>
+                    <p className="text-xs text-gray-400 mt-1 font-mono truncate">{skill.slug}</p>
                   </div>
-                  <p className="text-sm text-gray-600 mb-4 line-clamp-2 leading-relaxed">
-                    {skill.description}
-                  </p>
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2 flex-wrap">
-                      <Badge
-                        className={`text-xs ${getTeamColor(skill.team)}`}
-                        variant="secondary"
-                      >
-                        {skill.owner}
+                  <div className="flex flex-col items-end gap-1 shrink-0">
+                    <Badge variant="secondary" className={statusColors[skill.status]}>
+                      {statusLabels[skill.status]}
+                    </Badge>
+                    {skill.official?.status === "official" && (
+                      <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200 gap-1">
+                        <ShieldCheck className="w-3 h-3" />
+                        官方认证
                       </Badge>
-                      <Badge variant="outline" className="text-xs">
-                        {skill.category}
-                      </Badge>
-                      {skill.businessType && skill.businessType !== "通用" && (
-                        <Badge className={`text-xs ${businessTypeColors[skill.businessType] || "bg-gray-100 text-gray-600"}`} variant="secondary">
-                          {skill.businessType}
-                        </Badge>
-                      )}
-                    </div>
-                    <div className="flex items-center gap-3 text-xs text-gray-400">
-                      {skill.metrics.invokeCount > 0 && (
-                        <span>{skill.metrics.invokeCount} 次</span>
-                      )}
-                      {skill.downloadUrl && (
-                        <a
-                          href={skill.downloadUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          onClick={(e) => e.stopPropagation()}
-                          className="inline-flex items-center gap-1 px-2 py-1 rounded bg-blue-600 text-white hover:bg-blue-700 transition-colors text-xs font-medium"
-                        >
-                          <Download className="w-3 h-3" />
-                          试用
-                        </a>
-                      )}
-                    </div>
+                    )}
                   </div>
-                </CardContent>
-              </Card>
-            </Link>
-          );
-        })}
-      </div>
+                </div>
 
-      {filtered.length === 0 && (
-        <div className="text-center py-12 text-gray-400">
-          没有匹配的Skill
-        </div>
-      )}
+                <p className="text-sm text-gray-600 leading-relaxed line-clamp-3">
+                  {skill.description}
+                </p>
+
+                <div className="flex flex-wrap gap-1.5">
+                  <Badge variant="outline">{skill.category}</Badge>
+                  {(skill.domains ?? []).map((domain) => (
+                    <Badge key={domain} className={domainStyles[domain]} variant="secondary">
+                      {domain}
+                    </Badge>
+                  ))}
+                </div>
+
+                <div className="text-xs text-gray-500 space-y-1">
+                  <p>Owner：{skill.owner}</p>
+                  {skill.official && <p>评审归属：{skill.official.reviewerGroup}</p>}
+                </div>
+
+                <div className="flex items-center justify-between pt-3 border-t border-gray-100 text-sm">
+                  <div className="text-gray-500">
+                    下载量 <span className="font-semibold text-gray-900">{skill.metrics.invokeCount}</span>
+                  </div>
+                  {skill.downloadUrl && (
+                    <span className="inline-flex items-center gap-1 text-gray-600">
+                      <Download className="w-3.5 h-3.5" />
+                      查看详情
+                    </span>
+                  )}
+                </div>
+              </CardContent>
+            </Card>
+          </Link>
+        ))}
+      </div>
     </div>
   );
 }

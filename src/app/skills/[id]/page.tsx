@@ -143,16 +143,10 @@ function GrowthPath({ stage, skill }: { stage: SkillStage; skill: Skill }) {
         {/* Stage-specific guidance */}
         <div className="mt-3 p-3 rounded-lg bg-gray-50 text-sm text-gray-600">
           {stage === "personal" && (
-            <p>
-              涉及联盟业务场景？可{" "}
-              <Link href="/rules#certification" className="text-blue-600 hover:underline">
-                申请参与下月认证评价
-              </Link>
-              ，通过后获得联盟官方认证标识和优先推荐。
-            </p>
+            <p>当前还不是官方认证 Skill。若被各组 PM 评审通过，后续会进入联盟认证馆并获得官方推荐标识。</p>
           )}
           {stage === "reviewing" && (
-            <p>本月评价进行中，经过 Demo 展示 + 大众点评官 + 专家评价，结果将在月底公布。</p>
+            <p>当前正处于组内评审确认阶段，待 PM 最终确认后，将决定是否进入联盟认证馆。</p>
           )}
           {stage === "certified" && (
             <div className="space-y-1">
@@ -163,6 +157,11 @@ function GrowthPath({ stage, skill }: { stage: SkillStage; skill: Skill }) {
                   <span className="text-gray-400 text-xs ml-2">认证于 {skill.certifiedAt}</span>
                 )}
               </p>
+              {skill.official?.reviewerGroup && (
+                <p className="text-xs text-gray-500">
+                  评审归属：{skill.official.reviewerGroup} · 确认方式：{skill.official.certifiedBy}
+                </p>
+              )}
               {certResult && (
                 <p className="text-xs text-gray-500 mt-1">
                   大众评价 {certResult.publicScore.toFixed(1)} 分（{certResult.publicCount} 人）· 专家评价 {certResult.expertScore.toFixed(1)} 分
@@ -235,14 +234,23 @@ export default async function SkillDetailPage({
                 联盟认证
               </Badge>
             )}
-          {/* Team info */}
+          </div>
+          <div className="flex flex-wrap gap-2 mt-3">
+            {(skill.domains ?? []).map((domain) => (
+              <Badge key={domain} variant="outline" className="text-xs">
+                {domain}
+              </Badge>
+            ))}
+          </div>
           <p className="text-xs text-gray-400 mt-2">
             Owner: <span className="text-gray-600">{skill.owner}</span>
             {skill.contributors.length > 0 && (
               <> · Contributors: {skill.contributors.join(", ")}</>
             )}
           </p>
-          </div>
+          {skill.official?.note && (
+            <p className="text-sm text-gray-600 mt-3 leading-relaxed">{skill.official.note}</p>
+          )}
         </div>
         {skill.score && (
           <div className="text-right">
