@@ -1,2 +1,2 @@
-:HL["/skillhub-portal/_next/static/css/493e244ae53e35f5.css","style"]
-0:{"tree":{"name":"","param":null,"prefetchHints":16,"slots":{"children":{"name":"skills","param":null,"prefetchHints":0,"slots":{"children":{"name":"id","param":{"type":"d","key":"vendor-scene-analysis","siblings":null},"prefetchHints":0,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":0,"slots":null}}}}}}},"staleTime":300,"buildId":"BRPMt9JQ9HBObLlhogbMn"}
+:HL["/skillhub-portal/_next/static/css/96253fcf1296e422.css","style"]
+0:{"tree":{"name":"","param":null,"prefetchHints":16,"slots":{"children":{"name":"skills","param":null,"prefetchHints":0,"slots":{"children":{"name":"id","param":{"type":"d","key":"vendor-scene-analysis","siblings":null},"prefetchHints":0,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":0,"slots":null}}}}}}},"staleTime":300,"buildId":"pOjrG8-9DdAWxVfNjtUtT"}
