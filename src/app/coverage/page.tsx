@@ -1,14 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
-import { AlertTriangle, ArrowRight, CheckCircle2, Clock3 } from "lucide-react";
+import { AlertTriangle, CheckCircle2, Clock3 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import {
   BUDGET_WORKFLOW_TAGS,
   getCapabilityCards,
-  getPendingSkillRegistrations,
   TRAFFIC_WORKFLOW_TAGS,
 } from "@/lib/data";
 import type { CapabilityCard, CapabilityStage, WorkflowTag, Workstream } from "@/lib/types";
@@ -175,9 +173,6 @@ function WorkstreamSection({
       <div className="flex items-end justify-between gap-4">
         <div>
           <h2 className="text-lg font-semibold text-gray-900">{title}</h2>
-          <p className="mt-1 text-sm text-gray-500">
-            先按大环节看进度，不做复杂筛选；每个环节只露出最该处理的 3 个能力点。
-          </p>
         </div>
         <span className="hidden text-sm text-gray-400 md:block">
           {tags.length} 个环节 / {cards.length} 个能力点
@@ -252,7 +247,6 @@ function WorkstreamSummary({
 export default function CoveragePage() {
   const [scope, setScope] = useState<Scope>("全部");
   const cards = getCapabilityCards();
-  const pending = getPendingSkillRegistrations();
   const visibleCards =
     scope === "全部" ? cards : cards.filter((card) => card.workstream === scope);
   const counts = countByStage(visibleCards);
@@ -261,47 +255,16 @@ export default function CoveragePage() {
   ).slice(0, 5);
   const trafficCards = cards.filter((card) => card.workstream === "流量侧");
   const budgetCards = cards.filter((card) => card.workstream === "预算侧");
-  const pmTodoCount = pending.filter((item) => item.status !== "已挂靠").length;
 
   return (
     <div className="space-y-8">
-      <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
-        <div>
-          <p className="text-xs font-medium text-gray-400 uppercase tracking-widest">
-            CAPABILITY MAP
-          </p>
-          <h1 className="mt-1 text-2xl font-bold text-gray-900">基础能力地图</h1>
-          <p className="mt-1 max-w-3xl text-sm text-gray-500">
-            这页先只回答一个问题：联盟现在有哪些能力已经有官方 Skill，哪些在建，哪些还缺。每个能力点下面可以挂多个 Skill，但页面不展示复杂治理模型。
-          </p>
-        </div>
-        <Link
-          href="/upload"
-          className="inline-flex items-center justify-center gap-2 rounded-lg bg-gray-900 px-4 py-2 text-sm font-medium text-white hover:bg-gray-800"
-        >
-          上传前登记归属
-          <ArrowRight className="h-4 w-4" />
-        </Link>
+      <div>
+        <p className="text-xs font-medium text-gray-400 uppercase tracking-widest">
+          CAPABILITY MAP
+        </p>
+        <h1 className="mt-1 text-2xl font-bold text-gray-900">能力地图</h1>
+        <p className="mt-1 text-sm text-gray-500">按业务环节查看 Skill 建设进度。</p>
       </div>
-
-      <Card className="border-blue-100 bg-blue-50/50">
-        <CardContent className="p-5">
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-            <div>
-              <p className="text-sm font-semibold text-gray-900">给使用者看什么</p>
-              <p className="mt-1 text-sm text-gray-600">我负责的环节有没有官方 Skill，缺口在哪里。</p>
-            </div>
-            <div>
-              <p className="text-sm font-semibold text-gray-900">给 PM 看什么</p>
-              <p className="mt-1 text-sm text-gray-600">哪些 P0 能力缺口要补，哪些 Skill 该认证。</p>
-            </div>
-            <div>
-              <p className="text-sm font-semibold text-gray-900">给研发怎么做</p>
-              <p className="mt-1 text-sm text-gray-600">先做字段和展示，不做后台治理闭环。</p>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
 
       <div className="flex flex-wrap gap-2">
         {scopeOptions.map((item) => (
@@ -321,23 +284,16 @@ export default function CoveragePage() {
 
       <div className="grid grid-cols-1 gap-4 md:grid-cols-4">
         <StatCard label="官方覆盖率" value={`${coverageRate(visibleCards)}%`} desc="官方认证 / 当前能力点" />
-        <StatCard label="官方认证" value={counts.官方认证} desc="PM 已确认可推荐" />
-        <StatCard label="建设中" value={counts.建设中} desc="已有候选 Skill 或建设动作" />
-        <StatCard label="缺口" value={counts.缺口} desc="还没有明确可用 Skill" />
+        <StatCard label="官方认证" value={counts.官方认证} desc="已确认可推荐" />
+        <StatCard label="建设中" value={counts.建设中} desc="已有候选 Skill" />
+        <StatCard label="缺口" value={counts.缺口} desc="暂无可用 Skill" />
       </div>
 
       <Card className="border-orange-100">
         <CardContent className="p-5 space-y-4">
           <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
-            <div>
-              <h2 className="text-lg font-semibold text-gray-900">先处理这几件事</h2>
-              <p className="mt-1 text-sm text-gray-500">
-                只展示 P0 且未官方认证的能力点，避免一上来信息过载。
-              </p>
-            </div>
-            <Badge variant="outline" className="bg-orange-50 text-orange-700 border-orange-200">
-              PM 待处理 {pmTodoCount}
-            </Badge>
+            <h2 className="text-lg font-semibold text-gray-900">重点缺口</h2>
+            <span className="text-sm text-gray-400">P0 / 未认证</span>
           </div>
           <div className="space-y-3">
             {p0Needs.map((card) => (

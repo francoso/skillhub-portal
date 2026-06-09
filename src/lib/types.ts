@@ -262,23 +262,6 @@ export interface CapabilityCard {
   updatedAt: string;
 }
 
-export interface PendingSkillRegistration {
-  id: string;
-  uploader: string;
-  workstream: Workstream;
-  workflowTag: WorkflowTag;
-  capabilityCardId?: string;
-  proposedCard?: {
-    title: string;
-    description: string;
-    ownerDomain: BusinessDomain;
-    reason: string;
-  };
-  knotSkillUrl?: string;
-  status: "待上传" | "待回填" | "待PM确认" | "已挂靠" | "已驳回";
-  createdAt: string;
-}
-
 export interface OfficialSkillRecord {
   skillId: string;
   ownerDomain: BusinessDomain;

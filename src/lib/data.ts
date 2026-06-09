@@ -11,7 +11,6 @@ import type {
   CertificationResult,
   CapabilityCard,
   OfficialSkillRecord,
-  PendingSkillRegistration,
   SkillDomain,
   Workstream,
   WorkflowTag,
@@ -30,7 +29,6 @@ import activitiesData from "@/data/activities.json";
 import certificationsData from "@/data/certifications.json";
 import capabilityMapData from "@/data/capability-map.json";
 import officialSkillsData from "@/data/official-skills.json";
-import pendingRegistrationsData from "@/data/pending-registrations.json";
 
 // 数据加载层 — MVP阶段从JSON读取，后续切API只改这里
 
@@ -182,10 +180,6 @@ export function getOfficialSkillRecords(): OfficialSkillRecord[] {
 export function getOfficialSkills(): Skill[] {
   const officialIds = new Set(getOfficialSkillRecords().map((item) => item.skillId));
   return getSkills().filter((skill) => officialIds.has(skill.id));
-}
-
-export function getPendingSkillRegistrations(): PendingSkillRegistration[] {
-  return pendingRegistrationsData as PendingSkillRegistration[];
 }
 
 // === Certification ===

@@ -17,7 +17,6 @@ import { cn } from "@/lib/utils";
 const navItems = [
   { href: "/", label: "首页", icon: Upload },
   { href: "/skills", label: "Skill 库", icon: Puzzle },
-  { href: "/upload", label: "上传登记", icon: Upload },
   { href: "/coverage", label: "能力地图", icon: Map },
   { href: "/demo", label: "Demo 会", icon: Presentation },
   { href: "/contribution", label: "贡献看板", icon: Trophy },
