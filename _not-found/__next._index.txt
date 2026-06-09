@@ -2,5 +2,5 @@
 2:I[85283,["47","static/chunks/47-09a82d67c36405a0.js","500","static/chunks/500-e2a7ab501ac40f90.js","177","static/chunks/app/layout-f845bda4b4e923df.js"],"Sidebar"]
 3:I[57121,[],""]
 4:I[74581,[],""]
-:HL["/skillhub-portal/_next/static/css/8af7343c2b8a2f19.css","style"]
-0:{"rsc":["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/skillhub-portal/_next/static/css/8af7343c2b8a2f19.css","precedence":"next"}]],["$","html",null,{"lang":"zh-CN","className":"h-full antialiased","children":["$","body",null,{"className":"min-h-screen flex bg-gray-50","children":[["$","$L2",null,{}],["$","main",null,{"className":"flex-1 ml-60 p-8","children":["$","$L3",null,{"parallelRouterKey":"children","template":["$","$L4",null,{}]}]}]]}]}]]}],"isPartial":false,"staleTime":300,"varyParams":null,"buildId":"75L7bOYv2Pxl7ZD0NYaEw"}
+:HL["/skillhub-portal/_next/static/css/12a72e6ae2d0ce00.css","style"]
+0:{"rsc":["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/skillhub-portal/_next/static/css/12a72e6ae2d0ce00.css","precedence":"next"}]],["$","html",null,{"lang":"zh-CN","className":"h-full antialiased","children":["$","body",null,{"className":"min-h-screen flex bg-gray-50","children":[["$","$L2",null,{}],["$","main",null,{"className":"flex-1 ml-60 p-8","children":["$","$L3",null,{"parallelRouterKey":"children","template":["$","$L4",null,{}]}]}]]}]}]]}],"isPartial":false,"staleTime":300,"varyParams":null,"buildId":"goUJuzQL2u4I1IFEAZDxE"}
