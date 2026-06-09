@@ -32,7 +32,10 @@ const stageIcon: Record<CapabilityStage, typeof CheckCircle2> = {
   缺口: AlertTriangle,
 };
 
-const previewSize = 2;
+const workstreamHint: Record<Workstream, string> = {
+  流量侧: "按开发者运营链路从市场判断到客户服务推进。",
+  预算侧: "按预算服务链路从日常沉淀到 case 诊断推进。",
+};
 
 function countByStage(cards: CapabilityCard[]) {
   return {
@@ -177,54 +180,73 @@ function WorkflowBlock({
   skills,
   expanded,
   onToggle,
+  step,
+  total,
 }: {
   title: WorkflowTag;
   cards: CapabilityCard[];
   skills: Map<string, Skill>;
   expanded: boolean;
   onToggle: () => void;
+  step: number;
+  total: number;
 }) {
   const counts = countByStage(cards);
   const sortedCards = sortForDisplay(cards);
-  const visibleCards = expanded ? sortedCards : sortedCards.slice(0, previewSize);
-  const hasMore = sortedCards.length > previewSize;
+  const hasCards = sortedCards.length > 0;
 
   return (
-    <div className="rounded-2xl border border-gray-100 bg-gray-50/60 p-3">
-      <div className="mb-3 flex items-center justify-between gap-3">
-        <div>
-          <h3 className="text-sm font-semibold text-gray-900">{title}</h3>
-          <p className="mt-0.5 text-xs text-gray-400">
-            {cards.length} 个能力点 · 覆盖 {coverageRate(cards)}%
-          </p>
+    <div className="relative flex gap-3">
+      <div className="flex w-9 shrink-0 flex-col items-center">
+        <div className="z-10 flex h-9 w-9 items-center justify-center rounded-full border-2 border-white bg-gray-900 text-sm font-bold text-white shadow-sm">
+          {step}
         </div>
-        <div className="flex shrink-0 gap-1 text-[11px]">
-          <span className="rounded-full bg-emerald-100 px-2 py-0.5 text-emerald-700">
-            认证 {counts.官方认证}
-          </span>
-          <span className="rounded-full bg-orange-100 px-2 py-0.5 text-orange-700">
-            建设 {counts.建设中}
-          </span>
-          <span className="rounded-full bg-slate-200 px-2 py-0.5 text-slate-600">
-            缺口 {counts.缺口}
-          </span>
-        </div>
+        {step < total && <div className="mt-1 h-full min-h-10 w-px bg-gray-200" />}
       </div>
+      <div className="min-w-0 flex-1 rounded-2xl border border-gray-100 bg-white p-3 shadow-sm">
+        <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+          <div className="min-w-0">
+            <div className="flex items-center gap-2">
+              <h3 className="text-sm font-semibold text-gray-900">{title}</h3>
+              <span className="rounded-full bg-gray-100 px-2 py-0.5 text-[11px] text-gray-500">
+                第 {step}/{total} 步
+              </span>
+            </div>
+            <p className="mt-1 text-xs text-gray-400">
+              {cards.length} 个能力点 · 官方覆盖 {coverageRate(cards)}%
+            </p>
+          </div>
+          <div className="flex flex-wrap gap-1 text-[11px]">
+            <span className="rounded-full bg-emerald-100 px-2 py-0.5 text-emerald-700">
+              认证 {counts.官方认证}
+            </span>
+            <span className="rounded-full bg-orange-100 px-2 py-0.5 text-orange-700">
+              建设 {counts.建设中}
+            </span>
+            <span className="rounded-full bg-slate-200 px-2 py-0.5 text-slate-600">
+              缺口 {counts.缺口}
+            </span>
+          </div>
+        </div>
 
-      <div className="grid grid-cols-1 gap-2 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-2">
-        {visibleCards.map((card) => (
-          <CapabilityTile key={card.id} card={card} skills={skills} />
-        ))}
+        {expanded && (
+          <div className="mt-3 grid grid-cols-1 gap-2 md:grid-cols-2 xl:grid-cols-3">
+            {sortedCards.map((card) => (
+              <CapabilityTile key={card.id} card={card} skills={skills} />
+            ))}
+          </div>
+        )}
+
+        {hasCards && (
+          <button
+            onClick={onToggle}
+            className="mt-3 flex w-full items-center justify-center gap-1 rounded-lg border border-gray-200 bg-gray-50 px-3 py-1.5 text-xs font-medium text-gray-600 transition hover:border-gray-300 hover:bg-white hover:text-gray-900"
+          >
+            {expanded ? "收起能力点" : `展开 ${sortedCards.length} 个能力点`}
+            {expanded ? <ChevronDown className="h-3.5 w-3.5" /> : <ChevronRight className="h-3.5 w-3.5" />}
+          </button>
+        )}
       </div>
-      {hasMore && (
-        <button
-          onClick={onToggle}
-          className="mt-2 flex w-full items-center justify-center gap-1 rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-xs font-medium text-gray-600 transition hover:border-gray-300 hover:text-gray-900"
-        >
-          {expanded ? "收起" : `展开全部 ${sortedCards.length} 个能力点`}
-          {expanded ? <ChevronDown className="h-3.5 w-3.5" /> : <ChevronRight className="h-3.5 w-3.5" />}
-        </button>
-      )}
     </div>
   );
 }
@@ -252,7 +274,8 @@ function WorkstreamPanel({
         <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
           <div>
             <h2 className="text-xl font-bold text-gray-900">{title}</h2>
-            <p className="mt-1 text-sm text-gray-500">{tags.length} 个环节 / {cards.length} 个能力点</p>
+            <p className="mt-1 text-sm text-gray-500">{workstreamHint[title]}</p>
+            <p className="mt-1 text-xs text-gray-400">{tags.length} 个步骤 / {cards.length} 个能力点</p>
           </div>
           <div className="flex items-center gap-4 md:text-right">
             <div>
@@ -264,20 +287,28 @@ function WorkstreamPanel({
 
         <StageCount counts={counts} />
 
-        <div className="space-y-3">
-          {tags.map((tag) => {
-            const workflowKey = `${title}-${tag}`;
-            return (
-              <WorkflowBlock
-                key={tag}
-                title={tag}
-                cards={cards.filter((card) => card.workflowTag === tag)}
-                skills={skills}
-                expanded={Boolean(expandedWorkflows[workflowKey])}
-                onToggle={() => onToggleWorkflow(workflowKey)}
-              />
-            );
-          })}
+        <div className="rounded-2xl bg-gray-50 p-3">
+          <div className="mb-3 flex items-center justify-between">
+            <p className="text-xs font-medium text-gray-500">工作流顺序</p>
+            <p className="text-xs text-gray-400">从上到下推进</p>
+          </div>
+          <div className="space-y-3">
+            {tags.map((tag, index) => {
+              const workflowKey = `${title}-${tag}`;
+              return (
+                <WorkflowBlock
+                  key={tag}
+                  title={tag}
+                  cards={cards.filter((card) => card.workflowTag === tag)}
+                  skills={skills}
+                  expanded={Boolean(expandedWorkflows[workflowKey])}
+                  onToggle={() => onToggleWorkflow(workflowKey)}
+                  step={index + 1}
+                  total={tags.length}
+                />
+              );
+            })}
+          </div>
         </div>
       </CardContent>
     </Card>
