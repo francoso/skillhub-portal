@@ -1,5 +1,15 @@
+"use client";
+
 import Link from "next/link";
-import { AlertTriangle, ArrowUpRight, CheckCircle2, Clock3 } from "lucide-react";
+import { useState } from "react";
+import {
+  AlertTriangle,
+  ArrowUpRight,
+  CheckCircle2,
+  ChevronDown,
+  ChevronRight,
+  Clock3,
+} from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import {
@@ -21,6 +31,8 @@ const stageIcon: Record<CapabilityStage, typeof CheckCircle2> = {
   建设中: Clock3,
   缺口: AlertTriangle,
 };
+
+const previewSize = 2;
 
 function countByStage(cards: CapabilityCard[]) {
   return {
@@ -80,7 +92,7 @@ function CapabilityTile({
     ? skills.get(card.officialSkillIds[0])
     : undefined;
   const isOfficial = card.stage === "官方认证";
-  const baseClass = `group block min-h-[98px] rounded-xl border p-2.5 transition ${
+  const baseClass = `group block min-h-[86px] rounded-xl border p-2.5 transition ${
     isOfficial
       ? "border-emerald-200 bg-emerald-50 shadow-sm hover:border-emerald-300"
       : skill
@@ -134,17 +146,48 @@ function CapabilityTile({
   );
 }
 
+function StageCount({
+  counts,
+  compact = false,
+}: {
+  counts: ReturnType<typeof countByStage>;
+  compact?: boolean;
+}) {
+  return (
+    <div className={`grid grid-cols-3 gap-2 text-center ${compact ? "text-[11px]" : "text-xs"}`}>
+      <div className="rounded-xl bg-emerald-50 p-2 text-emerald-700">
+        <p className={compact ? "font-bold" : "text-lg font-bold"}>{counts.官方认证}</p>
+        <p>官方认证</p>
+      </div>
+      <div className="rounded-xl bg-orange-50 p-2 text-orange-700">
+        <p className={compact ? "font-bold" : "text-lg font-bold"}>{counts.建设中}</p>
+        <p>建设中</p>
+      </div>
+      <div className="rounded-xl bg-slate-100 p-2 text-slate-600">
+        <p className={compact ? "font-bold" : "text-lg font-bold"}>{counts.缺口}</p>
+        <p>缺口</p>
+      </div>
+    </div>
+  );
+}
+
 function WorkflowBlock({
   title,
   cards,
   skills,
+  expanded,
+  onToggle,
 }: {
   title: WorkflowTag;
   cards: CapabilityCard[];
   skills: Map<string, Skill>;
+  expanded: boolean;
+  onToggle: () => void;
 }) {
   const counts = countByStage(cards);
   const sortedCards = sortForDisplay(cards);
+  const visibleCards = expanded ? sortedCards : sortedCards.slice(0, previewSize);
+  const hasMore = sortedCards.length > previewSize;
 
   return (
     <div className="rounded-2xl border border-gray-100 bg-gray-50/60 p-3">
@@ -169,10 +212,19 @@ function WorkflowBlock({
       </div>
 
       <div className="grid grid-cols-1 gap-2 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-2">
-        {sortedCards.map((card) => (
+        {visibleCards.map((card) => (
           <CapabilityTile key={card.id} card={card} skills={skills} />
         ))}
       </div>
+      {hasMore && (
+        <button
+          onClick={onToggle}
+          className="mt-2 flex w-full items-center justify-center gap-1 rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-xs font-medium text-gray-600 transition hover:border-gray-300 hover:text-gray-900"
+        >
+          {expanded ? "收起" : `展开全部 ${sortedCards.length} 个能力点`}
+          {expanded ? <ChevronDown className="h-3.5 w-3.5" /> : <ChevronRight className="h-3.5 w-3.5" />}
+        </button>
+      )}
     </div>
   );
 }
@@ -182,11 +234,19 @@ function WorkstreamPanel({
   tags,
   cards,
   skills,
+  expanded,
+  onToggle,
+  expandedWorkflows,
+  onToggleWorkflow,
 }: {
   title: Workstream;
   tags: WorkflowTag[];
   cards: CapabilityCard[];
   skills: Map<string, Skill>;
+  expanded: boolean;
+  onToggle: () => void;
+  expandedWorkflows: Record<string, boolean>;
+  onToggleWorkflow: (key: string) => void;
 }) {
   const counts = countByStage(cards);
 
@@ -198,37 +258,93 @@ function WorkstreamPanel({
             <h2 className="text-xl font-bold text-gray-900">{title}</h2>
             <p className="mt-1 text-sm text-gray-500">{tags.length} 个环节 / {cards.length} 个能力点</p>
           </div>
-          <div className="text-left md:text-right">
-            <p className="text-3xl font-bold text-gray-900">{coverageRate(cards)}%</p>
-            <p className="text-xs text-gray-400">官方覆盖率</p>
+          <div className="flex items-center gap-4 md:text-right">
+            <div>
+              <p className="text-3xl font-bold text-gray-900">{coverageRate(cards)}%</p>
+              <p className="text-xs text-gray-400">官方覆盖率</p>
+            </div>
+            <button
+              onClick={onToggle}
+              className="flex shrink-0 items-center gap-1 rounded-lg bg-gray-900 px-3 py-1.5 text-sm font-medium text-white transition hover:bg-gray-700"
+            >
+              {expanded ? "收起" : "展开"}
+              {expanded ? <ChevronDown className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
+            </button>
           </div>
         </div>
 
-        <div className="grid grid-cols-3 gap-2 text-center text-xs">
-          <div className="rounded-xl bg-emerald-50 p-2 text-emerald-700">
-            <p className="text-lg font-bold">{counts.官方认证}</p>
-            <p>官方认证</p>
-          </div>
-          <div className="rounded-xl bg-orange-50 p-2 text-orange-700">
-            <p className="text-lg font-bold">{counts.建设中}</p>
-            <p>建设中</p>
-          </div>
-          <div className="rounded-xl bg-slate-100 p-2 text-slate-600">
-            <p className="text-lg font-bold">{counts.缺口}</p>
-            <p>缺口</p>
-          </div>
-        </div>
+        <StageCount counts={counts} />
 
-        <div className="space-y-3">
-          {tags.map((tag) => (
-            <WorkflowBlock
-              key={tag}
-              title={tag}
-              cards={cards.filter((card) => card.workflowTag === tag)}
-              skills={skills}
-            />
-          ))}
+        {!expanded && (
+          <div className="flex flex-wrap gap-1.5">
+            {tags.map((tag) => {
+              const tagCards = cards.filter((card) => card.workflowTag === tag);
+              const tagCounts = countByStage(tagCards);
+              return (
+                <span key={tag} className="rounded-full bg-gray-100 px-2.5 py-1 text-xs text-gray-600">
+                  {tag} · 认证 {tagCounts.官方认证}/{tagCards.length}
+                </span>
+              );
+            })}
+          </div>
+        )}
+
+        {expanded && (
+          <div className="space-y-3">
+            {tags.map((tag) => {
+              const workflowKey = `${title}-${tag}`;
+              return (
+                <WorkflowBlock
+                  key={tag}
+                  title={tag}
+                  cards={cards.filter((card) => card.workflowTag === tag)}
+                  skills={skills}
+                  expanded={Boolean(expandedWorkflows[workflowKey])}
+                  onToggle={() => onToggleWorkflow(workflowKey)}
+                />
+              );
+            })}
+          </div>
+        )}
+      </CardContent>
+    </Card>
+  );
+}
+
+function OverviewCard({
+  cards,
+  trafficCards,
+  budgetCards,
+}: {
+  cards: CapabilityCard[];
+  trafficCards: CapabilityCard[];
+  budgetCards: CapabilityCard[];
+}) {
+  const counts = countByStage(cards);
+  const streamRows = [
+    { title: "流量侧", cards: trafficCards },
+    { title: "预算侧", cards: budgetCards },
+  ];
+
+  return (
+    <Card className="border-gray-100">
+      <CardContent className="space-y-4 p-4">
+        <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
+          <div>
+            <h2 className="text-xl font-bold text-gray-900">总览</h2>
+            <p className="mt-1 text-sm text-gray-500">{cards.length} 个能力点 / 官方覆盖 {coverageRate(cards)}%</p>
+          </div>
+          <div className="grid grid-cols-2 gap-2 text-xs text-gray-500 md:w-72">
+            {streamRows.map((row) => (
+              <div key={row.title} className="rounded-xl bg-gray-50 p-3">
+                <p className="font-semibold text-gray-900">{row.title}</p>
+                <p className="mt-1">{coverageRate(row.cards)}% 覆盖</p>
+                <p>{countByStage(row.cards).官方认证} 个官方认证</p>
+              </div>
+            ))}
+          </div>
         </div>
+        <StageCount counts={counts} compact />
       </CardContent>
     </Card>
   );
@@ -239,6 +355,25 @@ export default function CoveragePage() {
   const skills = new Map(getSkills().map((skill) => [skill.id, skill]));
   const trafficCards = cards.filter((card) => card.workstream === "流量侧");
   const budgetCards = cards.filter((card) => card.workstream === "预算侧");
+  const [expandedStreams, setExpandedStreams] = useState<Record<Workstream, boolean>>({
+    流量侧: false,
+    预算侧: false,
+  });
+  const [expandedWorkflows, setExpandedWorkflows] = useState<Record<string, boolean>>({});
+
+  function toggleStream(stream: Workstream) {
+    setExpandedStreams((current) => ({
+      ...current,
+      [stream]: !current[stream],
+    }));
+  }
+
+  function toggleWorkflow(key: string) {
+    setExpandedWorkflows((current) => ({
+      ...current,
+      [key]: !current[key],
+    }));
+  }
 
   return (
     <div className="space-y-6">
@@ -250,18 +385,28 @@ export default function CoveragePage() {
         <p className="mt-1 text-sm text-gray-500">流量侧与预算侧 Skill 建设进度。</p>
       </div>
 
-      <div className="grid grid-cols-1 gap-4 2xl:grid-cols-2">
+      <OverviewCard cards={cards} trafficCards={trafficCards} budgetCards={budgetCards} />
+
+      <div className="grid grid-cols-1 gap-4 xl:grid-cols-2">
         <WorkstreamPanel
           title="流量侧"
           cards={trafficCards}
           tags={TRAFFIC_WORKFLOW_TAGS}
           skills={skills}
+          expanded={expandedStreams.流量侧}
+          onToggle={() => toggleStream("流量侧")}
+          expandedWorkflows={expandedWorkflows}
+          onToggleWorkflow={toggleWorkflow}
         />
         <WorkstreamPanel
           title="预算侧"
           cards={budgetCards}
           tags={BUDGET_WORKFLOW_TAGS}
           skills={skills}
+          expanded={expandedStreams.预算侧}
+          onToggle={() => toggleStream("预算侧")}
+          expandedWorkflows={expandedWorkflows}
+          onToggleWorkflow={toggleWorkflow}
         />
       </div>
     </div>
