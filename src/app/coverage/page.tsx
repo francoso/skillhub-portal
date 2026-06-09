@@ -234,8 +234,6 @@ function WorkstreamPanel({
   tags,
   cards,
   skills,
-  expanded,
-  onToggle,
   expandedWorkflows,
   onToggleWorkflow,
 }: {
@@ -243,8 +241,6 @@ function WorkstreamPanel({
   tags: WorkflowTag[];
   cards: CapabilityCard[];
   skills: Map<string, Skill>;
-  expanded: boolean;
-  onToggle: () => void;
   expandedWorkflows: Record<string, boolean>;
   onToggleWorkflow: (key: string) => void;
 }) {
@@ -263,51 +259,73 @@ function WorkstreamPanel({
               <p className="text-3xl font-bold text-gray-900">{coverageRate(cards)}%</p>
               <p className="text-xs text-gray-400">官方覆盖率</p>
             </div>
-            <button
-              onClick={onToggle}
-              className="flex shrink-0 items-center gap-1 rounded-lg bg-gray-900 px-3 py-1.5 text-sm font-medium text-white transition hover:bg-gray-700"
-            >
-              {expanded ? "收起" : "展开"}
-              {expanded ? <ChevronDown className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
-            </button>
           </div>
         </div>
 
         <StageCount counts={counts} />
 
-        {!expanded && (
-          <div className="flex flex-wrap gap-1.5">
-            {tags.map((tag) => {
-              const tagCards = cards.filter((card) => card.workflowTag === tag);
-              const tagCounts = countByStage(tagCards);
-              return (
-                <span key={tag} className="rounded-full bg-gray-100 px-2.5 py-1 text-xs text-gray-600">
-                  {tag} · 认证 {tagCounts.官方认证}/{tagCards.length}
-                </span>
-              );
-            })}
-          </div>
-        )}
-
-        {expanded && (
-          <div className="space-y-3">
-            {tags.map((tag) => {
-              const workflowKey = `${title}-${tag}`;
-              return (
-                <WorkflowBlock
-                  key={tag}
-                  title={tag}
-                  cards={cards.filter((card) => card.workflowTag === tag)}
-                  skills={skills}
-                  expanded={Boolean(expandedWorkflows[workflowKey])}
-                  onToggle={() => onToggleWorkflow(workflowKey)}
-                />
-              );
-            })}
-          </div>
-        )}
+        <div className="space-y-3">
+          {tags.map((tag) => {
+            const workflowKey = `${title}-${tag}`;
+            return (
+              <WorkflowBlock
+                key={tag}
+                title={tag}
+                cards={cards.filter((card) => card.workflowTag === tag)}
+                skills={skills}
+                expanded={Boolean(expandedWorkflows[workflowKey])}
+                onToggle={() => onToggleWorkflow(workflowKey)}
+              />
+            );
+          })}
+        </div>
       </CardContent>
     </Card>
+  );
+}
+
+function WorkstreamTabs({
+  active,
+  trafficCards,
+  budgetCards,
+  onChange,
+}: {
+  active: Workstream;
+  trafficCards: CapabilityCard[];
+  budgetCards: CapabilityCard[];
+  onChange: (workstream: Workstream) => void;
+}) {
+  const tabs: { title: Workstream; cards: CapabilityCard[] }[] = [
+    { title: "流量侧", cards: trafficCards },
+    { title: "预算侧", cards: budgetCards },
+  ];
+
+  return (
+    <div className="flex gap-2 rounded-2xl bg-gray-100 p-1">
+      {tabs.map((tab) => {
+        const counts = countByStage(tab.cards);
+        const selected = active === tab.title;
+        return (
+          <button
+            key={tab.title}
+            onClick={() => onChange(tab.title)}
+            className={`flex flex-1 items-center justify-between rounded-xl px-4 py-3 text-left transition ${
+              selected ? "bg-white text-gray-900 shadow-sm" : "text-gray-500 hover:text-gray-900"
+            }`}
+          >
+            <span>
+              <span className="block text-sm font-semibold">{tab.title}</span>
+              <span className="mt-0.5 block text-xs">
+                {tab.cards.length} 个能力点 · {coverageRate(tab.cards)}% 覆盖
+              </span>
+            </span>
+            <span className="text-xs">
+              官方 {counts.官方认证}
+            </span>
+          </button>
+        );
+      })}
+    </div>
   );
 }
 
@@ -355,18 +373,10 @@ export default function CoveragePage() {
   const skills = new Map(getSkills().map((skill) => [skill.id, skill]));
   const trafficCards = cards.filter((card) => card.workstream === "流量侧");
   const budgetCards = cards.filter((card) => card.workstream === "预算侧");
-  const [expandedStreams, setExpandedStreams] = useState<Record<Workstream, boolean>>({
-    流量侧: false,
-    预算侧: false,
-  });
+  const [activeWorkstream, setActiveWorkstream] = useState<Workstream>("流量侧");
   const [expandedWorkflows, setExpandedWorkflows] = useState<Record<string, boolean>>({});
-
-  function toggleStream(stream: Workstream) {
-    setExpandedStreams((current) => ({
-      ...current,
-      [stream]: !current[stream],
-    }));
-  }
+  const activeCards = activeWorkstream === "流量侧" ? trafficCards : budgetCards;
+  const activeTags = activeWorkstream === "流量侧" ? TRAFFIC_WORKFLOW_TAGS : BUDGET_WORKFLOW_TAGS;
 
   function toggleWorkflow(key: string) {
     setExpandedWorkflows((current) => ({
@@ -387,28 +397,21 @@ export default function CoveragePage() {
 
       <OverviewCard cards={cards} trafficCards={trafficCards} budgetCards={budgetCards} />
 
-      <div className="grid grid-cols-1 gap-4 xl:grid-cols-2">
-        <WorkstreamPanel
-          title="流量侧"
-          cards={trafficCards}
-          tags={TRAFFIC_WORKFLOW_TAGS}
-          skills={skills}
-          expanded={expandedStreams.流量侧}
-          onToggle={() => toggleStream("流量侧")}
-          expandedWorkflows={expandedWorkflows}
-          onToggleWorkflow={toggleWorkflow}
-        />
-        <WorkstreamPanel
-          title="预算侧"
-          cards={budgetCards}
-          tags={BUDGET_WORKFLOW_TAGS}
-          skills={skills}
-          expanded={expandedStreams.预算侧}
-          onToggle={() => toggleStream("预算侧")}
-          expandedWorkflows={expandedWorkflows}
-          onToggleWorkflow={toggleWorkflow}
-        />
-      </div>
+      <WorkstreamTabs
+        active={activeWorkstream}
+        trafficCards={trafficCards}
+        budgetCards={budgetCards}
+        onChange={setActiveWorkstream}
+      />
+
+      <WorkstreamPanel
+        title={activeWorkstream}
+        cards={activeCards}
+        tags={activeTags}
+        skills={skills}
+        expandedWorkflows={expandedWorkflows}
+        onToggleWorkflow={toggleWorkflow}
+      />
     </div>
   );
 }
