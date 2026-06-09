@@ -9,10 +9,12 @@ import type {
   CertificationRound,
   Review,
   CertificationResult,
-  CapabilityStage,
-  CapabilityItem,
+  CapabilityCard,
   OfficialSkillRecord,
+  PendingSkillRegistration,
   SkillDomain,
+  Workstream,
+  WorkflowTag,
 } from "./types";
 
 // Demo mock 当前用户
@@ -28,35 +30,66 @@ import activitiesData from "@/data/activities.json";
 import certificationsData from "@/data/certifications.json";
 import capabilityMapData from "@/data/capability-map.json";
 import officialSkillsData from "@/data/official-skills.json";
+import pendingRegistrationsData from "@/data/pending-registrations.json";
 
 // 数据加载层 — MVP阶段从JSON读取，后续切API只改这里
 
+export const TRAFFIC_WORKFLOW_TAGS: WorkflowTag[] = [
+  "市场分析",
+  "流量接入",
+  "形态样式",
+  "变现调优",
+  "体验管理",
+  "客户服务",
+];
+
+export const BUDGET_WORKFLOW_TAGS: WorkflowTag[] = [
+  "日常服务沉淀",
+  "基本面分析",
+  "可投可播分析",
+  "模版双率优化",
+  "优质流量提渗",
+  "扶持策略设计",
+  "case诊断优化",
+];
+
+export const BUSINESS_DOMAINS: SkillDomain[] = ["APP流量", "平台", "预算", "厂商"];
+
 export function getSkills(): Skill[] {
   const skills = skillsData as Skill[];
-  const capabilityMap = getCapabilityMap();
+  const capabilityCards = getCapabilityCards();
   const officialLookup = new Map(
     getOfficialSkillRecords().map((item) => [item.skillId, item])
   );
   const skillMeta = new Map<
     string,
-    { domains: Set<SkillDomain>; capabilityIds: string[]; category?: string }
+    {
+      domains: Set<SkillDomain>;
+      capabilityIds: string[];
+      workstreams: Set<Workstream>;
+      workflowTags: Set<WorkflowTag>;
+      category?: string;
+    }
   >();
 
-  for (const stage of capabilityMap) {
-    for (const section of stage.modules) {
-      for (const capability of section.capabilities) {
-        for (const skillId of capability.skillIds) {
-          const current = skillMeta.get(skillId) ?? {
-            domains: new Set<SkillDomain>(),
-            capabilityIds: [],
-            category: stage.serviceStage,
-          };
-          capability.domains.forEach((domain) => current.domains.add(domain));
-          current.capabilityIds.push(capability.id);
-          current.category = current.category ?? stage.serviceStage;
-          skillMeta.set(skillId, current);
-        }
-      }
+  for (const card of capabilityCards) {
+    const domains = [card.ownerDomain, ...card.relatedDomains];
+    const skillIds = new Set([...card.skillIds, ...card.officialSkillIds]);
+
+    for (const skillId of skillIds) {
+      const current = skillMeta.get(skillId) ?? {
+        domains: new Set<SkillDomain>(),
+        capabilityIds: [],
+        workstreams: new Set<Workstream>(),
+        workflowTags: new Set<WorkflowTag>(),
+        category: card.workflowTag,
+      };
+      domains.forEach((domain) => current.domains.add(domain));
+      if (!current.capabilityIds.includes(card.id)) current.capabilityIds.push(card.id);
+      current.workstreams.add(card.workstream);
+      current.workflowTags.add(card.workflowTag);
+      current.category = current.category ?? card.workflowTag;
+      skillMeta.set(skillId, current);
     }
   }
 
@@ -68,6 +101,8 @@ export function getSkills(): Skill[] {
       category: meta?.category ?? skill.category,
       domains: meta ? Array.from(meta.domains) : [],
       capabilityIds: meta?.capabilityIds ?? [],
+      workstreams: meta ? Array.from(meta.workstreams) : [],
+      workflowTags: meta ? Array.from(meta.workflowTags) : [],
       certified: official ? true : skill.certified,
       certifiedAt: official?.certifiedAt ?? skill.certifiedAt,
       official: official
@@ -77,6 +112,8 @@ export function getSkills(): Skill[] {
             certifiedBy: official.certifiedBy,
             certifiedAt: official.certifiedAt,
             note: official.note,
+            ownerDomain: official.ownerDomain,
+            workstream: official.workstream,
           }
         : undefined,
     };
@@ -111,14 +148,31 @@ export function getActivities(): ActivityEvent[] {
   return activitiesData as ActivityEvent[];
 }
 
-export function getCapabilityMap(): CapabilityStage[] {
-  return capabilityMapData as CapabilityStage[];
+export function getCapabilityCards(): CapabilityCard[] {
+  const officialIds = new Set(getOfficialSkillRecords().map((item) => item.skillId));
+
+  return (capabilityMapData as CapabilityCard[]).map((card) => {
+    const officialSkillIds = Array.from(
+      new Set([
+        ...card.officialSkillIds,
+        ...card.skillIds.filter((skillId) => officialIds.has(skillId)),
+      ])
+    );
+
+    return {
+      ...card,
+      officialSkillIds,
+      stage: officialSkillIds.length > 0 ? "官方认证" : card.stage,
+    };
+  });
 }
 
-export function getCapabilityItems(): CapabilityItem[] {
-  return getCapabilityMap().flatMap((stage) =>
-    stage.modules.flatMap((module) => module.capabilities)
-  );
+export function getCapabilityMap(): CapabilityCard[] {
+  return getCapabilityCards();
+}
+
+export function getCapabilityItems(): CapabilityCard[] {
+  return getCapabilityCards();
 }
 
 export function getOfficialSkillRecords(): OfficialSkillRecord[] {
@@ -128,6 +182,10 @@ export function getOfficialSkillRecords(): OfficialSkillRecord[] {
 export function getOfficialSkills(): Skill[] {
   const officialIds = new Set(getOfficialSkillRecords().map((item) => item.skillId));
   return getSkills().filter((skill) => officialIds.has(skill.id));
+}
+
+export function getPendingSkillRegistrations(): PendingSkillRegistration[] {
+  return pendingRegistrationsData as PendingSkillRegistration[];
 }
 
 // === Certification ===
@@ -171,7 +229,7 @@ export function getSkillStage(skillId: string): SkillStage {
 export function getStats() {
   const skills = getSkills();
   const metrics = getMetrics();
-  const capabilityItems = getCapabilityItems();
+  const capabilityCards = getCapabilityCards();
 
   // Count unique owners from skills as real contributor count
   const uniqueOwners = new Set(skills.map((s) => s.owner)).size;
@@ -183,7 +241,7 @@ export function getStats() {
     monthlyInvokes: metrics.monthlyInvokes,
     totalInvokes: metrics.totalInvokes,
     officialSkillCount: skills.filter((s) => s.official?.status === "official").length,
-    coveredCapabilityCount: capabilityItems.filter((item) => item.status === "covered").length,
-    totalCapabilityCount: capabilityItems.length,
+    coveredCapabilityCount: capabilityCards.filter((item) => item.stage === "官方认证").length,
+    totalCapabilityCount: capabilityCards.length,
   };
 }

@@ -33,10 +33,39 @@ export interface Skill {
   readme?: string;
   domains?: SkillDomain[];
   capabilityIds?: string[];
+  workstreams?: Workstream[];
+  workflowTags?: WorkflowTag[];
   official?: OfficialSkillMeta;
 }
 
-export type SkillDomain = "APP流量" | "平台" | "预算" | "厂商";
+export type Workstream = "流量侧" | "预算侧";
+
+export type TrafficWorkflowTag =
+  | "市场分析"
+  | "流量接入"
+  | "形态样式"
+  | "变现调优"
+  | "体验管理"
+  | "客户服务";
+
+export type BudgetWorkflowTag =
+  | "日常服务沉淀"
+  | "基本面分析"
+  | "可投可播分析"
+  | "模版双率优化"
+  | "优质流量提渗"
+  | "扶持策略设计"
+  | "case诊断优化";
+
+export type WorkflowTag = TrafficWorkflowTag | BudgetWorkflowTag;
+
+export type BusinessDomain = "APP流量" | "平台" | "预算" | "厂商";
+
+export type SkillDomain = BusinessDomain;
+
+export type CapabilityStage = "官方认证" | "建设中" | "缺口";
+
+export type CapabilityPriority = "P0" | "P1" | "P2";
 
 export interface OfficialSkillMeta {
   status: "official" | "candidate";
@@ -44,6 +73,8 @@ export interface OfficialSkillMeta {
   certifiedBy: string;
   certifiedAt?: string;
   note?: string;
+  ownerDomain?: BusinessDomain;
+  workstream?: Workstream;
 }
 
 // === Contributor ===
@@ -212,29 +243,46 @@ export interface SkillAssessment {
   analyzedFiles: string[];
 }
 
-export interface CapabilityItem {
+export interface CapabilityCard {
   id: string;
+  workstream: Workstream;
+  workflowTag: WorkflowTag;
+  module: string;
   title: string;
   description: string;
-  domains: SkillDomain[];
-  status: "covered" | "building" | "gap";
+  ownerDomain: BusinessDomain;
+  relatedDomains: BusinessDomain[];
+  stage: CapabilityStage;
+  priority: CapabilityPriority;
   skillIds: string[];
-  examples?: string[];
+  officialSkillIds: string[];
+  ownerPm?: string;
+  nextAction: string;
+  evidenceExamples: string[];
+  updatedAt: string;
 }
 
-export interface CapabilityModule {
-  name: string;
-  capabilities: CapabilityItem[];
-}
-
-export interface CapabilityStage {
-  serviceStage: string;
-  description: string;
-  modules: CapabilityModule[];
+export interface PendingSkillRegistration {
+  id: string;
+  uploader: string;
+  workstream: Workstream;
+  workflowTag: WorkflowTag;
+  capabilityCardId?: string;
+  proposedCard?: {
+    title: string;
+    description: string;
+    ownerDomain: BusinessDomain;
+    reason: string;
+  };
+  knotSkillUrl?: string;
+  status: "待上传" | "待回填" | "待PM确认" | "已挂靠" | "已驳回";
+  createdAt: string;
 }
 
 export interface OfficialSkillRecord {
   skillId: string;
+  ownerDomain: BusinessDomain;
+  workstream: Workstream;
   reviewerGroup: string;
   certifiedBy: string;
   certifiedAt: string;

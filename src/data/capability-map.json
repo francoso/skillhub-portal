@@ -1,358 +1,758 @@
 [
   {
-    "serviceStage": "市场分析",
-    "description": "围绕基本面盘点、竞品对标、拓客扫描和经营报告，明确机会与优先级。",
-    "modules": [
-      {
-        "name": "基本面分析",
-        "capabilities": [
-          {
-            "id": "fundamentals-industry",
-            "title": "行业/媒体基本面盘点",
-            "description": "结合行业、媒体和项目现状，完成基本面盘点并明确项目推进 OKR。",
-            "domains": ["APP流量", "预算", "厂商"],
-            "status": "building",
-            "skillIds": [],
-            "examples": ["【25年】-APP生态开发者运营项目管理-周会", "荣耀商业分析"]
-          },
-          {
-            "id": "market-expansion-scan",
-            "title": "拓客地图扫描",
-            "description": "基于竞对、厂商和客户数据识别可拓展客户，并输出拓展方案。",
-            "domains": ["APP流量", "厂商"],
-            "status": "covered",
-            "skillIds": ["market-insight"],
-            "examples": ["26Q1长尾媒体覆盖"]
-          }
-        ]
-      },
-      {
-        "name": "竞品对标",
-        "capabilities": [
-          {
-            "id": "competitive-benchmark",
-            "title": "竞品份额与动作调研",
-            "description": "回收竞品份额、OKR 与数据表现，形成对标结论。",
-            "domains": ["APP流量", "平台", "预算", "厂商"],
-            "status": "gap",
-            "skillIds": []
-          }
-        ]
-      },
-      {
-        "name": "经营报告",
-        "capabilities": [
-          {
-            "id": "weekly-monthly-report",
-            "title": "周报/月报自动化",
-            "description": "自动整合关键经营指标与动作纪要，生成标准化经营报告。",
-            "domains": ["APP流量", "平台", "预算"],
-            "status": "covered",
-            "skillIds": ["monthly-report"]
-          },
-          {
-            "id": "business-fluctuation-analysis",
-            "title": "波动归因分析",
-            "description": "围绕集团、媒体、收入等核心指标定位波动原因并输出归因。",
-            "domains": ["APP流量", "预算", "厂商"],
-            "status": "covered",
-            "skillIds": ["group-fluctuation", "media-uv-analysis", "revenue-fluctuation"]
-          }
-        ]
-      }
-    ]
+    "id": "traffic-market-fundamentals",
+    "workstream": "流量侧",
+    "workflowTag": "市场分析",
+    "module": "基本面分析",
+    "title": "行业/媒体基本面盘点",
+    "description": "结合行业、媒体和项目现状，完成基本面盘点并明确项目推进 OKR。",
+    "ownerDomain": "APP流量",
+    "relatedDomains": ["预算", "厂商"],
+    "stage": "建设中",
+    "priority": "P0",
+    "skillIds": ["group-fluctuation", "media-uv-analysis"],
+    "officialSkillIds": [],
+    "ownerPm": "APP流量 PM",
+    "nextAction": "补齐基本面分析模板，明确是否可进入 APP 流量 PM 认证。",
+    "evidenceExamples": ["【25年】-APP生态开发者运营项目管理-周会", "荣耀商业分析"],
+    "updatedAt": "2026-06-09"
   },
   {
-    "serviceStage": "流量接入",
-    "description": "覆盖拓客建联、接入支持和从 0 到 1 / 从 1 到 10 的放量推进。",
-    "modules": [
-      {
-        "name": "拓客建联",
-        "capabilities": [
-          {
-            "id": "lead-contact-discovery",
-            "title": "建联方式与关键人定位",
-            "description": "定位开发者或厂商关键人，沉淀建联路径和触达方式。",
-            "domains": ["APP流量", "厂商"],
-            "status": "gap",
-            "skillIds": [],
-            "examples": ["百度架构 26.01更新", "华为架构（2）"]
-          }
-        ]
-      },
-      {
-        "name": "从0到1接入",
-        "capabilities": [
-          {
-            "id": "access-solution-design",
-            "title": "接入方案与顾虑拆解",
-            "description": "根据媒体类型输出商业化方案、收益空间和定制化接入建议。",
-            "domains": ["APP流量", "厂商", "平台"],
-            "status": "building",
-            "skillIds": []
-          },
-          {
-            "id": "access-support",
-            "title": "SDK / API / RTB 接入支持",
-            "description": "承接 SDK、API、RTB 等接入支持与规格匹配。",
-            "domains": ["APP流量", "平台", "厂商"],
-            "status": "building",
-            "skillIds": [],
-            "examples": ["厂商协议汇总", "VIVO广告位绑定流程"]
-          }
-        ]
-      },
-      {
-        "name": "从1到10放量",
-        "capabilities": [
-          {
-            "id": "traffic-ramp-up",
-            "title": "冷启放开与流量放量",
-            "description": "推进 ROI 过滤放开、冷启扶持和灰度验收，提升媒体放量效率。",
-            "domains": ["APP流量", "平台"],
-            "status": "covered",
-            "skillIds": ["roi-filter-release"]
-          }
-        ]
-      }
-    ]
+    "id": "traffic-market-expansion-scan",
+    "workstream": "流量侧",
+    "workflowTag": "市场分析",
+    "module": "拓客地图扫描",
+    "title": "拓客地图扫描与拓展方案",
+    "description": "基于竞对、厂商和客户数据识别可拓展客户，并输出拓展方案。",
+    "ownerDomain": "APP流量",
+    "relatedDomains": ["厂商"],
+    "stage": "官方认证",
+    "priority": "P0",
+    "skillIds": ["market-insight"],
+    "officialSkillIds": ["market-insight"],
+    "ownerPm": "APP流量 PM",
+    "nextAction": "沉淀更多行业样例，扩展到长尾媒体覆盖。",
+    "evidenceExamples": ["26Q1长尾媒体覆盖"],
+    "updatedAt": "2026-06-09"
   },
   {
-    "serviceStage": "形态样式",
-    "description": "围绕模板调研、规则配置、样式抓取和效果优化，支撑广告形态迭代。",
-    "modules": [
-      {
-        "name": "模板规则",
-        "capabilities": [
-          {
-            "id": "template-query",
-            "title": "模板查询与规则关联",
-            "description": "快速识别模板样式、定位规则关系并给出查询结果。",
-            "domains": ["APP流量", "平台"],
-            "status": "covered",
-            "skillIds": ["template-query"]
-          },
-          {
-            "id": "template-rule-review",
-            "title": "模板规则审查",
-            "description": "检查联盟模板规则创建逻辑并提示风险。",
-            "domains": ["APP流量", "平台"],
-            "status": "covered",
-            "skillIds": ["template-rule-check"]
-          }
-        ]
-      },
-      {
-        "name": "样式采集",
-        "capabilities": [
-          {
-            "id": "style-capture",
-            "title": "联盟/竞品样式抓取",
-            "description": "按场景抓取联盟与竞品模板样式，支持后续对标分析。",
-            "domains": ["APP流量", "平台"],
-            "status": "covered",
-            "skillIds": ["ad-style-capture"]
-          }
-        ]
-      },
-      {
-        "name": "模板优化",
-        "capabilities": [
-          {
-            "id": "template-effect-feedback",
-            "title": "模板效果回收与优化方向",
-            "description": "回收模板效果数据并明确优化方向，联动媒体侧问题反馈。",
-            "domains": ["APP流量", "平台"],
-            "status": "gap",
-            "skillIds": [],
-            "examples": ["七猫插页激励化接入问题整理"]
-          }
-        ]
-      }
-    ]
+    "id": "traffic-competitive-benchmark",
+    "workstream": "流量侧",
+    "workflowTag": "市场分析",
+    "module": "竞品对标",
+    "title": "竞品份额与动作调研",
+    "description": "回收竞品份额、OKR 与数据表现，形成对标结论。",
+    "ownerDomain": "平台",
+    "relatedDomains": ["APP流量", "预算", "厂商"],
+    "stage": "缺口",
+    "priority": "P1",
+    "skillIds": [],
+    "officialSkillIds": [],
+    "ownerPm": "平台 PM",
+    "nextAction": "确认竞品数据源和合规边界，拉出第一版采集需求。",
+    "evidenceExamples": ["竞品份额回收", "YYB数据对标"],
+    "updatedAt": "2026-06-09"
   },
   {
-    "serviceStage": "变现调优",
-    "description": "围绕收入、预算、流量、场景和链路问题做诊断与调优。",
-    "modules": [
-      {
-        "name": "诊断分析",
-        "capabilities": [
-          {
-            "id": "alliance-data-analysis",
-            "title": "联盟广告数据智能分析",
-            "description": "整合核心数据查询、经营分析和预算问题诊断。",
-            "domains": ["APP流量", "平台", "预算"],
-            "status": "covered",
-            "skillIds": ["data-analysis-assistant"]
-          },
-          {
-            "id": "queue-funnel-analysis",
-            "title": "竞争队列与漏斗归因",
-            "description": "从预算 x 流量视角拆解竞争队列、错误码和漏斗问题。",
-            "domains": ["平台", "预算"],
-            "status": "covered",
-            "skillIds": ["ad-competition-queue"]
-          },
-          {
-            "id": "budget-penetration-gap",
-            "title": "预算渗透与 benchmark 分析",
-            "description": "定位预算渗透问题并完成预算 x 流量链路漏斗分析。",
-            "domains": ["预算"],
-            "status": "covered",
-            "skillIds": ["budget-penetration"]
-          }
-        ]
-      },
-      {
-        "name": "流量与场景",
-        "capabilities": [
-          {
-            "id": "traffic-forecast",
-            "title": "联盟流量预估",
-            "description": "按月预估联盟整体与分场景流量趋势，并给出投放建议。",
-            "domains": ["APP流量", "预算"],
-            "status": "covered",
-            "skillIds": ["traffic-forecast"]
-          },
-          {
-            "id": "vendor-scene-diagnosis",
-            "title": "厂商场景消耗异动分析",
-            "description": "按厂商和场景定位消耗波动，输出原因与建议。",
-            "domains": ["厂商"],
-            "status": "covered",
-            "skillIds": ["vendor-scene-analysis", "ad-slot-query"]
-          }
-        ]
-      },
-      {
-        "name": "策略调优",
-        "capabilities": [
-          {
-            "id": "support-strategy-design",
-            "title": "扶持策略设计与效果分析",
-            "description": "围绕人货场机会设计扶持策略，并阶段性评估效果。",
-            "domains": ["预算", "平台"],
-            "status": "building",
-            "skillIds": []
-          },
-          {
-            "id": "quality-traffic-penetration",
-            "title": "优质流量提渗",
-            "description": "分析优质场景和人群渗透机会，联动人工配置推进提渗。",
-            "domains": ["预算", "APP流量", "厂商"],
-            "status": "building",
-            "skillIds": []
-          }
-        ]
-      }
-    ]
+    "id": "traffic-lead-contact",
+    "workstream": "流量侧",
+    "workflowTag": "流量接入",
+    "module": "拓客建联",
+    "title": "建联方式与关键人定位",
+    "description": "定位开发者或厂商关键人，沉淀建联路径和触达方式。",
+    "ownerDomain": "APP流量",
+    "relatedDomains": ["厂商"],
+    "stage": "缺口",
+    "priority": "P1",
+    "skillIds": [],
+    "officialSkillIds": [],
+    "ownerPm": "APP流量 PM",
+    "nextAction": "补一张建联路径卡，明确天眼查、后台、人脉三类信息入口。",
+    "evidenceExamples": ["百度架构 26.01更新", "华为架构（2）"],
+    "updatedAt": "2026-06-09"
   },
   {
-    "serviceStage": "体验管理",
-    "description": "覆盖素材体验、预算屏蔽、性能和风险排查相关能力。",
-    "modules": [
-      {
-        "name": "素材体验",
-        "capabilities": [
-          {
-            "id": "material-experience-ops",
-            "title": "素材体验知识库与 SOP",
-            "description": "承接素材审核、体验放宽、售后退款、屏蔽排查等问题。",
-            "domains": ["平台", "APP流量", "预算"],
-            "status": "covered",
-            "skillIds": ["material-experience"]
-          }
-        ]
-      },
-      {
-        "name": "预算屏蔽",
-        "capabilities": [
-          {
-            "id": "budget-blocking-plan",
-            "title": "预算屏蔽沟通与方案制定",
-            "description": "评估屏蔽合理性、制定放开或屏蔽方案并推进沟通。",
-            "domains": ["预算", "平台"],
-            "status": "building",
-            "skillIds": []
-          },
-          {
-            "id": "budget-blocking-config",
-            "title": "预算屏蔽配置与审批",
-            "description": "承接保护伞等配置动作与审批过程。",
-            "domains": ["预算", "平台"],
-            "status": "gap",
-            "skillIds": []
-          }
-        ]
-      },
-      {
-        "name": "性能优化",
-        "capabilities": [
-          {
-            "id": "sdk-performance",
-            "title": "SDK 性能优化",
-            "description": "处理 SDK 数据获取、崩溃、卡顿等体验问题。",
-            "domains": ["APP流量", "平台"],
-            "status": "gap",
-            "skillIds": []
-          }
-        ]
-      }
-    ]
+    "id": "traffic-access-solution",
+    "workstream": "流量侧",
+    "workflowTag": "流量接入",
+    "module": "流量接入 从0到1",
+    "title": "接入方案与顾虑拆解",
+    "description": "根据媒体类型输出商业化方案、收益空间和定制化接入建议。",
+    "ownerDomain": "APP流量",
+    "relatedDomains": ["平台", "厂商"],
+    "stage": "建设中",
+    "priority": "P0",
+    "skillIds": [],
+    "officialSkillIds": [],
+    "ownerPm": "APP流量 PM",
+    "nextAction": "从现有接入方案中抽取标准输入输出，招募候选 Skill。",
+    "evidenceExamples": ["媒体商业化方案", "收益空间测算"],
+    "updatedAt": "2026-06-09"
   },
   {
-    "serviceStage": "客户服务",
-    "description": "支撑客户拜访、日常答疑、结算沟通和沙龙运营。",
-    "modules": [
-      {
-        "name": "客户拜访",
-        "capabilities": [
-          {
-            "id": "visit-docs",
-            "title": "拜访文档与路线规划",
-            "description": "生成拜访文档、规划路线并沉淀会前材料。",
-            "domains": ["APP流量", "厂商"],
-            "status": "covered",
-            "skillIds": ["visit-doc-generator", "vendor-trip-material"]
-          },
-          {
-            "id": "visit-followup",
-            "title": "拜访纪要与待办跟进",
-            "description": "输出纪要、形成需求并推进 todo 跟进。",
-            "domains": ["APP流量", "厂商"],
-            "status": "covered",
-            "skillIds": ["visit-summary"]
-          }
-        ]
-      },
-      {
-        "name": "日常服务",
-        "capabilities": [
-          {
-            "id": "daily-qa",
-            "title": "联盟特色知识问答 / 新人辅导",
-            "description": "承接日常答疑、新人学习和知识问答场景。",
-            "domains": ["平台", "预算"],
-            "status": "covered",
-            "skillIds": ["ai-mentor"]
-          }
-        ]
-      },
-      {
-        "name": "活动运营",
-        "capabilities": [
-          {
-            "id": "salon-ops",
-            "title": "沙龙材料、邀约与纪要",
-            "description": "支撑沙龙主题规划、材料输出、客户邀约和会后纪要。",
-            "domains": ["APP流量"],
-            "status": "gap",
-            "skillIds": [],
-            "examples": ["2025联盟内容建设-沙龙&直播SOP"]
-          }
-        ]
-      }
-    ]
+    "id": "traffic-access-support",
+    "workstream": "流量侧",
+    "workflowTag": "流量接入",
+    "module": "流量接入 从0到1",
+    "title": "SDK / API / RTB 接入支持",
+    "description": "承接 SDK、API、RTB 等接入支持与规格匹配。",
+    "ownerDomain": "平台",
+    "relatedDomains": ["APP流量", "厂商"],
+    "stage": "建设中",
+    "priority": "P0",
+    "skillIds": [],
+    "officialSkillIds": [],
+    "ownerPm": "平台 PM",
+    "nextAction": "把 SDK/API/RTB 拆成可维护 SOP，并确认是否需要三张子卡。",
+    "evidenceExamples": ["厂商协议汇总", "VIVO广告位绑定流程"],
+    "updatedAt": "2026-06-09"
+  },
+  {
+    "id": "traffic-ramp-up",
+    "workstream": "流量侧",
+    "workflowTag": "流量接入",
+    "module": "流量接入 从1到10",
+    "title": "冷启放开与流量放量",
+    "description": "推进 ROI 过滤放开、冷启扶持和灰度验收，提升媒体放量效率。",
+    "ownerDomain": "APP流量",
+    "relatedDomains": ["平台"],
+    "stage": "建设中",
+    "priority": "P0",
+    "skillIds": ["roi-filter-release"],
+    "officialSkillIds": [],
+    "ownerPm": "APP流量 PM",
+    "nextAction": "补齐灰度验收样例和风控边界后提交认证。",
+    "evidenceExamples": ["冷启扶持优化", "放量验收记录"],
+    "updatedAt": "2026-06-09"
+  },
+  {
+    "id": "traffic-template-query",
+    "workstream": "流量侧",
+    "workflowTag": "形态样式",
+    "module": "模板规则",
+    "title": "模板查询与规则关联",
+    "description": "快速识别模板样式、定位规则关系并给出查询结果。",
+    "ownerDomain": "平台",
+    "relatedDomains": ["APP流量"],
+    "stage": "建设中",
+    "priority": "P1",
+    "skillIds": ["template-query"],
+    "officialSkillIds": [],
+    "ownerPm": "平台 PM",
+    "nextAction": "确认模板数据口径，补齐异常规则样例。",
+    "evidenceExamples": ["联盟模板样式识别与判断"],
+    "updatedAt": "2026-06-09"
+  },
+  {
+    "id": "traffic-template-rule-review",
+    "workstream": "流量侧",
+    "workflowTag": "形态样式",
+    "module": "模板规则",
+    "title": "模板规则审查",
+    "description": "检查联盟模板规则创建逻辑并提示风险。",
+    "ownerDomain": "平台",
+    "relatedDomains": ["APP流量"],
+    "stage": "官方认证",
+    "priority": "P0",
+    "skillIds": ["template-rule-check"],
+    "officialSkillIds": ["template-rule-check"],
+    "ownerPm": "形态样式 PM",
+    "nextAction": "扩展到模板上线前的自动审查清单。",
+    "evidenceExamples": ["模板规则创建逻辑检查"],
+    "updatedAt": "2026-06-09"
+  },
+  {
+    "id": "traffic-style-capture",
+    "workstream": "流量侧",
+    "workflowTag": "形态样式",
+    "module": "样式采集",
+    "title": "联盟/竞品样式抓取",
+    "description": "按场景抓取联盟与竞品模板样式，支持后续对标分析。",
+    "ownerDomain": "平台",
+    "relatedDomains": ["APP流量"],
+    "stage": "建设中",
+    "priority": "P1",
+    "skillIds": ["ad-style-capture"],
+    "officialSkillIds": [],
+    "ownerPm": "平台 PM",
+    "nextAction": "确认抓取频次、样式分类标准和合规边界。",
+    "evidenceExamples": ["竞品模板样式分场景自动抓取"],
+    "updatedAt": "2026-06-09"
+  },
+  {
+    "id": "traffic-template-effect-feedback",
+    "workstream": "流量侧",
+    "workflowTag": "形态样式",
+    "module": "模板优化",
+    "title": "模板效果回收与优化方向",
+    "description": "回收模板效果数据并明确优化方向，联动媒体侧问题反馈。",
+    "ownerDomain": "APP流量",
+    "relatedDomains": ["平台"],
+    "stage": "缺口",
+    "priority": "P1",
+    "skillIds": [],
+    "officialSkillIds": [],
+    "ownerPm": "APP流量 PM",
+    "nextAction": "先建立效果回收字段模板，再开放 Skill 征集。",
+    "evidenceExamples": ["七猫插页激励化接入问题整理"],
+    "updatedAt": "2026-06-09"
+  },
+  {
+    "id": "traffic-data-diagnosis",
+    "workstream": "流量侧",
+    "workflowTag": "变现调优",
+    "module": "诊断分析",
+    "title": "联盟广告数据智能分析",
+    "description": "整合核心数据查询、经营分析和预算问题诊断。",
+    "ownerDomain": "平台",
+    "relatedDomains": ["APP流量", "预算"],
+    "stage": "官方认证",
+    "priority": "P0",
+    "skillIds": ["data-analysis-assistant", "ad-competition-queue"],
+    "officialSkillIds": ["data-analysis-assistant"],
+    "ownerPm": "平台 PM",
+    "nextAction": "补充流量侧漏斗样例，避免只被理解为预算工具。",
+    "evidenceExamples": ["流量链路漏斗分析", "竞争队列漏斗打开"],
+    "updatedAt": "2026-06-09"
+  },
+  {
+    "id": "traffic-revenue-fluctuation",
+    "workstream": "流量侧",
+    "workflowTag": "变现调优",
+    "module": "诊断分析",
+    "title": "收入异动监控与归因",
+    "description": "围绕收入、请求、填充、展示等链路指标定位波动原因。",
+    "ownerDomain": "APP流量",
+    "relatedDomains": ["预算", "厂商"],
+    "stage": "建设中",
+    "priority": "P0",
+    "skillIds": ["revenue-fluctuation", "group-fluctuation", "media-uv-analysis"],
+    "officialSkillIds": [],
+    "ownerPm": "APP流量 PM",
+    "nextAction": "明确流量侧归因输出模板，推动收入波动 Skill 认证。",
+    "evidenceExamples": ["厂商pushmail模版-Y26", "预算×流量异动分析"],
+    "updatedAt": "2026-06-09"
+  },
+  {
+    "id": "traffic-vendor-scene-diagnosis",
+    "workstream": "流量侧",
+    "workflowTag": "变现调优",
+    "module": "策略调优",
+    "title": "厂商场景消耗异动分析",
+    "description": "按厂商和场景定位消耗波动，输出原因与建议。",
+    "ownerDomain": "厂商",
+    "relatedDomains": ["APP流量", "预算"],
+    "stage": "官方认证",
+    "priority": "P0",
+    "skillIds": ["vendor-scene-analysis", "ad-slot-query"],
+    "officialSkillIds": ["vendor-scene-analysis"],
+    "ownerPm": "厂商 PM",
+    "nextAction": "补充商店、浏览器、锁屏等分场景 SOP。",
+    "evidenceExamples": ["2025厂商流量变现分析框架", "厂商桌面场景逻辑SOP"],
+    "updatedAt": "2026-06-09"
+  },
+  {
+    "id": "traffic-node-ramp-up",
+    "workstream": "流量侧",
+    "workflowTag": "变现调优",
+    "module": "节点放量",
+    "title": "预算节点配合放量",
+    "description": "配合预算节点推进媒体放量、增加 adload 并跟踪验收。",
+    "ownerDomain": "APP流量",
+    "relatedDomains": ["预算"],
+    "stage": "缺口",
+    "priority": "P1",
+    "skillIds": [],
+    "officialSkillIds": [],
+    "ownerPm": "APP流量 PM",
+    "nextAction": "沉淀节点放量 checklist，和预算侧联动确认数据口径。",
+    "evidenceExamples": ["闲鱼0321冲量-APP流量侧信息"],
+    "updatedAt": "2026-06-09"
+  },
+  {
+    "id": "traffic-sdk-performance",
+    "workstream": "流量侧",
+    "workflowTag": "体验管理",
+    "module": "性能优化",
+    "title": "SDK 性能优化",
+    "description": "处理 SDK 数据获取、崩溃、卡顿等体验问题。",
+    "ownerDomain": "平台",
+    "relatedDomains": ["APP流量"],
+    "stage": "缺口",
+    "priority": "P1",
+    "skillIds": [],
+    "officialSkillIds": [],
+    "ownerPm": "平台 PM",
+    "nextAction": "确认性能数据接口是否可开放给 Skill 使用。",
+    "evidenceExamples": ["SDK崩溃/卡顿问题排查"],
+    "updatedAt": "2026-06-09"
+  },
+  {
+    "id": "traffic-material-experience",
+    "workstream": "流量侧",
+    "workflowTag": "体验管理",
+    "module": "素材体验",
+    "title": "素材体验知识库与 SOP",
+    "description": "承接素材审核、体验放宽、售后退款、屏蔽排查等问题。",
+    "ownerDomain": "平台",
+    "relatedDomains": ["APP流量", "预算"],
+    "stage": "官方认证",
+    "priority": "P0",
+    "skillIds": ["material-experience"],
+    "officialSkillIds": ["material-experience"],
+    "ownerPm": "平台 PM",
+    "nextAction": "把高频售后问题沉淀为可复用问答卡。",
+    "evidenceExamples": ["联盟一审标签放宽评估-审核"],
+    "updatedAt": "2026-06-09"
+  },
+  {
+    "id": "traffic-budget-blocking",
+    "workstream": "流量侧",
+    "workflowTag": "体验管理",
+    "module": "预算屏蔽",
+    "title": "预算屏蔽沟通与配置",
+    "description": "评估屏蔽合理性、制定放开或屏蔽方案并推进配置审批。",
+    "ownerDomain": "预算",
+    "relatedDomains": ["平台", "APP流量"],
+    "stage": "建设中",
+    "priority": "P0",
+    "skillIds": [],
+    "officialSkillIds": [],
+    "ownerPm": "预算 PM",
+    "nextAction": "明确保护伞配置数据源，拆分沟通方案和配置管理两张卡。",
+    "evidenceExamples": ["预算屏蔽沟通", "保护伞配置&审批"],
+    "updatedAt": "2026-06-09"
+  },
+  {
+    "id": "traffic-visit-docs",
+    "workstream": "流量侧",
+    "workflowTag": "客户服务",
+    "module": "客户拜访",
+    "title": "拜访文档与路线规划",
+    "description": "生成拜访文档、规划路线并沉淀会前材料。",
+    "ownerDomain": "APP流量",
+    "relatedDomains": ["厂商"],
+    "stage": "建设中",
+    "priority": "P1",
+    "skillIds": ["visit-doc-generator", "vendor-trip-material"],
+    "officialSkillIds": [],
+    "ownerPm": "APP流量 PM",
+    "nextAction": "补齐不同客户类型模板，确认是否能合并厂商出差材料能力。",
+    "evidenceExamples": ["厂商拜访文档 X AI自动化输出需求"],
+    "updatedAt": "2026-06-09"
+  },
+  {
+    "id": "traffic-visit-followup",
+    "workstream": "流量侧",
+    "workflowTag": "客户服务",
+    "module": "客户拜访",
+    "title": "拜访纪要与待办跟进",
+    "description": "输出纪要、形成需求并推进 todo 跟进。",
+    "ownerDomain": "APP流量",
+    "relatedDomains": ["厂商", "平台"],
+    "stage": "建设中",
+    "priority": "P1",
+    "skillIds": ["visit-summary"],
+    "officialSkillIds": [],
+    "ownerPm": "APP流量 PM",
+    "nextAction": "补充 Todo 归档和需求推进字段后发起认证。",
+    "evidenceExamples": ["拜访纪要", "产品需求推进记录"],
+    "updatedAt": "2026-06-09"
+  },
+  {
+    "id": "traffic-daily-qa",
+    "workstream": "流量侧",
+    "workflowTag": "客户服务",
+    "module": "日常答疑",
+    "title": "联盟特色知识问答 / 新人辅导",
+    "description": "承接日常答疑、新人学习和知识问答场景。",
+    "ownerDomain": "平台",
+    "relatedDomains": ["预算", "APP流量"],
+    "stage": "建设中",
+    "priority": "P2",
+    "skillIds": ["ai-mentor"],
+    "officialSkillIds": [],
+    "ownerPm": "平台 PM",
+    "nextAction": "把新人辅导和客户服务答疑边界分清，避免能力卡泛化。",
+    "evidenceExamples": ["新人学习档案", "联盟内部知识库问答"],
+    "updatedAt": "2026-06-09"
+  },
+  {
+    "id": "traffic-salon-ops",
+    "workstream": "流量侧",
+    "workflowTag": "客户服务",
+    "module": "赛道沙龙",
+    "title": "沙龙材料、邀约与纪要",
+    "description": "支撑沙龙主题规划、材料输出、客户邀约和会后纪要。",
+    "ownerDomain": "APP流量",
+    "relatedDomains": [],
+    "stage": "缺口",
+    "priority": "P2",
+    "skillIds": [],
+    "officialSkillIds": [],
+    "ownerPm": "APP流量 PM",
+    "nextAction": "先从沙龙材料生成或客户邀约二选一做最小卡片。",
+    "evidenceExamples": ["2025联盟内容建设-沙龙&直播SOP", "0710工具线下沙龙 - 开发者问题跟进"],
+    "updatedAt": "2026-06-09"
+  },
+  {
+    "id": "budget-daily-data-query",
+    "workstream": "预算侧",
+    "workflowTag": "日常服务沉淀",
+    "module": "取数",
+    "title": "预算通用取数与查询",
+    "description": "响应预算侧日常数据查询，支持快速拉取、解释和沉淀常用口径。",
+    "ownerDomain": "预算",
+    "relatedDomains": ["平台"],
+    "stage": "官方认证",
+    "priority": "P0",
+    "skillIds": ["data-analysis-assistant"],
+    "officialSkillIds": ["data-analysis-assistant"],
+    "ownerPm": "预算 PM",
+    "nextAction": "补充常用 SQL 口径和权限说明。",
+    "evidenceExamples": ["查询数据", "联盟核心数据表"],
+    "updatedAt": "2026-06-09"
+  },
+  {
+    "id": "budget-revenue-fluctuation",
+    "workstream": "预算侧",
+    "workflowTag": "日常服务沉淀",
+    "module": "收入波动分析",
+    "title": "大盘收入波动分析",
+    "description": "日常大盘收入波动超过阈值或节假日时，分析消耗情况并做波动归因。",
+    "ownerDomain": "预算",
+    "relatedDomains": ["APP流量", "厂商"],
+    "stage": "建设中",
+    "priority": "P0",
+    "skillIds": ["revenue-fluctuation"],
+    "officialSkillIds": [],
+    "ownerPm": "预算 PM",
+    "nextAction": "确认阈值、节假日处理和预算侧归因模板。",
+    "evidenceExamples": ["联盟大盘收入波动分析"],
+    "updatedAt": "2026-06-09"
+  },
+  {
+    "id": "budget-traffic-forecast",
+    "workstream": "预算侧",
+    "workflowTag": "日常服务沉淀",
+    "module": "联盟流量预估",
+    "title": "联盟流量整体与分场景预估",
+    "description": "按月预估联盟整体和分场景趋势，并给到行业投放建议。",
+    "ownerDomain": "预算",
+    "relatedDomains": ["APP流量"],
+    "stage": "官方认证",
+    "priority": "P0",
+    "skillIds": ["traffic-forecast"],
+    "officialSkillIds": ["traffic-forecast"],
+    "ownerPm": "预算 PM",
+    "nextAction": "建立节假日和大促修正因子说明。",
+    "evidenceExamples": ["联盟流量预估"],
+    "updatedAt": "2026-06-09"
+  },
+  {
+    "id": "budget-knowledge-qa",
+    "workstream": "预算侧",
+    "workflowTag": "日常服务沉淀",
+    "module": "联盟特色知识解答",
+    "title": "预算侧知识问答与投诉响应",
+    "description": "基于联盟内部知识库，回答行业相关能力、流量情况和差异化投诉问题。",
+    "ownerDomain": "预算",
+    "relatedDomains": ["平台"],
+    "stage": "建设中",
+    "priority": "P2",
+    "skillIds": ["ai-mentor"],
+    "officialSkillIds": [],
+    "ownerPm": "预算 PM",
+    "nextAction": "拆分静态知识问答和个性化投诉响应，避免范围过宽。",
+    "evidenceExamples": ["联盟知识问答整体", "个性化投诉响应"],
+    "updatedAt": "2026-06-09"
+  },
+  {
+    "id": "budget-business-fundamentals",
+    "workstream": "预算侧",
+    "workflowTag": "基本面分析",
+    "module": "业务基本面判断",
+    "title": "内部/外部机会分析",
+    "description": "结合行业、AMS 大盘、内广和媒体侧信息，明确预算提收机会和 OKR 锚点。",
+    "ownerDomain": "预算",
+    "relatedDomains": ["APP流量", "平台"],
+    "stage": "缺口",
+    "priority": "P0",
+    "skillIds": [],
+    "officialSkillIds": [],
+    "ownerPm": "预算 PM",
+    "nextAction": "先沉淀季度机会分析模板，明确输入数据源。",
+    "evidenceExamples": ["内部机会分析", "外部机会对标"],
+    "updatedAt": "2026-06-09"
+  },
+  {
+    "id": "budget-capability-benchmark",
+    "workstream": "预算侧",
+    "workflowTag": "基本面分析",
+    "module": "能力对标分析",
+    "title": "内广/竞品能力对标",
+    "description": "通过内部联动、手刷、广告主和媒体侧输入，保持关键能力对标盘点。",
+    "ownerDomain": "预算",
+    "relatedDomains": ["平台"],
+    "stage": "缺口",
+    "priority": "P1",
+    "skillIds": [],
+    "officialSkillIds": [],
+    "ownerPm": "预算 PM",
+    "nextAction": "明确对标维度和竞品信息合规采集方式。",
+    "evidenceExamples": ["内广能力对标", "竞品能力对标"],
+    "updatedAt": "2026-06-09"
+  },
+  {
+    "id": "budget-potential-customer",
+    "workstream": "预算侧",
+    "workflowTag": "基本面分析",
+    "module": "潜客挖掘分析",
+    "title": "标杆同类与内广头客挖掘",
+    "description": "分析 LM 存量标杆和内广头客，判断联盟预算潜力机会。",
+    "ownerDomain": "预算",
+    "relatedDomains": ["APP流量"],
+    "stage": "建设中",
+    "priority": "P1",
+    "skillIds": ["budget-penetration"],
+    "officialSkillIds": [],
+    "ownerPm": "预算 PM",
+    "nextAction": "增加潜客名单输出和机会评级字段。",
+    "evidenceExamples": ["内部潜力-标杆同类", "外部潜力-内广头客"],
+    "updatedAt": "2026-06-09"
+  },
+  {
+    "id": "budget-ad-open-analysis",
+    "workstream": "预算侧",
+    "workflowTag": "可投可播分析",
+    "module": "可投-广告开口分析",
+    "title": "广告基建表达覆盖分析",
+    "description": "分析锚定预算在联盟的基建表达覆盖，明确增量拓展机会。",
+    "ownerDomain": "预算",
+    "relatedDomains": ["平台"],
+    "stage": "缺口",
+    "priority": "P0",
+    "skillIds": [],
+    "officialSkillIds": [],
+    "ownerPm": "预算 PM",
+    "nextAction": "确认广告基建表达数据源和可投口径。",
+    "evidenceExamples": ["可投-广告开口分析"],
+    "updatedAt": "2026-06-09"
+  },
+  {
+    "id": "budget-playable-coverage",
+    "workstream": "预算侧",
+    "workflowTag": "可投可播分析",
+    "module": "可播-媒体开口分析",
+    "title": "可播能力覆盖与媒体屏蔽分析",
+    "description": "分析锚定预算在细分规格、创意、落地页和媒体屏蔽规则上的可播情况。",
+    "ownerDomain": "预算",
+    "relatedDomains": ["平台", "APP流量"],
+    "stage": "缺口",
+    "priority": "P0",
+    "skillIds": [],
+    "officialSkillIds": [],
+    "ownerPm": "预算 PM",
+    "nextAction": "先做媒体屏蔽离线表口径确认，再拆成覆盖/屏蔽两张卡。",
+    "evidenceExamples": ["可播-能力覆盖分析", "可播-媒体屏蔽分析"],
+    "updatedAt": "2026-06-09"
+  },
+  {
+    "id": "budget-penetration-gap",
+    "workstream": "预算侧",
+    "workflowTag": "可投可播分析",
+    "module": "预算渗透分析",
+    "title": "预算渗透与 benchmark 分析",
+    "description": "定位预算渗透问题并完成预算 x 流量链路漏斗分析。",
+    "ownerDomain": "预算",
+    "relatedDomains": ["APP流量", "平台"],
+    "stage": "建设中",
+    "priority": "P0",
+    "skillIds": ["budget-penetration", "ad-competition-queue"],
+    "officialSkillIds": [],
+    "ownerPm": "预算 PM",
+    "nextAction": "补齐 benchmark 选择规则，推动预算 PM 认证。",
+    "evidenceExamples": ["预算×流量异动分析", "厂商预算×流量诊断Agent需求"],
+    "updatedAt": "2026-06-09"
+  },
+  {
+    "id": "budget-template-existing",
+    "workstream": "预算侧",
+    "workflowTag": "模版双率优化",
+    "module": "存量-模版配置建议",
+    "title": "存量模版分析与配置建议",
+    "description": "分析同类预算模板表现，给到锚定预算配置建议，并观察线上数据。",
+    "ownerDomain": "预算",
+    "relatedDomains": ["平台"],
+    "stage": "建设中",
+    "priority": "P1",
+    "skillIds": ["ad-style-distribution", "template-query"],
+    "officialSkillIds": [],
+    "ownerPm": "预算 PM",
+    "nextAction": "明确双率指标和样式分布对比输出格式。",
+    "evidenceExamples": ["存量模版分析", "存量模版配置"],
+    "updatedAt": "2026-06-09"
+  },
+  {
+    "id": "budget-template-custom",
+    "workstream": "预算侧",
+    "workflowTag": "模版双率优化",
+    "module": "增量-商业产品定制",
+    "title": "预算定制模版与商业产品创新",
+    "description": "基于预算特性，在存量模板上定制调整或创新商业产品。",
+    "ownerDomain": "预算",
+    "relatedDomains": ["平台", "APP流量"],
+    "stage": "缺口",
+    "priority": "P1",
+    "skillIds": [],
+    "officialSkillIds": [],
+    "ownerPm": "预算 PM",
+    "nextAction": "沉淀一个锚定预算定制案例，抽象成需求产出模板。",
+    "evidenceExamples": ["存量模版更新定制", "纯新商业产品创新"],
+    "updatedAt": "2026-06-09"
+  },
+  {
+    "id": "budget-premium-scene",
+    "workstream": "预算侧",
+    "workflowTag": "优质流量提渗",
+    "module": "优质场景渗透分析",
+    "title": "优质场景渗透机会分析",
+    "description": "按锚定预算考核指标和流量类型分析优质场景渗透机会。",
+    "ownerDomain": "预算",
+    "relatedDomains": ["APP流量", "厂商"],
+    "stage": "缺口",
+    "priority": "P0",
+    "skillIds": [],
+    "officialSkillIds": [],
+    "ownerPm": "预算 PM",
+    "nextAction": "确认优质场景定义和可操作配置入口。",
+    "evidenceExamples": ["优质场景渗透分析"],
+    "updatedAt": "2026-06-09"
+  },
+  {
+    "id": "budget-premium-crowd",
+    "workstream": "预算侧",
+    "workflowTag": "优质流量提渗",
+    "module": "优质人群渗透分析",
+    "title": "优质人群渗透与人工提渗配置",
+    "description": "分析锚定预算行业 TA 人群的联盟渗透情况，并联动配置推进提渗。",
+    "ownerDomain": "预算",
+    "relatedDomains": ["平台"],
+    "stage": "建设中",
+    "priority": "P1",
+    "skillIds": ["budget-penetration"],
+    "officialSkillIds": [],
+    "ownerPm": "预算 PM",
+    "nextAction": "补齐人群定义字段和人工配置流程。",
+    "evidenceExamples": ["优质人群渗透分析", "优质流量提渗配置"],
+    "updatedAt": "2026-06-09"
+  },
+  {
+    "id": "budget-support-qa",
+    "workstream": "预算侧",
+    "workflowTag": "扶持策略设计",
+    "module": "扶持使用规范",
+    "title": "扶持问答与使用规范",
+    "description": "回答扶持相关的静态知识咨询，明确规则、范围和注意事项。",
+    "ownerDomain": "预算",
+    "relatedDomains": ["平台"],
+    "stage": "缺口",
+    "priority": "P2",
+    "skillIds": [],
+    "officialSkillIds": [],
+    "ownerPm": "预算 PM",
+    "nextAction": "从扶持规则文档抽取 FAQ，形成可维护知识卡。",
+    "evidenceExamples": ["扶持问答能力"],
+    "updatedAt": "2026-06-09"
+  },
+  {
+    "id": "budget-support-strategy",
+    "workstream": "预算侧",
+    "workflowTag": "扶持策略设计",
+    "module": "扶持策略设计",
+    "title": "扶持策略设计与调整",
+    "description": "基于业务洞察假设，分析人货场潜在机会，设计或调整扶持策略。",
+    "ownerDomain": "预算",
+    "relatedDomains": ["APP流量", "平台"],
+    "stage": "建设中",
+    "priority": "P0",
+    "skillIds": [],
+    "officialSkillIds": [],
+    "ownerPm": "预算 PM",
+    "nextAction": "补一版策略设计框架，明确假设、论证和配置动作。",
+    "evidenceExamples": ["扶持策略设计"],
+    "updatedAt": "2026-06-09"
+  },
+  {
+    "id": "budget-support-effect",
+    "workstream": "预算侧",
+    "workflowTag": "扶持策略设计",
+    "module": "扶持效果分析",
+    "title": "扶持效果分析与配置管理",
+    "description": "阶段性分析扶持效果，给出下阶段策略建议，并管理扶持平台配置。",
+    "ownerDomain": "预算",
+    "relatedDomains": ["平台"],
+    "stage": "缺口",
+    "priority": "P1",
+    "skillIds": [],
+    "officialSkillIds": [],
+    "ownerPm": "预算 PM",
+    "nextAction": "确认腾飞/aid 平台配置字段是否能人工回填到 SkillHub。",
+    "evidenceExamples": ["扶持效果分析", "扶持配置管理"],
+    "updatedAt": "2026-06-09"
+  },
+  {
+    "id": "budget-case-consumption",
+    "workstream": "预算侧",
+    "workflowTag": "case诊断优化",
+    "module": "消耗波动分析",
+    "title": "预算消耗波动诊断",
+    "description": "分析锚定预算在联盟的消耗波动，定位原因并给到建议。",
+    "ownerDomain": "预算",
+    "relatedDomains": ["APP流量", "厂商"],
+    "stage": "建设中",
+    "priority": "P0",
+    "skillIds": ["revenue-fluctuation", "data-analysis-assistant"],
+    "officialSkillIds": [],
+    "ownerPm": "预算 PM",
+    "nextAction": "抽取 XX 预算诊断模板，确认是否与官方数据助手合并认证。",
+    "evidenceExamples": ["XX预算消耗波动分析"],
+    "updatedAt": "2026-06-09"
+  },
+  {
+    "id": "budget-case-pricing",
+    "workstream": "预算侧",
+    "workflowTag": "case诊断优化",
+    "module": "计价率波动分析",
+    "title": "预算计价率/成本波动诊断",
+    "description": "分析锚定预算计价率和成本波动，定位原因并给到建议。",
+    "ownerDomain": "预算",
+    "relatedDomains": ["平台"],
+    "stage": "缺口",
+    "priority": "P1",
+    "skillIds": [],
+    "officialSkillIds": [],
+    "ownerPm": "预算 PM",
+    "nextAction": "确认计价率、成本、竞争队列之间的归因顺序。",
+    "evidenceExamples": ["XX预算计价率波动分析"],
+    "updatedAt": "2026-06-09"
+  },
+  {
+    "id": "budget-case-postlink",
+    "workstream": "预算侧",
+    "workflowTag": "case诊断优化",
+    "module": "后链路效果波动分析",
+    "title": "后链路效果波动诊断",
+    "description": "分析 ctr/cvr/次留/7留/prompt率/停留时长/ROI 等个性化指标波动。",
+    "ownerDomain": "预算",
+    "relatedDomains": ["平台", "APP流量"],
+    "stage": "缺口",
+    "priority": "P0",
+    "skillIds": [],
+    "officialSkillIds": [],
+    "ownerPm": "预算 PM",
+    "nextAction": "确认后链路指标数据权限和可自动化的最小诊断范围。",
+    "evidenceExamples": ["XX预算效果波动分析"],
+    "updatedAt": "2026-06-09"
   }
 ]

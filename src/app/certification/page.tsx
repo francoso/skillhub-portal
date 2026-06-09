@@ -3,11 +3,12 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import {
   getCertificationRounds,
+  getCapabilityCards,
   getOfficialSkills,
   getOfficialSkillRecords,
   getSkillById,
 } from "@/lib/data";
-import type { Skill, SkillDomain } from "@/lib/types";
+import type { OfficialSkillRecord, Skill, SkillDomain } from "@/lib/types";
 import { ArrowRight, CheckCircle2, Shield, Users } from "lucide-react";
 
 const domainOrder: SkillDomain[] = ["APP流量", "平台", "预算", "厂商"];
@@ -19,15 +20,16 @@ const domainStyles: Record<SkillDomain, string> = {
   "厂商": "bg-emerald-100 text-emerald-700 border-emerald-200",
 };
 
-function groupSkillsByDomain(skills: Skill[]) {
+function groupSkillsByDomain(
+  skills: Skill[],
+  records: Map<string, OfficialSkillRecord>
+) {
   const result = new Map<SkillDomain, Skill[]>();
   for (const domain of domainOrder) result.set(domain, []);
 
   for (const skill of skills) {
-    const domains: SkillDomain[] = skill.domains?.length ? skill.domains : ["平台"];
-    for (const domain of domains) {
-      result.get(domain)?.push(skill);
-    }
+    const domain = records.get(skill.id)?.ownerDomain ?? skill.official?.ownerDomain ?? "平台";
+    result.get(domain)?.push(skill);
   }
 
   return result;
@@ -38,7 +40,10 @@ export default function CertificationPage() {
   const officialRecords = new Map(
     getOfficialSkillRecords().map((item) => [item.skillId, item])
   );
-  const grouped = groupSkillsByDomain(officialSkills);
+  const grouped = groupSkillsByDomain(officialSkills, officialRecords);
+  const officialCapabilityCount = getCapabilityCards().filter(
+    (card) => card.stage === "官方认证"
+  ).length;
   const currentRound = getCertificationRounds().find((round) => round.status === "reviewing");
   const candidateSkills =
     currentRound?.skills
@@ -71,7 +76,7 @@ export default function CertificationPage() {
             </div>
             <div className="space-y-1.5">
               <p>官方 Skill 会在 Skill 市场、能力地图、详情页里同步展示。</p>
-              <p>单独设馆的目的，是让“官方推荐”从一个标签变成一个清晰的资产池。</p>
+              <p>认证记录会反向驱动能力卡阶段，目前已带动 {officialCapabilityCount} 张能力卡进入官方认证。</p>
             </div>
           </div>
         </CardContent>
@@ -130,6 +135,11 @@ export default function CertificationPage() {
                           </div>
                           <p className="text-sm text-gray-600 leading-relaxed">{skill.description}</p>
                           <div className="flex flex-wrap gap-1.5">
+                            {record?.workstream && (
+                              <Badge variant="outline" className="bg-gray-50 text-gray-600 border-gray-200">
+                                {record.workstream}
+                              </Badge>
+                            )}
                             {(skill.domains ?? []).map((item) => (
                               <Badge key={item} variant="outline" className={domainStyles[item]}>
                                 {item}

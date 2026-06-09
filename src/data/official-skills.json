@@ -1,6 +1,8 @@
 [
   {
     "skillId": "data-analysis-assistant",
+    "ownerDomain": "预算",
+    "workstream": "预算侧",
     "reviewerGroup": "预算 PM 评审",
     "certifiedBy": "预算组 PM 联合确认",
     "certifiedAt": "2026-05-28",
@@ -8,6 +10,8 @@
   },
   {
     "skillId": "traffic-forecast",
+    "ownerDomain": "预算",
+    "workstream": "预算侧",
     "reviewerGroup": "APP流量 / 预算 PM 评审",
     "certifiedBy": "APP流量组 PM 联合确认",
     "certifiedAt": "2026-05-28",
@@ -15,6 +19,8 @@
   },
   {
     "skillId": "template-rule-check",
+    "ownerDomain": "平台",
+    "workstream": "流量侧",
     "reviewerGroup": "APP流量 PM 评审",
     "certifiedBy": "形态样式 PM 组确认",
     "certifiedAt": "2026-06-03",
@@ -22,6 +28,8 @@
   },
   {
     "skillId": "market-insight",
+    "ownerDomain": "APP流量",
+    "workstream": "流量侧",
     "reviewerGroup": "APP流量 PM 评审",
     "certifiedBy": "APP流量组 PM 联合确认",
     "certifiedAt": "2026-06-03",
@@ -29,6 +37,8 @@
   },
   {
     "skillId": "material-experience",
+    "ownerDomain": "平台",
+    "workstream": "流量侧",
     "reviewerGroup": "平台 PM 评审",
     "certifiedBy": "平台组 PM 联合确认",
     "certifiedAt": "2026-06-04",
@@ -36,6 +46,8 @@
   },
   {
     "skillId": "vendor-scene-analysis",
+    "ownerDomain": "厂商",
+    "workstream": "流量侧",
     "reviewerGroup": "厂商 PM 评审",
     "certifiedBy": "厂商组 PM 联合确认",
     "certifiedAt": "2026-06-04",

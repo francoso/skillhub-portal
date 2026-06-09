@@ -6,10 +6,11 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { getSkills, getSkillStage } from "@/lib/data";
-import type { Skill, SkillDomain } from "@/lib/types";
+import type { Skill, SkillDomain, Workstream } from "@/lib/types";
 import { Download, Search, ShieldCheck } from "lucide-react";
 
 const domainOptions: Array<SkillDomain | "全部"> = ["全部", "APP流量", "平台", "预算", "厂商"];
+const workstreamOptions: Array<Workstream | "全部"> = ["全部", "流量侧", "预算侧"];
 
 const statusLabels: Record<Skill["status"], string> = {
   developing: "开发中",
@@ -35,6 +36,7 @@ export default function SkillsPage() {
   const serviceStages = Array.from(new Set(skills.map((skill) => skill.category)));
 
   const [keyword, setKeyword] = useState("");
+  const [selectedWorkstream, setSelectedWorkstream] = useState<Workstream | "全部">("全部");
   const [selectedDomain, setSelectedDomain] = useState<SkillDomain | "全部">("全部");
   const [selectedStage, setSelectedStage] = useState<string>("全部");
   const [officialOnly, setOfficialOnly] = useState(false);
@@ -52,9 +54,12 @@ export default function SkillsPage() {
         const matchDomain =
           selectedDomain === "全部" ||
           (skill.domains ?? []).includes(selectedDomain);
+        const matchWorkstream =
+          selectedWorkstream === "全部" ||
+          (skill.workstreams ?? []).includes(selectedWorkstream);
         const matchStage = selectedStage === "全部" || skill.category === selectedStage;
         const matchOfficial = !officialOnly || skill.official?.status === "official";
-        return matchKeyword && matchDomain && matchStage && matchOfficial;
+        return matchKeyword && matchDomain && matchWorkstream && matchStage && matchOfficial;
       })
       .sort((a, b) => {
         const stageOrder = getSkillStage(a.id) === "certified" ? -1 : 0;
@@ -62,7 +67,7 @@ export default function SkillsPage() {
         if (stageOrder !== compareOrder) return stageOrder - compareOrder;
         return new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime();
       });
-  }, [keyword, officialOnly, selectedDomain, selectedStage, skills]);
+  }, [keyword, officialOnly, selectedDomain, selectedStage, selectedWorkstream, skills]);
 
   return (
     <div className="space-y-8">
@@ -89,6 +94,22 @@ export default function SkillsPage() {
           </div>
 
           <div className="space-y-3">
+            <div className="flex gap-2 flex-wrap">
+              {workstreamOptions.map((workstream) => (
+                <button
+                  key={workstream}
+                  onClick={() => setSelectedWorkstream(workstream)}
+                  className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
+                    selectedWorkstream === workstream
+                      ? "bg-gray-900 text-white"
+                      : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                  }`}
+                >
+                  {workstream}
+                </button>
+              ))}
+            </div>
+
             <div className="flex gap-2 flex-wrap">
               {domainOptions.map((domain) => (
                 <button
@@ -177,6 +198,11 @@ export default function SkillsPage() {
 
                 <div className="flex flex-wrap gap-1.5">
                   <Badge variant="outline">{skill.category}</Badge>
+                  {(skill.workstreams ?? []).map((workstream) => (
+                    <Badge key={workstream} variant="outline" className="bg-gray-50 text-gray-600">
+                      {workstream}
+                    </Badge>
+                  ))}
                   {(skill.domains ?? []).map((domain) => (
                     <Badge key={domain} className={domainStyles[domain]} variant="secondary">
                       {domain}
