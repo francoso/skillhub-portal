@@ -13,6 +13,7 @@ import {
   Plus,
   Save,
   Settings2,
+  Trash2,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
@@ -50,8 +51,26 @@ const workstreamHint: Record<Workstream, string> = {
 };
 
 const domains: BusinessDomain[] = ["APP流量", "平台", "预算", "厂商"];
-const stages: CapabilityStage[] = ["官方认证", "建设中", "缺口"];
 const priorities: CapabilityPriority[] = ["P0", "P1", "P2"];
+type ManageMode = "none" | "associate" | "pm";
+
+function deriveStage(card: Pick<CapabilityCard, "skillIds" | "officialSkillIds">): CapabilityStage {
+  if (card.officialSkillIds.length > 0) return "官方认证";
+  if (card.skillIds.length > 0) return "建设中";
+  return "缺口";
+}
+
+function normalizeCard(card: CapabilityCard): CapabilityCard {
+  const officialSkillIds = card.officialSkillIds.filter((skillId) => card.skillIds.includes(skillId));
+  const nextCard = {
+    ...card,
+    officialSkillIds,
+  };
+  return {
+    ...nextCard,
+    stage: deriveStage(nextCard),
+  };
+}
 
 function countByStage(cards: CapabilityCard[]) {
   return {
@@ -125,12 +144,12 @@ function createCapabilityCard(workstream: Workstream, workflowTag: WorkflowTag):
 function CapabilityTile({
   card,
   skills,
-  editMode,
+  manageMode = "none",
   onEdit,
 }: {
   card: CapabilityCard;
   skills: Map<string, Skill>;
-  editMode?: boolean;
+  manageMode?: ManageMode;
   onEdit?: (cardId: string) => void;
 }) {
   const Icon = stageIcon[card.stage];
@@ -185,7 +204,7 @@ function CapabilityTile({
     </>
   );
 
-  if (editMode) {
+  if (manageMode !== "none") {
     return (
       <div className={baseClass}>
         {content}
@@ -194,7 +213,7 @@ function CapabilityTile({
           className="mt-2 flex w-full items-center justify-center gap-1 rounded-lg border border-gray-200 bg-white px-2 py-1 text-xs font-medium text-gray-600 transition hover:border-gray-300 hover:text-gray-900"
         >
           <Pencil className="h-3 w-3" />
-          编辑
+          {manageMode === "pm" ? "编辑" : "关联 Skill"}
         </button>
       </div>
     );
@@ -242,9 +261,8 @@ function WorkflowBlock({
   onToggle,
   step,
   total,
-  editMode,
+  manageMode = "none",
   onEditCard,
-  onAddCard,
 }: {
   title: WorkflowTag;
   cards: CapabilityCard[];
@@ -253,13 +271,13 @@ function WorkflowBlock({
   onToggle: () => void;
   step: number;
   total: number;
-  editMode?: boolean;
+  manageMode?: ManageMode;
   onEditCard?: (cardId: string) => void;
-  onAddCard?: (workflowTag: WorkflowTag) => void;
 }) {
   const counts = countByStage(cards);
   const sortedCards = sortForDisplay(cards);
   const hasCards = sortedCards.length > 0;
+  const showCards = expanded || (manageMode !== "none" && hasCards);
 
   return (
     <div className="relative flex gap-3">
@@ -295,14 +313,14 @@ function WorkflowBlock({
           </div>
         </div>
 
-        {expanded && (
+        {showCards && (
           <div className="mt-3 grid grid-cols-1 gap-2 md:grid-cols-2 xl:grid-cols-3">
             {sortedCards.map((card) => (
               <CapabilityTile
                 key={card.id}
                 card={card}
                 skills={skills}
-                editMode={editMode}
+                manageMode={manageMode}
                 onEdit={onEditCard}
               />
             ))}
@@ -319,15 +337,6 @@ function WorkflowBlock({
               {expanded ? <ChevronDown className="h-3.5 w-3.5" /> : <ChevronRight className="h-3.5 w-3.5" />}
             </button>
           )}
-          {editMode && (
-            <button
-              onClick={() => onAddCard?.(title)}
-              className="flex flex-1 items-center justify-center gap-1 rounded-lg border border-blue-200 bg-blue-50 px-3 py-1.5 text-xs font-medium text-blue-700 transition hover:border-blue-300 hover:bg-white"
-            >
-              <Plus className="h-3.5 w-3.5" />
-              新增能力点
-            </button>
-          )}
         </div>
       </div>
     </div>
@@ -341,9 +350,8 @@ function WorkstreamPanel({
   skills,
   expandedWorkflows,
   onToggleWorkflow,
-  editMode,
+  manageMode,
   onEditCard,
-  onAddCard,
 }: {
   title: Workstream;
   tags: WorkflowTag[];
@@ -351,9 +359,8 @@ function WorkstreamPanel({
   skills: Map<string, Skill>;
   expandedWorkflows: Record<string, boolean>;
   onToggleWorkflow: (key: string) => void;
-  editMode?: boolean;
+  manageMode?: ManageMode;
   onEditCard?: (cardId: string) => void;
-  onAddCard?: (workflowTag: WorkflowTag) => void;
 }) {
   const counts = countByStage(cards);
 
@@ -394,9 +401,8 @@ function WorkstreamPanel({
                   onToggle={() => onToggleWorkflow(workflowKey)}
                   step={index + 1}
                   total={tags.length}
-                  editMode={editMode}
+                  manageMode={manageMode}
                   onEditCard={onEditCard}
-                  onAddCard={onAddCard}
                 />
               );
             })}
@@ -407,7 +413,8 @@ function WorkstreamPanel({
   );
 }
 
-function PmEditPanel({
+function CapabilityManagePanel({
+  mode,
   cards,
   skills,
   selectedCard,
@@ -417,9 +424,12 @@ function PmEditPanel({
   onPatchCard,
   onToggleSkill,
   onToggleOfficialSkill,
+  onAddCard,
+  onDeleteCard,
   onSave,
   saved,
 }: {
+  mode: Exclude<ManageMode, "none">;
   cards: CapabilityCard[];
   skills: Skill[];
   selectedCard?: CapabilityCard;
@@ -429,10 +439,24 @@ function PmEditPanel({
   onPatchCard: (cardId: string, patch: Partial<CapabilityCard>) => void;
   onToggleSkill: (cardId: string, skillId: string) => void;
   onToggleOfficialSkill: (cardId: string, skillId: string) => void;
+  onAddCard: (workflowTag: WorkflowTag) => void;
+  onDeleteCard: (cardId: string) => void;
   onSave: () => void;
   saved: boolean;
 }) {
+  const [openMenus, setOpenMenus] = useState<Record<string, boolean>>({});
   const activeCards = cards.filter((card) => card.workstream === activeWorkstream);
+  const isPm = mode === "pm";
+  const panelTitle = isPm ? "PM 管理" : "关联 Skill";
+  const panelDesc = isPm ? "维护能力点、负责人、工作流和官方认证。" : "选择已有能力点，把 Skill 关联进去。";
+
+  function toggleMenu(tag: WorkflowTag) {
+    const key = `${activeWorkstream}-${tag}`;
+    setOpenMenus((current) => ({
+      ...current,
+      [key]: !current[key],
+    }));
+  }
 
   return (
     <Card className="border-blue-100 bg-blue-50/40">
@@ -441,9 +465,9 @@ function PmEditPanel({
           <div>
             <h2 className="flex items-center gap-2 text-lg font-bold text-gray-900">
               <Settings2 className="h-4 w-4 text-blue-600" />
-              PM 管理
+              {panelTitle}
             </h2>
-            <p className="mt-1 text-sm text-gray-500">维护能力点，并把 Skill 挂到对应能力点。</p>
+            <p className="mt-1 text-sm text-gray-500">{panelDesc}</p>
           </div>
           <button
             onClick={onSave}
@@ -458,111 +482,162 @@ function PmEditPanel({
 
         <div className="grid gap-4 lg:grid-cols-[260px_1fr]">
           <div className="rounded-2xl border border-blue-100 bg-white p-3">
-            <p className="mb-2 text-xs font-medium text-gray-500">{activeWorkstream}能力点</p>
-            <div className="max-h-72 space-y-1 overflow-auto pr-1">
-              {activeCards.map((card) => (
-                <button
-                  key={card.id}
-                  onClick={() => onSelectCard(card.id)}
-                  className={`block w-full rounded-lg px-2 py-2 text-left text-xs transition ${
-                    selectedCard?.id === card.id
-                      ? "bg-blue-50 text-blue-700"
-                      : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
-                  }`}
-                >
-                  <span className="block font-medium">{card.title}</span>
-                  <span className="mt-0.5 block text-[11px] text-gray-400">{card.workflowTag}</span>
-                </button>
-              ))}
+            <p className="mb-2 text-xs font-medium text-gray-500">{activeWorkstream}工作流</p>
+            <div className="max-h-[420px] space-y-2 overflow-auto pr-1">
+              {activeTags.map((tag) => {
+                const menuKey = `${activeWorkstream}-${tag}`;
+                const expanded = Boolean(openMenus[menuKey]);
+                const workflowCards = sortForDisplay(activeCards.filter((card) => card.workflowTag === tag));
+                return (
+                  <div key={tag} className="rounded-xl border border-gray-100 bg-gray-50">
+                    <button
+                      onClick={() => toggleMenu(tag)}
+                      className="flex w-full items-center justify-between gap-2 px-3 py-2 text-left text-xs font-medium text-gray-700 transition hover:text-gray-900"
+                    >
+                      <span className="truncate">{tag}</span>
+                      <span className="flex shrink-0 items-center gap-1 text-[11px] text-gray-400">
+                        {workflowCards.length}
+                        {expanded ? <ChevronDown className="h-3.5 w-3.5" /> : <ChevronRight className="h-3.5 w-3.5" />}
+                      </span>
+                    </button>
+                    {expanded && (
+                      <div className="space-y-1 border-t border-gray-100 bg-white p-2">
+                        {isPm && (
+                          <button
+                            onClick={() => onAddCard(tag)}
+                            className="mb-1 flex w-full items-center justify-center gap-1 rounded-lg border border-blue-200 bg-blue-50 px-2 py-1.5 text-xs font-medium text-blue-700 transition hover:border-blue-300 hover:bg-white"
+                          >
+                            <Plus className="h-3.5 w-3.5" />
+                            新增能力点
+                          </button>
+                        )}
+                        {workflowCards.length === 0 ? (
+                          <p className="rounded-lg bg-gray-50 px-2 py-2 text-xs text-gray-400">暂无能力点</p>
+                        ) : (
+                          workflowCards.map((card) => (
+                            <div
+                              key={card.id}
+                              className={`group flex items-center gap-1 rounded-lg transition ${
+                                selectedCard?.id === card.id ? "bg-blue-50" : "hover:bg-gray-50"
+                              }`}
+                            >
+                              <button
+                                onClick={() => onSelectCard(card.id)}
+                                className={`min-w-0 flex-1 px-2 py-2 text-left text-xs ${
+                                  selectedCard?.id === card.id ? "text-blue-700" : "text-gray-600"
+                                }`}
+                              >
+                                <span className="block truncate font-medium">{card.title}</span>
+                                <span className="mt-0.5 block text-[11px] text-gray-400">{deriveStage(card)}</span>
+                              </button>
+                              {isPm && (
+                                <button
+                                  onClick={() => onDeleteCard(card.id)}
+                                  className="mr-1 rounded-md p-1 text-gray-300 opacity-100 transition hover:bg-red-50 hover:text-red-500 md:opacity-0 md:group-hover:opacity-100"
+                                  aria-label={`删除 ${card.title}`}
+                                >
+                                  <Trash2 className="h-3.5 w-3.5" />
+                                </button>
+                              )}
+                            </div>
+                          ))
+                        )}
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
             </div>
           </div>
 
           {selectedCard ? (
             <div className="space-y-4 rounded-2xl border border-blue-100 bg-white p-3">
-              <div className="grid gap-3 md:grid-cols-2">
-                <label className="text-xs font-medium text-gray-500">
-                  能力点名称
-                  <input
-                    value={selectedCard.title}
-                    onChange={(event) => onPatchCard(selectedCard.id, { title: event.target.value })}
-                    className="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm text-gray-900 outline-none focus:border-blue-300"
-                  />
-                </label>
-                <label className="text-xs font-medium text-gray-500">
-                  所属步骤
-                  <select
-                    value={selectedCard.workflowTag}
-                    onChange={(event) => onPatchCard(selectedCard.id, { workflowTag: event.target.value as WorkflowTag })}
-                    className="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm text-gray-900 outline-none focus:border-blue-300"
-                  >
-                    {activeTags.map((tag) => (
-                      <option key={tag} value={tag}>{tag}</option>
-                    ))}
-                  </select>
-                </label>
-                <label className="text-xs font-medium text-gray-500">
-                  细分模块
-                  <input
-                    value={selectedCard.module}
-                    onChange={(event) => onPatchCard(selectedCard.id, { module: event.target.value })}
-                    className="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm text-gray-900 outline-none focus:border-blue-300"
-                  />
-                </label>
-                <label className="text-xs font-medium text-gray-500">
-                  阶段
-                  <select
-                    value={selectedCard.stage}
-                    onChange={(event) => onPatchCard(selectedCard.id, { stage: event.target.value as CapabilityStage })}
-                    className="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm text-gray-900 outline-none focus:border-blue-300"
-                  >
-                    {stages.map((stage) => (
-                      <option key={stage} value={stage}>{stage}</option>
-                    ))}
-                  </select>
-                </label>
-                <label className="text-xs font-medium text-gray-500">
-                  优先级
-                  <select
-                    value={selectedCard.priority}
-                    onChange={(event) => onPatchCard(selectedCard.id, { priority: event.target.value as CapabilityPriority })}
-                    className="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm text-gray-900 outline-none focus:border-blue-300"
-                  >
-                    {priorities.map((priority) => (
-                      <option key={priority} value={priority}>{priority}</option>
-                    ))}
-                  </select>
-                </label>
-                <label className="text-xs font-medium text-gray-500">
-                  Owner PM
-                  <input
-                    value={selectedCard.ownerPm ?? ""}
-                    onChange={(event) => onPatchCard(selectedCard.id, { ownerPm: event.target.value })}
-                    className="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm text-gray-900 outline-none focus:border-blue-300"
-                  />
-                </label>
-                <label className="text-xs font-medium text-gray-500">
-                  主责域
-                  <select
-                    value={selectedCard.ownerDomain}
-                    onChange={(event) => onPatchCard(selectedCard.id, { ownerDomain: event.target.value as BusinessDomain })}
-                    className="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm text-gray-900 outline-none focus:border-blue-300"
-                  >
-                    {domains.map((domain) => (
-                      <option key={domain} value={domain}>{domain}</option>
-                    ))}
-                  </select>
-                </label>
+              <div className="flex flex-col gap-2 md:flex-row md:items-start md:justify-between">
+                <div>
+                  <p className="text-sm font-semibold text-gray-900">{selectedCard.title}</p>
+                  <p className="mt-1 text-xs text-gray-400">{selectedCard.workflowTag}</p>
+                </div>
+                <Badge variant="outline" className={`w-fit ${stageStyle[deriveStage(selectedCard)]}`}>
+                  {deriveStage(selectedCard)}
+                </Badge>
               </div>
 
-              <label className="block text-xs font-medium text-gray-500">
-                下一步动作
-                <textarea
-                  value={selectedCard.nextAction}
-                  onChange={(event) => onPatchCard(selectedCard.id, { nextAction: event.target.value })}
-                  rows={2}
-                  className="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm text-gray-900 outline-none focus:border-blue-300"
-                />
-              </label>
+              {isPm && (
+                <>
+                  <div className="grid gap-3 md:grid-cols-2">
+                    <label className="text-xs font-medium text-gray-500">
+                      能力点名称
+                      <input
+                        value={selectedCard.title}
+                        onChange={(event) => onPatchCard(selectedCard.id, { title: event.target.value })}
+                        className="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm text-gray-900 outline-none focus:border-blue-300"
+                      />
+                    </label>
+                    <label className="text-xs font-medium text-gray-500">
+                      所属工作流
+                      <select
+                        value={selectedCard.workflowTag}
+                        onChange={(event) => onPatchCard(selectedCard.id, { workflowTag: event.target.value as WorkflowTag })}
+                        className="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm text-gray-900 outline-none focus:border-blue-300"
+                      >
+                        {activeTags.map((tag) => (
+                          <option key={tag} value={tag}>{tag}</option>
+                        ))}
+                      </select>
+                    </label>
+                    <label className="text-xs font-medium text-gray-500">
+                      细分模块
+                      <input
+                        value={selectedCard.module}
+                        onChange={(event) => onPatchCard(selectedCard.id, { module: event.target.value })}
+                        className="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm text-gray-900 outline-none focus:border-blue-300"
+                      />
+                    </label>
+                    <label className="text-xs font-medium text-gray-500">
+                      Owner PM
+                      <input
+                        value={selectedCard.ownerPm ?? ""}
+                        onChange={(event) => onPatchCard(selectedCard.id, { ownerPm: event.target.value })}
+                        className="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm text-gray-900 outline-none focus:border-blue-300"
+                      />
+                    </label>
+                    <label className="text-xs font-medium text-gray-500">
+                      优先级
+                      <select
+                        value={selectedCard.priority}
+                        onChange={(event) => onPatchCard(selectedCard.id, { priority: event.target.value as CapabilityPriority })}
+                        className="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm text-gray-900 outline-none focus:border-blue-300"
+                      >
+                        {priorities.map((priority) => (
+                          <option key={priority} value={priority}>{priority}</option>
+                        ))}
+                      </select>
+                    </label>
+                    <label className="text-xs font-medium text-gray-500">
+                      主责域
+                      <select
+                        value={selectedCard.ownerDomain}
+                        onChange={(event) => onPatchCard(selectedCard.id, { ownerDomain: event.target.value as BusinessDomain })}
+                        className="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm text-gray-900 outline-none focus:border-blue-300"
+                      >
+                        {domains.map((domain) => (
+                          <option key={domain} value={domain}>{domain}</option>
+                        ))}
+                      </select>
+                    </label>
+                  </div>
+
+                  <label className="block text-xs font-medium text-gray-500">
+                    下一步动作
+                    <textarea
+                      value={selectedCard.nextAction}
+                      onChange={(event) => onPatchCard(selectedCard.id, { nextAction: event.target.value })}
+                      rows={2}
+                      className="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm text-gray-900 outline-none focus:border-blue-300"
+                    />
+                  </label>
+                </>
+              )}
 
               <div>
                 <p className="mb-2 text-xs font-medium text-gray-500">关联 Skill</p>
@@ -583,14 +658,17 @@ function PmEditPanel({
                             <span className="block truncate text-[11px] text-gray-400">{skill.owner}</span>
                           </span>
                         </label>
-                        <label className="flex shrink-0 items-center gap-1 text-gray-500">
-                          <input
-                            type="checkbox"
-                            checked={official}
-                            onChange={() => onToggleOfficialSkill(selectedCard.id, skill.id)}
-                          />
-                          官方
-                        </label>
+                        {isPm && (
+                          <label className={`flex shrink-0 items-center gap-1 ${linked ? "text-gray-500" : "text-gray-300"}`}>
+                            <input
+                              type="checkbox"
+                              checked={official}
+                              disabled={!linked}
+                              onChange={() => onToggleOfficialSkill(selectedCard.id, skill.id)}
+                            />
+                            官方认证
+                          </label>
+                        )}
                       </div>
                     );
                   })}
@@ -599,7 +677,7 @@ function PmEditPanel({
             </div>
           ) : (
             <div className="rounded-2xl border border-dashed border-blue-200 bg-white p-6 text-center text-sm text-gray-500">
-              选择一个能力点编辑，或在工作流步骤里新增能力点。
+              从左侧工作流选择能力点。
             </div>
           )}
         </div>
@@ -693,14 +771,14 @@ function OverviewCard({
 }
 
 export default function CoveragePage() {
-  const [cards, setCards] = useState<CapabilityCard[]>(() => getCapabilityCards());
+  const [cards, setCards] = useState<CapabilityCard[]>(() => getCapabilityCards().map(normalizeCard));
   const skillList = getSkills();
   const skills = new Map(skillList.map((skill) => [skill.id, skill]));
   const trafficCards = cards.filter((card) => card.workstream === "流量侧");
   const budgetCards = cards.filter((card) => card.workstream === "预算侧");
   const [activeWorkstream, setActiveWorkstream] = useState<Workstream>("流量侧");
   const [expandedWorkflows, setExpandedWorkflows] = useState<Record<string, boolean>>({});
-  const [editMode, setEditMode] = useState(false);
+  const [manageMode, setManageMode] = useState<ManageMode>("none");
   const [selectedCardId, setSelectedCardId] = useState<string>();
   const [saved, setSaved] = useState(false);
   const activeCards = activeWorkstream === "流量侧" ? trafficCards : budgetCards;
@@ -719,11 +797,11 @@ export default function CoveragePage() {
     setCards((current) =>
       current.map((card) =>
         card.id === cardId
-          ? {
+          ? normalizeCard({
               ...card,
               ...patch,
               updatedAt: today(),
-            }
+            })
           : card
       )
     );
@@ -740,6 +818,12 @@ export default function CoveragePage() {
     }));
   }
 
+  function deleteCard(cardId: string) {
+    setSaved(false);
+    setCards((current) => current.filter((card) => card.id !== cardId));
+    setSelectedCardId((current) => (current === cardId ? undefined : current));
+  }
+
   function toggleSkill(cardId: string, skillId: string) {
     setSaved(false);
     setCards((current) =>
@@ -752,14 +836,12 @@ export default function CoveragePage() {
         const officialSkillIds = linked
           ? card.officialSkillIds.filter((id) => id !== skillId)
           : card.officialSkillIds;
-        const stage = officialSkillIds.length > 0 ? "官方认证" : skillIds.length > 0 ? "建设中" : card.stage;
-        return {
+        return normalizeCard({
           ...card,
           skillIds,
           officialSkillIds,
-          stage,
           updatedAt: today(),
-        };
+        });
       })
     );
   }
@@ -769,21 +851,16 @@ export default function CoveragePage() {
     setCards((current) =>
       current.map((card) => {
         if (card.id !== cardId) return card;
+        if (!card.skillIds.includes(skillId)) return card;
         const official = card.officialSkillIds.includes(skillId);
         const officialSkillIds = official
           ? card.officialSkillIds.filter((id) => id !== skillId)
           : [...card.officialSkillIds, skillId];
-        const skillIds = card.skillIds.includes(skillId)
-          ? card.skillIds
-          : [...card.skillIds, skillId];
-        const stage = officialSkillIds.length > 0 ? "官方认证" : skillIds.length > 0 ? "建设中" : "缺口";
-        return {
+        return normalizeCard({
           ...card,
-          skillIds,
           officialSkillIds,
-          stage,
           updatedAt: today(),
-        };
+        });
       })
     );
   }
@@ -798,6 +875,12 @@ export default function CoveragePage() {
     setSaved(false);
   }
 
+  function toggleManageMode(nextMode: Exclude<ManageMode, "none">) {
+    setManageMode((current) => (current === nextMode ? "none" : nextMode));
+    setSelectedCardId(undefined);
+    setSaved(false);
+  }
+
   return (
     <div className="space-y-6">
       <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
@@ -808,17 +891,30 @@ export default function CoveragePage() {
           <h1 className="mt-1 text-2xl font-bold text-gray-900">能力地图</h1>
           <p className="mt-1 text-sm text-gray-500">流量侧与预算侧 Skill 建设进度。</p>
         </div>
-        <button
-          onClick={() => setEditMode((current) => !current)}
-          className={`flex items-center justify-center gap-1 rounded-lg px-3 py-2 text-sm font-medium transition ${
-            editMode
-              ? "bg-blue-600 text-white hover:bg-blue-500"
-              : "bg-gray-900 text-white hover:bg-gray-700"
-          }`}
-        >
-          <Settings2 className="h-4 w-4" />
-          {editMode ? "退出编辑" : "PM 编辑"}
-        </button>
+        <div className="flex flex-wrap gap-2">
+          <button
+            onClick={() => toggleManageMode("associate")}
+            className={`flex items-center justify-center gap-1 rounded-lg px-3 py-2 text-sm font-medium transition ${
+              manageMode === "associate"
+                ? "bg-blue-600 text-white hover:bg-blue-500"
+                : "bg-white text-gray-700 ring-1 ring-gray-200 hover:text-gray-900"
+            }`}
+          >
+            <Pencil className="h-4 w-4" />
+            {manageMode === "associate" ? "退出关联" : "关联 Skill"}
+          </button>
+          <button
+            onClick={() => toggleManageMode("pm")}
+            className={`flex items-center justify-center gap-1 rounded-lg px-3 py-2 text-sm font-medium transition ${
+              manageMode === "pm"
+                ? "bg-blue-600 text-white hover:bg-blue-500"
+                : "bg-gray-900 text-white hover:bg-gray-700"
+            }`}
+          >
+            <Settings2 className="h-4 w-4" />
+            {manageMode === "pm" ? "退出管理" : "PM 管理"}
+          </button>
+        </div>
       </div>
 
       <OverviewCard cards={cards} trafficCards={trafficCards} budgetCards={budgetCards} />
@@ -830,8 +926,9 @@ export default function CoveragePage() {
         onChange={changeWorkstream}
       />
 
-      {editMode && (
-        <PmEditPanel
+      {manageMode !== "none" && (
+        <CapabilityManagePanel
+          mode={manageMode}
           cards={cards}
           skills={skillList}
           selectedCard={selectedCard}
@@ -841,6 +938,8 @@ export default function CoveragePage() {
           onPatchCard={patchCard}
           onToggleSkill={toggleSkill}
           onToggleOfficialSkill={toggleOfficialSkill}
+          onAddCard={addCard}
+          onDeleteCard={deleteCard}
           onSave={saveDraft}
           saved={saved}
         />
@@ -853,9 +952,8 @@ export default function CoveragePage() {
         skills={skills}
         expandedWorkflows={expandedWorkflows}
         onToggleWorkflow={toggleWorkflow}
-        editMode={editMode}
+        manageMode={manageMode}
         onEditCard={setSelectedCardId}
-        onAddCard={addCard}
       />
     </div>
   );
