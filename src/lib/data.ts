@@ -14,6 +14,7 @@ import type {
   SkillDomain,
   Workstream,
   WorkflowTag,
+  PlatformWorkflowTag,
 } from "./types";
 
 // Demo mock 当前用户
@@ -50,6 +51,15 @@ export const BUDGET_WORKFLOW_TAGS: WorkflowTag[] = [
   "优质流量提渗",
   "扶持策略设计",
   "case诊断优化",
+];
+
+export const PLATFORM_WORKFLOW_TAGS: PlatformWorkflowTag[] = [
+  "准入准出管理",
+  "规则治理",
+  "开发者服务",
+  "运营支持",
+  "合同&结算管理",
+  "流量违规治理",
 ];
 
 export const BUSINESS_DOMAINS: SkillDomain[] = ["APP流量", "平台", "预算", "厂商"];

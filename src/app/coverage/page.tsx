@@ -22,6 +22,7 @@ import {
   CURRENT_SKILL_OWNER,
   getCapabilityCards,
   getSkills,
+  PLATFORM_WORKFLOW_TAGS,
   TRAFFIC_WORKFLOW_TAGS,
 } from "@/lib/data";
 import type {
@@ -46,14 +47,49 @@ const stageIcon: Record<CapabilityStage, typeof CheckCircle2> = {
   缺口: AlertTriangle,
 };
 
-const workstreamHint: Record<Workstream, string> = {
-  流量侧: "按开发者运营链路从市场判断到客户服务推进。",
-  预算侧: "按预算服务链路从日常沉淀到 case 诊断推进。",
-};
-
 const domains: BusinessDomain[] = ["APP流量", "平台", "预算", "厂商"];
 const priorities: CapabilityPriority[] = ["P0", "P1", "P2"];
 type ManageMode = "none" | "associate" | "pm";
+type CapabilityModule = BusinessDomain;
+
+const moduleHint: Record<CapabilityModule, string> = {
+  APP流量: "APP 开发者运营链路，包含通用能力和 APP 专属能力。",
+  厂商: "厂商流量运营链路，包含通用能力和厂商专属能力。",
+  平台: "平台治理与服务支撑模块，先按 6 个大模块建框架。",
+  预算: "预算服务链路，按预算侧 7 个服务环节推进。",
+};
+
+const trafficCardModules: Record<string, CapabilityModule[]> = {
+  "traffic-market-fundamentals": ["APP流量", "厂商"],
+  "traffic-market-expansion-scan": ["APP流量"],
+  "traffic-competitive-benchmark": ["APP流量", "厂商"],
+  "traffic-lead-contact": ["APP流量", "厂商"],
+  "traffic-access-solution": ["APP流量", "厂商"],
+  "traffic-access-support": ["APP流量", "厂商"],
+  "traffic-ramp-up": ["APP流量", "厂商"],
+  "traffic-template-query": ["APP流量"],
+  "traffic-template-rule-review": ["APP流量"],
+  "traffic-style-capture": ["APP流量"],
+  "traffic-template-effect-feedback": ["APP流量"],
+  "traffic-data-diagnosis": ["APP流量", "厂商"],
+  "traffic-revenue-fluctuation": ["APP流量", "厂商"],
+  "traffic-vendor-scene-diagnosis": ["厂商"],
+  "traffic-node-ramp-up": ["APP流量", "厂商"],
+  "traffic-sdk-performance": ["APP流量"],
+  "traffic-material-experience": ["APP流量"],
+  "traffic-budget-blocking": ["APP流量", "厂商"],
+  "traffic-visit-docs": ["APP流量"],
+  "traffic-visit-followup": ["APP流量"],
+  "traffic-daily-qa": ["APP流量"],
+  "traffic-salon-ops": ["APP流量"],
+};
+
+function cardBelongsToModule(card: CapabilityCard, module: CapabilityModule) {
+  if (module === "预算") return card.workstream === "预算侧";
+  if (module === "平台") return card.workstream === "平台";
+  if (card.workstream !== "流量侧") return false;
+  return (trafficCardModules[card.id] ?? [card.ownerDomain, ...card.relatedDomains]).includes(module);
+}
 
 function deriveStage(card: Pick<CapabilityCard, "skillIds" | "officialSkillIds">): CapabilityStage {
   if (card.officialSkillIds.length > 0) return "官方认证";
@@ -121,7 +157,11 @@ function today() {
   return new Date().toISOString().slice(0, 10);
 }
 
-function createCapabilityCard(workstream: Workstream, workflowTag: WorkflowTag): CapabilityCard {
+function createCapabilityCard(
+  workstream: Workstream,
+  workflowTag: WorkflowTag,
+  ownerDomain: BusinessDomain
+): CapabilityCard {
   return {
     id: `draft-${Date.now()}`,
     workstream,
@@ -129,7 +169,7 @@ function createCapabilityCard(workstream: Workstream, workflowTag: WorkflowTag):
     module: "新能力点",
     title: "未命名能力点",
     description: "",
-    ownerDomain: workstream === "预算侧" ? "预算" : "APP流量",
+    ownerDomain,
     relatedDomains: [],
     stage: "缺口",
     priority: "P1",
@@ -354,7 +394,7 @@ function WorkstreamPanel({
   manageMode,
   onEditCard,
 }: {
-  title: Workstream;
+  title: CapabilityModule;
   tags: WorkflowTag[];
   cards: CapabilityCard[];
   skills: Map<string, Skill>;
@@ -371,7 +411,7 @@ function WorkstreamPanel({
         <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
           <div>
             <h2 className="text-xl font-bold text-gray-900">{title}</h2>
-            <p className="mt-1 text-sm text-gray-500">{workstreamHint[title]}</p>
+            <p className="mt-1 text-sm text-gray-500">{moduleHint[title]}</p>
             <p className="mt-1 text-xs text-gray-400">{tags.length} 个步骤 / {cards.length} 个能力点</p>
           </div>
           <div className="flex items-center gap-4 md:text-right">
@@ -419,7 +459,7 @@ function CapabilityManagePanel({
   cards,
   skills,
   selectedCard,
-  activeWorkstream,
+  activeModule,
   activeTags,
   onSelectCard,
   onPatchCard,
@@ -435,7 +475,7 @@ function CapabilityManagePanel({
   cards: CapabilityCard[];
   skills: Skill[];
   selectedCard?: CapabilityCard;
-  activeWorkstream: Workstream;
+  activeModule: CapabilityModule;
   activeTags: WorkflowTag[];
   onSelectCard: (cardId: string) => void;
   onPatchCard: (cardId: string, patch: Partial<CapabilityCard>) => void;
@@ -448,7 +488,7 @@ function CapabilityManagePanel({
   currentSkillOwner: string;
 }) {
   const [openMenus, setOpenMenus] = useState<Record<string, boolean>>({});
-  const activeCards = cards.filter((card) => card.workstream === activeWorkstream);
+  const activeCards = cards;
   const isPm = mode === "pm";
   const visibleSkills = isPm ? skills : skills.filter((skill) => skill.owner === currentSkillOwner);
   const panelTitle = isPm ? "PM 管理" : "关联 Skill";
@@ -457,7 +497,7 @@ function CapabilityManagePanel({
     : `只显示 ${currentSkillOwner} 上传的 Skill。`;
 
   function toggleMenu(tag: WorkflowTag) {
-    const key = `${activeWorkstream}-${tag}`;
+    const key = `${activeModule}-${tag}`;
     setOpenMenus((current) => ({
       ...current,
       [key]: !current[key],
@@ -488,10 +528,10 @@ function CapabilityManagePanel({
 
         <div className="grid gap-4 lg:grid-cols-[260px_1fr]">
           <div className="rounded-2xl border border-blue-100 bg-white p-3">
-            <p className="mb-2 text-xs font-medium text-gray-500">{activeWorkstream}工作流</p>
+            <p className="mb-2 text-xs font-medium text-gray-500">{activeModule}工作流</p>
             <div className="max-h-[420px] space-y-2 overflow-auto pr-1">
               {activeTags.map((tag) => {
-                const menuKey = `${activeWorkstream}-${tag}`;
+                const menuKey = `${activeModule}-${tag}`;
                 const expanded = Boolean(openMenus[menuKey]);
                 const workflowCards = sortForDisplay(activeCards.filter((card) => card.workflowTag === tag));
                 return (
@@ -702,39 +742,35 @@ function CapabilityManagePanel({
   );
 }
 
-function WorkstreamTabs({
+function ModuleTabs({
   active,
-  trafficCards,
-  budgetCards,
+  moduleCards,
   onChange,
 }: {
-  active: Workstream;
-  trafficCards: CapabilityCard[];
-  budgetCards: CapabilityCard[];
-  onChange: (workstream: Workstream) => void;
+  active: CapabilityModule;
+  moduleCards: Record<CapabilityModule, CapabilityCard[]>;
+  onChange: (module: CapabilityModule) => void;
 }) {
-  const tabs: { title: Workstream; cards: CapabilityCard[] }[] = [
-    { title: "流量侧", cards: trafficCards },
-    { title: "预算侧", cards: budgetCards },
-  ];
+  const tabs: CapabilityModule[] = ["APP流量", "厂商", "平台", "预算"];
 
   return (
-    <div className="flex gap-2 rounded-2xl bg-gray-100 p-1">
+    <div className="grid gap-2 rounded-2xl bg-gray-100 p-1 md:grid-cols-4">
       {tabs.map((tab) => {
-        const counts = countByStage(tab.cards);
-        const selected = active === tab.title;
+        const cards = moduleCards[tab];
+        const counts = countByStage(cards);
+        const selected = active === tab;
         return (
           <button
-            key={tab.title}
-            onClick={() => onChange(tab.title)}
+            key={tab}
+            onClick={() => onChange(tab)}
             className={`flex flex-1 items-center justify-between rounded-xl px-4 py-3 text-left transition ${
               selected ? "bg-white text-gray-900 shadow-sm" : "text-gray-500 hover:text-gray-900"
             }`}
           >
             <span>
-              <span className="block text-sm font-semibold">{tab.title}</span>
+              <span className="block text-sm font-semibold">{tab}</span>
               <span className="mt-0.5 block text-xs">
-                {tab.cards.length} 个能力点 · {coverageRate(tab.cards)}% 覆盖
+                {cards.length} 个能力点 · {coverageRate(cards)}% 覆盖
               </span>
             </span>
             <span className="text-xs">
@@ -749,18 +785,13 @@ function WorkstreamTabs({
 
 function OverviewCard({
   cards,
-  trafficCards,
-  budgetCards,
+  moduleCards,
 }: {
   cards: CapabilityCard[];
-  trafficCards: CapabilityCard[];
-  budgetCards: CapabilityCard[];
+  moduleCards: Record<CapabilityModule, CapabilityCard[]>;
 }) {
   const counts = countByStage(cards);
-  const streamRows = [
-    { title: "流量侧", cards: trafficCards },
-    { title: "预算侧", cards: budgetCards },
-  ];
+  const streamRows: CapabilityModule[] = ["APP流量", "厂商", "平台", "预算"];
 
   return (
     <Card className="border-gray-100">
@@ -770,12 +801,12 @@ function OverviewCard({
             <h2 className="text-xl font-bold text-gray-900">总览</h2>
             <p className="mt-1 text-sm text-gray-500">{cards.length} 个能力点 / 官方覆盖 {coverageRate(cards)}%</p>
           </div>
-          <div className="grid grid-cols-2 gap-2 text-xs text-gray-500 md:w-72">
-            {streamRows.map((row) => (
-              <div key={row.title} className="rounded-xl bg-gray-50 p-3">
-                <p className="font-semibold text-gray-900">{row.title}</p>
-                <p className="mt-1">{coverageRate(row.cards)}% 覆盖</p>
-                <p>{countByStage(row.cards).官方认证} 个官方认证</p>
+          <div className="grid grid-cols-2 gap-2 text-xs text-gray-500 md:w-[480px]">
+            {streamRows.map((module) => (
+              <div key={module} className="rounded-xl bg-gray-50 p-3">
+                <p className="font-semibold text-gray-900">{module}</p>
+                <p className="mt-1">{coverageRate(moduleCards[module])}% 覆盖</p>
+                <p>{countByStage(moduleCards[module]).官方认证} 个官方认证</p>
               </div>
             ))}
           </div>
@@ -790,15 +821,25 @@ export default function CoveragePage() {
   const [cards, setCards] = useState<CapabilityCard[]>(() => getCapabilityCards().map(normalizeCard));
   const skillList = getSkills();
   const skills = new Map(skillList.map((skill) => [skill.id, skill]));
-  const trafficCards = cards.filter((card) => card.workstream === "流量侧");
-  const budgetCards = cards.filter((card) => card.workstream === "预算侧");
-  const [activeWorkstream, setActiveWorkstream] = useState<Workstream>("流量侧");
+  const moduleCards: Record<CapabilityModule, CapabilityCard[]> = {
+    APP流量: cards.filter((card) => cardBelongsToModule(card, "APP流量")),
+    厂商: cards.filter((card) => cardBelongsToModule(card, "厂商")),
+    平台: cards.filter((card) => cardBelongsToModule(card, "平台")),
+    预算: cards.filter((card) => cardBelongsToModule(card, "预算")),
+  };
+  const [activeModule, setActiveModule] = useState<CapabilityModule>("APP流量");
   const [expandedWorkflows, setExpandedWorkflows] = useState<Record<string, boolean>>({});
   const [manageMode, setManageMode] = useState<ManageMode>("none");
   const [selectedCardId, setSelectedCardId] = useState<string>();
   const [saved, setSaved] = useState(false);
-  const activeCards = activeWorkstream === "流量侧" ? trafficCards : budgetCards;
-  const activeTags = activeWorkstream === "流量侧" ? TRAFFIC_WORKFLOW_TAGS : BUDGET_WORKFLOW_TAGS;
+  const activeCards = moduleCards[activeModule];
+  const activeWorkstream: Workstream = activeModule === "预算" ? "预算侧" : activeModule === "平台" ? "平台" : "流量侧";
+  const activeTags: WorkflowTag[] =
+    activeModule === "预算"
+      ? BUDGET_WORKFLOW_TAGS
+      : activeModule === "平台"
+        ? PLATFORM_WORKFLOW_TAGS
+        : TRAFFIC_WORKFLOW_TAGS;
   const selectedCard = selectedCardId ? cards.find((card) => card.id === selectedCardId) : undefined;
 
   function toggleWorkflow(key: string) {
@@ -824,13 +865,13 @@ export default function CoveragePage() {
   }
 
   function addCard(workflowTag: WorkflowTag) {
-    const nextCard = createCapabilityCard(activeWorkstream, workflowTag);
+    const nextCard = createCapabilityCard(activeWorkstream, workflowTag, activeModule);
     setSaved(false);
     setCards((current) => [...current, nextCard]);
     setSelectedCardId(nextCard.id);
     setExpandedWorkflows((current) => ({
       ...current,
-      [`${activeWorkstream}-${workflowTag}`]: true,
+      [`${activeModule}-${workflowTag}`]: true,
     }));
   }
 
@@ -885,8 +926,8 @@ export default function CoveragePage() {
     setSaved(true);
   }
 
-  function changeWorkstream(workstream: Workstream) {
-    setActiveWorkstream(workstream);
+  function changeModule(module: CapabilityModule) {
+    setActiveModule(module);
     setSelectedCardId(undefined);
     setSaved(false);
   }
@@ -905,7 +946,7 @@ export default function CoveragePage() {
             CAPABILITY MAP
           </p>
           <h1 className="mt-1 text-2xl font-bold text-gray-900">能力地图</h1>
-          <p className="mt-1 text-sm text-gray-500">流量侧与预算侧 Skill 建设进度。</p>
+          <p className="mt-1 text-sm text-gray-500">按 APP流量、厂商、平台、预算查看 Skill 建设进度。</p>
         </div>
         <div className="space-y-1 md:text-right">
           <div className="flex flex-wrap gap-2 md:justify-end">
@@ -938,22 +979,21 @@ export default function CoveragePage() {
         </div>
       </div>
 
-      <OverviewCard cards={cards} trafficCards={trafficCards} budgetCards={budgetCards} />
+      <OverviewCard cards={cards} moduleCards={moduleCards} />
 
-      <WorkstreamTabs
-        active={activeWorkstream}
-        trafficCards={trafficCards}
-        budgetCards={budgetCards}
-        onChange={changeWorkstream}
+      <ModuleTabs
+        active={activeModule}
+        moduleCards={moduleCards}
+        onChange={changeModule}
       />
 
       {manageMode !== "none" && (
         <CapabilityManagePanel
           mode={manageMode}
-          cards={cards}
+          cards={activeCards}
           skills={skillList}
           selectedCard={selectedCard}
-          activeWorkstream={activeWorkstream}
+          activeModule={activeModule}
           activeTags={activeTags}
           onSelectCard={setSelectedCardId}
           onPatchCard={patchCard}
@@ -968,7 +1008,7 @@ export default function CoveragePage() {
       )}
 
       <WorkstreamPanel
-        title={activeWorkstream}
+        title={activeModule}
         cards={activeCards}
         tags={activeTags}
         skills={skills}
