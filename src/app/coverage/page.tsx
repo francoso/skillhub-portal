@@ -19,6 +19,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import {
   BUDGET_WORKFLOW_TAGS,
+  CURRENT_SKILL_OWNER,
   getCapabilityCards,
   getSkills,
   TRAFFIC_WORKFLOW_TAGS,
@@ -428,6 +429,7 @@ function CapabilityManagePanel({
   onDeleteCard,
   onSave,
   saved,
+  currentSkillOwner,
 }: {
   mode: Exclude<ManageMode, "none">;
   cards: CapabilityCard[];
@@ -443,12 +445,16 @@ function CapabilityManagePanel({
   onDeleteCard: (cardId: string) => void;
   onSave: () => void;
   saved: boolean;
+  currentSkillOwner: string;
 }) {
   const [openMenus, setOpenMenus] = useState<Record<string, boolean>>({});
   const activeCards = cards.filter((card) => card.workstream === activeWorkstream);
   const isPm = mode === "pm";
+  const visibleSkills = isPm ? skills : skills.filter((skill) => skill.owner === currentSkillOwner);
   const panelTitle = isPm ? "PM 管理" : "关联 Skill";
-  const panelDesc = isPm ? "维护能力点、负责人、工作流和官方认证。" : "选择已有能力点，把 Skill 关联进去。";
+  const panelDesc = isPm
+    ? "维护能力点、负责人、工作流和官方认证。仅 PM / 管理员可见。"
+    : `只显示 ${currentSkillOwner} 上传的 Skill。`;
 
   function toggleMenu(tag: WorkflowTag) {
     const key = `${activeWorkstream}-${tag}`;
@@ -640,9 +646,19 @@ function CapabilityManagePanel({
               )}
 
               <div>
-                <p className="mb-2 text-xs font-medium text-gray-500">关联 Skill</p>
+                <div className="mb-2 flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
+                  <p className="text-xs font-medium text-gray-500">关联 Skill</p>
+                  {!isPm && (
+                    <p className="text-[11px] text-gray-400">仅可关联自己的 Skill</p>
+                  )}
+                </div>
                 <div className="max-h-64 space-y-1 overflow-auto rounded-xl border border-gray-100 p-2">
-                  {skills.map((skill) => {
+                  {visibleSkills.length === 0 && (
+                    <p className="rounded-lg bg-gray-50 px-3 py-3 text-xs text-gray-400">
+                      当前账号暂无可关联 Skill
+                    </p>
+                  )}
+                  {visibleSkills.map((skill) => {
                     const linked = selectedCard.skillIds.includes(skill.id);
                     const official = selectedCard.officialSkillIds.includes(skill.id);
                     return (
@@ -891,29 +907,34 @@ export default function CoveragePage() {
           <h1 className="mt-1 text-2xl font-bold text-gray-900">能力地图</h1>
           <p className="mt-1 text-sm text-gray-500">流量侧与预算侧 Skill 建设进度。</p>
         </div>
-        <div className="flex flex-wrap gap-2">
-          <button
-            onClick={() => toggleManageMode("associate")}
-            className={`flex items-center justify-center gap-1 rounded-lg px-3 py-2 text-sm font-medium transition ${
-              manageMode === "associate"
-                ? "bg-blue-600 text-white hover:bg-blue-500"
-                : "bg-white text-gray-700 ring-1 ring-gray-200 hover:text-gray-900"
-            }`}
-          >
-            <Pencil className="h-4 w-4" />
-            {manageMode === "associate" ? "退出关联" : "关联 Skill"}
-          </button>
-          <button
-            onClick={() => toggleManageMode("pm")}
-            className={`flex items-center justify-center gap-1 rounded-lg px-3 py-2 text-sm font-medium transition ${
-              manageMode === "pm"
-                ? "bg-blue-600 text-white hover:bg-blue-500"
-                : "bg-gray-900 text-white hover:bg-gray-700"
-            }`}
-          >
-            <Settings2 className="h-4 w-4" />
-            {manageMode === "pm" ? "退出管理" : "PM 管理"}
-          </button>
+        <div className="space-y-1 md:text-right">
+          <div className="flex flex-wrap gap-2 md:justify-end">
+            <button
+              onClick={() => toggleManageMode("associate")}
+              className={`flex items-center justify-center gap-1 rounded-lg px-3 py-2 text-sm font-medium transition ${
+                manageMode === "associate"
+                  ? "bg-blue-600 text-white hover:bg-blue-500"
+                  : "bg-white text-gray-700 ring-1 ring-gray-200 hover:text-gray-900"
+              }`}
+            >
+              <Pencil className="h-4 w-4" />
+              {manageMode === "associate" ? "退出关联" : "关联 Skill"}
+            </button>
+            <button
+              onClick={() => toggleManageMode("pm")}
+              className={`flex items-center justify-center gap-1 rounded-lg px-3 py-2 text-sm font-medium transition ${
+                manageMode === "pm"
+                  ? "bg-blue-600 text-white hover:bg-blue-500"
+                  : "bg-gray-900 text-white hover:bg-gray-700"
+              }`}
+            >
+              <Settings2 className="h-4 w-4" />
+              {manageMode === "pm" ? "退出管理" : "PM 管理"}
+            </button>
+          </div>
+          <p className="text-[11px] text-gray-400">
+            关联 Skill 仅限本人上传；PM 管理仅对 PM / 管理员开放
+          </p>
         </div>
       </div>
 
@@ -942,6 +963,7 @@ export default function CoveragePage() {
           onDeleteCard={deleteCard}
           onSave={saveDraft}
           saved={saved}
+          currentSkillOwner={CURRENT_SKILL_OWNER}
         />
       )}
 

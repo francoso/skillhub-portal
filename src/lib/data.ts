@@ -18,6 +18,7 @@ import type {
 
 // Demo mock 当前用户
 export const CURRENT_USER = "员工A";
+export const CURRENT_SKILL_OWNER = "vicyanzhang";
 
 import skillsData from "@/data/skills.json";
 import contributorsData from "@/data/contributors.json";
