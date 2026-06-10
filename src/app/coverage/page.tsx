@@ -839,7 +839,9 @@ export default function CoveragePage() {
       ? BUDGET_WORKFLOW_TAGS
       : activeModule === "平台"
         ? PLATFORM_WORKFLOW_TAGS
-        : TRAFFIC_WORKFLOW_TAGS;
+        : activeModule === "厂商"
+          ? TRAFFIC_WORKFLOW_TAGS.filter((tag) => tag !== "形态样式")
+          : TRAFFIC_WORKFLOW_TAGS;
   const selectedCard = selectedCardId ? cards.find((card) => card.id === selectedCardId) : undefined;
 
   function toggleWorkflow(key: string) {
