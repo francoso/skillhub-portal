@@ -38,7 +38,7 @@ export interface Skill {
   official?: OfficialSkillMeta;
 }
 
-export type Workstream = "流量侧" | "平台" | "预算侧";
+export type Workstream = "流量侧" | "APP产品" | "平台" | "预算侧";
 
 export type TrafficWorkflowTag =
   | "市场分析"
@@ -65,7 +65,20 @@ export type PlatformWorkflowTag =
   | "合同&结算管理"
   | "流量违规治理";
 
-export type WorkflowTag = TrafficWorkflowTag | BudgetWorkflowTag | PlatformWorkflowTag;
+export type AppProductWorkflowTag =
+  | "解决方案定义"
+  | "流量接入"
+  | "算力分配"
+  | "价值理解"
+  | "形态生产&配置"
+  | "变现调优"
+  | "体验管理";
+
+export type WorkflowTag =
+  | TrafficWorkflowTag
+  | BudgetWorkflowTag
+  | PlatformWorkflowTag
+  | AppProductWorkflowTag;
 
 export type BusinessDomain = "APP流量" | "平台" | "预算" | "厂商";
 

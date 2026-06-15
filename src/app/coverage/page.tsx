@@ -18,6 +18,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import {
+  APP_PRODUCT_WORKFLOW_TAGS,
   BUDGET_WORKFLOW_TAGS,
   CURRENT_SKILL_OWNER,
   getCapabilityCards,
@@ -50,45 +51,55 @@ const stageIcon: Record<CapabilityStage, typeof CheckCircle2> = {
 const domains: BusinessDomain[] = ["APP流量", "平台", "预算", "厂商"];
 const priorities: CapabilityPriority[] = ["P0", "P1", "P2"];
 type ManageMode = "none" | "associate" | "pm";
-type CapabilityModule = BusinessDomain;
+type CapabilityModule = "APP运营" | "APP产品" | "厂商" | "平台" | "预算";
 
 const moduleHint: Record<CapabilityModule, string> = {
-  APP流量: "APP 开发者运营链路，包含通用能力和 APP 专属能力。",
+  APP运营: "APP 开发者运营链路，沿用现有流量运营工作流。",
+  APP产品: "APP 产品能力链路，覆盖方案、接入、算力、价值、形态、变现和体验。",
   厂商: "厂商流量运营链路，包含通用能力和厂商专属能力。",
   平台: "平台治理与服务支撑模块，先按 6 个大模块建框架。",
   预算: "预算服务链路，按预算侧 7 个服务环节推进。",
 };
 
 const trafficCardModules: Record<string, CapabilityModule[]> = {
-  "traffic-market-fundamentals": ["APP流量", "厂商"],
-  "traffic-market-expansion-scan": ["APP流量"],
-  "traffic-competitive-benchmark": ["APP流量", "厂商"],
-  "traffic-lead-contact": ["APP流量", "厂商"],
-  "traffic-access-solution": ["APP流量", "厂商"],
-  "traffic-access-support": ["APP流量", "厂商"],
-  "traffic-ramp-up": ["APP流量", "厂商"],
-  "traffic-template-query": ["APP流量"],
-  "traffic-template-rule-review": ["APP流量"],
-  "traffic-style-capture": ["APP流量"],
-  "traffic-template-effect-feedback": ["APP流量"],
-  "traffic-data-diagnosis": ["APP流量", "厂商"],
-  "traffic-revenue-fluctuation": ["APP流量", "厂商"],
+  "traffic-market-fundamentals": ["APP运营", "厂商"],
+  "traffic-market-expansion-scan": ["APP运营"],
+  "traffic-competitive-benchmark": ["APP运营", "厂商"],
+  "traffic-lead-contact": ["APP运营", "厂商"],
+  "traffic-access-solution": ["APP运营", "厂商"],
+  "traffic-access-support": ["APP运营", "厂商"],
+  "traffic-ramp-up": ["APP运营", "厂商"],
+  "traffic-template-query": ["APP运营"],
+  "traffic-template-rule-review": ["APP运营"],
+  "traffic-style-capture": ["APP运营"],
+  "traffic-template-effect-feedback": ["APP运营"],
+  "traffic-data-diagnosis": ["APP运营", "厂商"],
+  "traffic-revenue-fluctuation": ["APP运营", "厂商"],
   "traffic-vendor-scene-diagnosis": ["厂商"],
-  "traffic-node-ramp-up": ["APP流量", "厂商"],
-  "traffic-sdk-performance": ["APP流量"],
-  "traffic-material-experience": ["APP流量"],
-  "traffic-budget-blocking": ["APP流量", "厂商"],
-  "traffic-visit-docs": ["APP流量"],
-  "traffic-visit-followup": ["APP流量"],
-  "traffic-daily-qa": ["APP流量"],
-  "traffic-salon-ops": ["APP流量"],
+  "traffic-node-ramp-up": ["APP运营", "厂商"],
+  "traffic-sdk-performance": ["APP运营"],
+  "traffic-material-experience": ["APP运营"],
+  "traffic-budget-blocking": ["APP运营", "厂商"],
+  "traffic-visit-docs": ["APP运营"],
+  "traffic-visit-followup": ["APP运营"],
+  "traffic-daily-qa": ["APP运营"],
+  "traffic-salon-ops": ["APP运营"],
 };
 
 function cardBelongsToModule(card: CapabilityCard, module: CapabilityModule) {
   if (module === "预算") return card.workstream === "预算侧";
   if (module === "平台") return card.workstream === "平台";
+  if (module === "APP产品") return card.workstream === "APP产品";
   if (card.workstream !== "流量侧") return false;
-  return (trafficCardModules[card.id] ?? [card.ownerDomain, ...card.relatedDomains]).includes(module);
+  const fallbackModules = [card.ownerDomain, ...card.relatedDomains].map((domain) =>
+    domain === "APP流量" ? "APP运营" : domain
+  );
+  return (trafficCardModules[card.id] ?? fallbackModules).includes(module);
+}
+
+function moduleOwnerDomain(module: CapabilityModule): BusinessDomain {
+  if (module === "APP运营" || module === "APP产品") return "APP流量";
+  return module;
 }
 
 function deriveStage(card: Pick<CapabilityCard, "skillIds" | "officialSkillIds">): CapabilityStage {
@@ -751,10 +762,10 @@ function ModuleTabs({
   moduleCards: Record<CapabilityModule, CapabilityCard[]>;
   onChange: (module: CapabilityModule) => void;
 }) {
-  const tabs: CapabilityModule[] = ["APP流量", "厂商", "平台", "预算"];
+  const tabs: CapabilityModule[] = ["APP运营", "APP产品", "厂商", "平台", "预算"];
 
   return (
-    <div className="grid gap-2 rounded-2xl bg-gray-100 p-1 md:grid-cols-4">
+    <div className="grid gap-2 rounded-2xl bg-gray-100 p-1 md:grid-cols-5">
       {tabs.map((tab) => {
         const cards = moduleCards[tab];
         const counts = countByStage(cards);
@@ -791,7 +802,7 @@ function OverviewCard({
   moduleCards: Record<CapabilityModule, CapabilityCard[]>;
 }) {
   const counts = countByStage(cards);
-  const streamRows: CapabilityModule[] = ["APP流量", "厂商", "平台", "预算"];
+  const streamRows: CapabilityModule[] = ["APP运营", "APP产品", "厂商", "平台", "预算"];
 
   return (
     <Card className="border-gray-100">
@@ -801,7 +812,7 @@ function OverviewCard({
             <h2 className="text-xl font-bold text-gray-900">总览</h2>
             <p className="mt-1 text-sm text-gray-500">{cards.length} 个能力点 / 官方覆盖 {coverageRate(cards)}%</p>
           </div>
-          <div className="grid grid-cols-2 gap-2 text-xs text-gray-500 md:w-[480px]">
+          <div className="grid grid-cols-2 gap-2 text-xs text-gray-500 md:w-[560px] lg:grid-cols-5">
             {streamRows.map((module) => (
               <div key={module} className="rounded-xl bg-gray-50 p-3">
                 <p className="font-semibold text-gray-900">{module}</p>
@@ -822,26 +833,36 @@ export default function CoveragePage() {
   const skillList = getSkills();
   const skills = new Map(skillList.map((skill) => [skill.id, skill]));
   const moduleCards: Record<CapabilityModule, CapabilityCard[]> = {
-    APP流量: cards.filter((card) => cardBelongsToModule(card, "APP流量")),
+    APP运营: cards.filter((card) => cardBelongsToModule(card, "APP运营")),
+    APP产品: cards.filter((card) => cardBelongsToModule(card, "APP产品")),
     厂商: cards.filter((card) => cardBelongsToModule(card, "厂商")),
     平台: cards.filter((card) => cardBelongsToModule(card, "平台")),
     预算: cards.filter((card) => cardBelongsToModule(card, "预算")),
   };
-  const [activeModule, setActiveModule] = useState<CapabilityModule>("APP流量");
+  const [activeModule, setActiveModule] = useState<CapabilityModule>("APP运营");
   const [expandedWorkflows, setExpandedWorkflows] = useState<Record<string, boolean>>({});
   const [manageMode, setManageMode] = useState<ManageMode>("none");
   const [selectedCardId, setSelectedCardId] = useState<string>();
   const [saved, setSaved] = useState(false);
   const activeCards = moduleCards[activeModule];
-  const activeWorkstream: Workstream = activeModule === "预算" ? "预算侧" : activeModule === "平台" ? "平台" : "流量侧";
+  const activeWorkstream: Workstream =
+    activeModule === "预算"
+      ? "预算侧"
+      : activeModule === "平台"
+        ? "平台"
+        : activeModule === "APP产品"
+          ? "APP产品"
+          : "流量侧";
   const activeTags: WorkflowTag[] =
     activeModule === "预算"
       ? BUDGET_WORKFLOW_TAGS
       : activeModule === "平台"
         ? PLATFORM_WORKFLOW_TAGS
-        : activeModule === "厂商"
-          ? TRAFFIC_WORKFLOW_TAGS.filter((tag) => tag !== "形态样式")
-          : TRAFFIC_WORKFLOW_TAGS;
+        : activeModule === "APP产品"
+          ? APP_PRODUCT_WORKFLOW_TAGS
+          : activeModule === "厂商"
+            ? TRAFFIC_WORKFLOW_TAGS.filter((tag) => tag !== "形态样式")
+            : TRAFFIC_WORKFLOW_TAGS;
   const selectedCard = selectedCardId ? cards.find((card) => card.id === selectedCardId) : undefined;
 
   function toggleWorkflow(key: string) {
@@ -867,7 +888,7 @@ export default function CoveragePage() {
   }
 
   function addCard(workflowTag: WorkflowTag) {
-    const nextCard = createCapabilityCard(activeWorkstream, workflowTag, activeModule);
+    const nextCard = createCapabilityCard(activeWorkstream, workflowTag, moduleOwnerDomain(activeModule));
     setSaved(false);
     setCards((current) => [...current, nextCard]);
     setSelectedCardId(nextCard.id);
@@ -948,7 +969,7 @@ export default function CoveragePage() {
             CAPABILITY MAP
           </p>
           <h1 className="mt-1 text-2xl font-bold text-gray-900">能力地图</h1>
-          <p className="mt-1 text-sm text-gray-500">按 APP流量、厂商、平台、预算查看 Skill 建设进度。</p>
+          <p className="mt-1 text-sm text-gray-500">按 APP运营、APP产品、厂商、平台、预算查看 Skill 建设进度。</p>
         </div>
         <div className="space-y-1 md:text-right">
           <div className="flex flex-wrap gap-2 md:justify-end">
