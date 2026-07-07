@@ -1,9 +1,9 @@
 1:"$Sreact.fragment"
 2:I[47257,["/skillhub-portal/_next/static/chunks/0kgllmrti5l8k.js","/skillhub-portal/_next/static/chunks/0n4z.7yu76je-.js","/skillhub-portal/_next/static/chunks/131qm6nqrg5tg.js"],"ClientPageRoot"]
-3:I[18924,["/skillhub-portal/_next/static/chunks/0kgllmrti5l8k.js","/skillhub-portal/_next/static/chunks/0n4z.7yu76je-.js","/skillhub-portal/_next/static/chunks/131qm6nqrg5tg.js","/skillhub-portal/_next/static/chunks/0qn~r9uy.9i3p.js","/skillhub-portal/_next/static/chunks/0ckucaep2k-_r.js"],"default"]
+3:I[18924,["/skillhub-portal/_next/static/chunks/0kgllmrti5l8k.js","/skillhub-portal/_next/static/chunks/0n4z.7yu76je-.js","/skillhub-portal/_next/static/chunks/131qm6nqrg5tg.js","/skillhub-portal/_next/static/chunks/0qn~r9uy.9i3p.js","/skillhub-portal/_next/static/chunks/01yigadehra07.js"],"default"]
 6:I[97367,["/skillhub-portal/_next/static/chunks/0kgllmrti5l8k.js","/skillhub-portal/_next/static/chunks/0n4z.7yu76je-.js","/skillhub-portal/_next/static/chunks/131qm6nqrg5tg.js"],"OutletBoundary"]
 7:"$Sreact.suspense"
-0:{"rsc":["$","$1","c",{"children":[["$","$L2",null,{"Component":"$3","serverProvidedParams":{"searchParams":{},"params":{},"promises":["$@4","$@5"]}}],[["$","script","script-0",{"src":"/skillhub-portal/_next/static/chunks/0qn~r9uy.9i3p.js","async":true}],["$","script","script-1",{"src":"/skillhub-portal/_next/static/chunks/0ckucaep2k-_r.js","async":true}]],["$","$L6",null,{"children":["$","$7",null,{"name":"Next.MetadataOutlet","children":"$@8"}]}]]}],"isPartial":false,"staleTime":300,"varyParams":null,"buildId":"wV6nhWLHDVqXOCi45Q13o"}
+0:{"rsc":["$","$1","c",{"children":[["$","$L2",null,{"Component":"$3","serverProvidedParams":{"searchParams":{},"params":{},"promises":["$@4","$@5"]}}],[["$","script","script-0",{"src":"/skillhub-portal/_next/static/chunks/0qn~r9uy.9i3p.js","async":true}],["$","script","script-1",{"src":"/skillhub-portal/_next/static/chunks/01yigadehra07.js","async":true}]],["$","$L6",null,{"children":["$","$7",null,{"name":"Next.MetadataOutlet","children":"$@8"}]}]]}],"isPartial":false,"staleTime":300,"varyParams":null,"buildId":"bcyaABwmDyUo4oW6jd1Ku"}
 4:{}
 5:"$0:rsc:props:children:0:props:serverProvidedParams:params"
 8:null
