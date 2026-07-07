@@ -10,8 +10,10 @@ import type {
   Review,
   CertificationResult,
   CapabilityCard,
+  CapabilityStage,
   OfficialSkillRecord,
   SkillDomain,
+  SkillSource,
   Workstream,
   WorkflowTag,
   PlatformWorkflowTag,
@@ -74,9 +76,40 @@ export const APP_PRODUCT_WORKFLOW_TAGS: AppProductWorkflowTag[] = [
 ];
 
 export const BUSINESS_DOMAINS: SkillDomain[] = ["APP流量", "平台", "预算", "厂商"];
+export const ADATACLAW_SKILL_URL = "https://adata.woa.com/bi/skill";
+
+export function resolveSkillSource(skill: Pick<Skill, "source" | "downloadUrl" | "externalUrl">): SkillSource {
+  if (skill.source) return skill.source;
+  if (skill.externalUrl?.includes("adata.woa.com")) return "adataclaw";
+  if (skill.downloadUrl?.includes("knot.woa.com")) return "knot";
+  return "manual";
+}
+
+function platformForSource(source: SkillSource): Skill["platform"] {
+  if (source === "knot") return "Knot";
+  return source;
+}
+
+export function resolveCapabilityStage(
+  card: Pick<CapabilityCard, "stage" | "ownerPm">
+): CapabilityStage {
+  if (card.stage === "官方认证") return "官方认证";
+  if (card.ownerPm?.trim()) return "建设中";
+  return "缺口";
+}
 
 export function getSkills(): Skill[] {
-  const skills = skillsData as Skill[];
+  const skills = (skillsData as Skill[]).map((skill) => {
+    const source = resolveSkillSource(skill);
+    return {
+      ...skill,
+      source,
+      platform: skill.platform ?? platformForSource(source),
+      externalUrl:
+        skill.externalUrl ??
+        (source === "adataclaw" ? ADATACLAW_SKILL_URL : skill.downloadUrl),
+    };
+  });
   const capabilityCards = getCapabilityCards();
   const officialLookup = new Map(
     getOfficialSkillRecords().map((item) => [item.skillId, item])
@@ -169,20 +202,15 @@ export function getActivities(): ActivityEvent[] {
 }
 
 export function getCapabilityCards(): CapabilityCard[] {
-  const officialIds = new Set(getOfficialSkillRecords().map((item) => item.skillId));
-
   return (capabilityMapData as CapabilityCard[]).map((card) => {
-    const officialSkillIds = Array.from(
-      new Set([
-        ...card.officialSkillIds,
-        ...card.skillIds.filter((skillId) => officialIds.has(skillId)),
-      ])
+    const officialSkillIds = card.officialSkillIds.filter((skillId) =>
+      card.skillIds.includes(skillId)
     );
 
     return {
       ...card,
       officialSkillIds,
-      stage: officialSkillIds.length > 0 ? "官方认证" : card.stage,
+      stage: resolveCapabilityStage(card),
     };
   });
 }

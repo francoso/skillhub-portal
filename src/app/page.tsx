@@ -5,9 +5,9 @@ import Link from "next/link";
 import { Upload, Puzzle, Shield, Presentation, Check, Download, ArrowRight, ArrowLeft, Loader2, Code2 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { SkillRadarChart } from "@/components/charts/radar-chart";
-import { getStats, getSkills, getDemos, getCurrentReviewRound, CURRENT_USER } from "@/lib/data";
+import { ADATACLAW_SKILL_URL, getStats, getSkills, getDemos, getCurrentReviewRound, CURRENT_USER } from "@/lib/data";
 import { analyzeSkillFiles, isAcceptedFile } from "@/lib/skill-analyzer";
 import type { SkillAssessment } from "@/lib/types";
 
@@ -135,12 +135,18 @@ function ActivityTicker({ activities }: { activities: ActivityItem[] }) {
 
 // Upload wizard steps
 type UploadStep = "upload" | "scoring" | "result" | "beacon" | "confirm";
+type UploadMode = "package" | "adataclaw";
 
 const UPLOAD_STEPS: { key: UploadStep; label: string }[] = [
   { key: "upload", label: "上传" },
   { key: "scoring", label: "AI 评分" },
   { key: "result", label: "评测结果" },
   { key: "beacon", label: "埋点注入" },
+  { key: "confirm", label: "确认上传" },
+];
+
+const ADATACLAW_UPLOAD_STEPS: { key: UploadStep; label: string }[] = [
+  { key: "upload", label: "登记" },
   { key: "confirm", label: "确认上传" },
 ];
 
@@ -155,12 +161,20 @@ const MOCK_BEACON_POINTS = [
 
 function UploadWizard() {
   const [step, setStep] = useState<UploadStep>("upload");
+  const [uploadMode, setUploadMode] = useState<UploadMode>("package");
   const [assessment, setAssessment] = useState<SkillAssessment | null>(null);
   const [analyzing, setAnalyzing] = useState(false);
   const [beaconInjecting, setBeaconInjecting] = useState(false);
   const [beaconDone, setBeaconDone] = useState(false);
   const [dragOver, setDragOver] = useState(false);
   const [uploadedFileName, setUploadedFileName] = useState("");
+  const [adataclawName, setAdataclawName] = useState("");
+  const [adataclawDescription, setAdataclawDescription] = useState("");
+  const [registeredAdataclawSkill, setRegisteredAdataclawSkill] = useState<{
+    name: string;
+    description: string;
+    owner: string;
+  } | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFiles = useCallback(async (files: FileList | File[]) => {
@@ -206,6 +220,22 @@ function UploadWizard() {
     setStep("confirm");
   }, []);
 
+  const handleAdataclawUpload = useCallback(() => {
+    const name = adataclawName.trim();
+    const description = adataclawDescription.trim();
+    if (!name || !description) return;
+    setUploadedFileName(name);
+    setAssessment(null);
+    setBeaconDone(false);
+    setBeaconInjecting(false);
+    setRegisteredAdataclawSkill({
+      name,
+      description,
+      owner: CURRENT_USER,
+    });
+    setStep("confirm");
+  }, [adataclawDescription, adataclawName]);
+
   const handleReset = useCallback(() => {
     setStep("upload");
     setAssessment(null);
@@ -213,9 +243,27 @@ function UploadWizard() {
     setBeaconInjecting(false);
     setBeaconDone(false);
     setUploadedFileName("");
+    setAdataclawName("");
+    setAdataclawDescription("");
+    setRegisteredAdataclawSkill(null);
   }, []);
 
-  const currentStepIndex = UPLOAD_STEPS.findIndex((s) => s.key === step);
+  const switchUploadMode = useCallback((mode: UploadMode) => {
+    setUploadMode(mode);
+    setStep("upload");
+    setAssessment(null);
+    setAnalyzing(false);
+    setBeaconInjecting(false);
+    setBeaconDone(false);
+    setUploadedFileName("");
+    setRegisteredAdataclawSkill(null);
+  }, []);
+
+  const isAdataclawMode = uploadMode === "adataclaw";
+  const activeUploadSteps = isAdataclawMode ? ADATACLAW_UPLOAD_STEPS : UPLOAD_STEPS;
+  const stepExists = activeUploadSteps.some((s) => s.key === step);
+  const visibleStep: UploadStep = stepExists ? step : "upload";
+  const currentStepIndex = activeUploadSteps.findIndex((s) => s.key === visibleStep);
 
   const radarData = assessment
     ? Object.entries(assessment.scores).map(([key, value]) => ({
@@ -230,7 +278,7 @@ function UploadWizard() {
       {/* Step Indicator */}
       <div className="px-6 pt-5 pb-3">
         <div className="flex items-center justify-between mb-1">
-          {UPLOAD_STEPS.map((s, idx) => {
+          {activeUploadSteps.map((s, idx) => {
             const isCompleted = idx < currentStepIndex;
             const isCurrent = idx === currentStepIndex;
             return (
@@ -255,7 +303,7 @@ function UploadWizard() {
                     {s.label}
                   </span>
                 </div>
-                {idx < UPLOAD_STEPS.length - 1 && (
+                {idx < activeUploadSteps.length - 1 && (
                   <div
                     className={`h-0.5 flex-1 mx-1 -mt-4 ${
                       idx < currentStepIndex ? "bg-green-300" : "bg-gray-200"
@@ -270,46 +318,117 @@ function UploadWizard() {
 
       <CardContent className="p-6 pt-2">
         {/* Step 1: Upload */}
-        {step === "upload" && (
-          <div
-            className={`flex flex-col items-center justify-center text-center cursor-pointer rounded-lg p-8 border-2 border-dashed transition-colors ${
-              dragOver ? "bg-blue-50 border-blue-300" : "border-gray-200 hover:border-blue-300"
-            }`}
-            onDragOver={(e) => {
-              e.preventDefault();
-              setDragOver(true);
-            }}
-            onDragLeave={() => setDragOver(false)}
-            onDrop={handleDrop}
-            onClick={() => fileInputRef.current?.click()}
-          >
-            <div className="w-12 h-12 rounded-full bg-blue-50 flex items-center justify-center mb-4">
-              <Upload className="w-6 h-6 text-blue-600" />
+        {visibleStep === "upload" && (
+          <div className="space-y-5">
+            <div className="grid grid-cols-2 rounded-lg bg-gray-100 p-1 text-sm font-medium">
+              <button
+                type="button"
+                onClick={() => switchUploadMode("package")}
+                className={`rounded-md px-3 py-2 transition ${
+                  uploadMode === "package" ? "bg-white text-gray-900 shadow-sm" : "text-gray-500 hover:text-gray-900"
+                }`}
+              >
+                标准 Skill 包
+              </button>
+              <button
+                type="button"
+                onClick={() => switchUploadMode("adataclaw")}
+                className={`rounded-md px-3 py-2 transition ${
+                  uploadMode === "adataclaw" ? "bg-white text-gray-900 shadow-sm" : "text-gray-500 hover:text-gray-900"
+                }`}
+              >
+                adataclaw Skill
+              </button>
             </div>
-            <h2 className="text-lg font-semibold text-gray-900">
-              Skill 规范评测器
-            </h2>
-            <p className="text-sm text-gray-500 mt-1">
-              拖入压缩包 → 结构评测演示 → 埋点能力待接入
-            </p>
-            <p className="text-xs text-gray-400 mt-3">
-              支持 .skill / .zip 压缩包格式
-            </p>
-            <input
-              ref={fileInputRef}
-              type="file"
-              multiple
-              accept=".skill,.zip"
-              className="hidden"
-              onChange={(e) => {
-                if (e.target.files) handleFiles(e.target.files);
-              }}
-            />
+
+            {uploadMode === "package" ? (
+              <div
+                className={`flex flex-col items-center justify-center text-center cursor-pointer rounded-lg p-8 border-2 border-dashed transition-colors ${
+                  dragOver ? "bg-blue-50 border-blue-300" : "border-gray-200 hover:border-blue-300"
+                }`}
+                onDragOver={(e) => {
+                  e.preventDefault();
+                  setDragOver(true);
+                }}
+                onDragLeave={() => setDragOver(false)}
+                onDrop={handleDrop}
+                onClick={() => fileInputRef.current?.click()}
+              >
+                <div className="w-12 h-12 rounded-full bg-blue-50 flex items-center justify-center mb-4">
+                  <Upload className="w-6 h-6 text-blue-600" />
+                </div>
+                <h2 className="text-lg font-semibold text-gray-900">
+                  Skill 规范评测器
+                </h2>
+                <p className="text-sm text-gray-500 mt-1">
+                  拖入压缩包 → 结构评测演示 → 埋点能力待接入
+                </p>
+                <p className="text-xs text-gray-400 mt-3">
+                  支持 .skill / .zip 压缩包格式
+                </p>
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  multiple
+                  accept=".skill,.zip"
+                  className="hidden"
+                  onChange={(e) => {
+                    if (e.target.files) handleFiles(e.target.files);
+                  }}
+                />
+              </div>
+            ) : (
+              <div className="rounded-lg border border-fuchsia-100 bg-fuchsia-50/40 p-5 space-y-4">
+                <div>
+                  <h2 className="text-lg font-semibold text-gray-900">登记 adataclaw Skill</h2>
+                  <p className="text-sm text-gray-500 mt-1">
+                    只登记名称和介绍，不走前置评估或埋点注入。名称需要与 adataclaw 上的 Skill 名称一致。
+                  </p>
+                </div>
+
+                <label className="block text-xs font-medium text-gray-500">
+                  Skill 名称
+                  <input
+                    value={adataclawName}
+                    onChange={(event) => setAdataclawName(event.target.value)}
+                    placeholder="与 adataclaw 上的 Skill 名称保持一致"
+                    className="mt-1 w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-900 outline-none focus:border-fuchsia-300"
+                  />
+                </label>
+
+                <label className="block text-xs font-medium text-gray-500">
+                  Skill 介绍
+                  <textarea
+                    value={adataclawDescription}
+                    onChange={(event) => setAdataclawDescription(event.target.value)}
+                    rows={3}
+                    placeholder="说明这个 Skill 解决什么业务问题、适合谁使用"
+                    className="mt-1 w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-900 outline-none focus:border-fuchsia-300"
+                  />
+                </label>
+
+                <div className="flex items-center justify-between gap-3 pt-2">
+                  <p className="text-xs text-gray-400">
+                    试用入口统一跳转到 adataclaw Skill 页
+                  </p>
+                  <Button
+                    type="button"
+                    size="sm"
+                    onClick={handleAdataclawUpload}
+                    disabled={!adataclawName.trim() || !adataclawDescription.trim()}
+                    className="gap-1.5"
+                  >
+                    直接上传
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </Button>
+                </div>
+              </div>
+            )}
           </div>
         )}
 
         {/* Step 2: Scoring (loading) */}
-        {step === "scoring" && analyzing && (
+        {visibleStep === "scoring" && analyzing && (
           <div className="flex flex-col items-center justify-center py-12">
             <Loader2 className="w-8 h-8 text-blue-600 animate-spin mb-4" />
             <p className="text-sm font-medium text-gray-700">AI 正在评测...</p>
@@ -320,7 +439,7 @@ function UploadWizard() {
         )}
 
         {/* Step 3: Result */}
-        {step === "result" && assessment && (
+        {visibleStep === "result" && assessment && (
           <div className="space-y-5">
             <div className="flex items-center justify-between">
               <h3 className="text-base font-semibold text-gray-900">
@@ -385,11 +504,11 @@ function UploadWizard() {
 
             {/* Action Buttons */}
             <div className="flex items-center justify-between pt-3 border-t">
-              <Button variant="ghost" size="sm" onClick={handleReset} className="gap-1.5 text-gray-500">
+              <Button type="button" variant="ghost" size="sm" onClick={handleReset} className="gap-1.5 text-gray-500">
                 <ArrowLeft className="w-3.5 h-3.5" />
                 取消
               </Button>
-              <Button size="sm" onClick={handleContinueToBeacon} className="gap-1.5">
+              <Button type="button" size="sm" onClick={handleContinueToBeacon} className="gap-1.5">
                 继续上传
                 <ArrowRight className="w-3.5 h-3.5" />
               </Button>
@@ -398,7 +517,7 @@ function UploadWizard() {
         )}
 
         {/* Step 4: Beacon Injection */}
-        {step === "beacon" && (
+        {visibleStep === "beacon" && (
           <div className="space-y-5">
             {beaconInjecting ? (
               <div className="flex flex-col items-center justify-center py-10">
@@ -461,11 +580,11 @@ function UploadWizard() {
 
                 {/* Action Buttons */}
                 <div className="flex items-center justify-between pt-3 border-t">
-                  <Button variant="ghost" size="sm" onClick={handleReset} className="gap-1.5 text-gray-500">
+                  <Button type="button" variant="ghost" size="sm" onClick={handleReset} className="gap-1.5 text-gray-500">
                     <ArrowLeft className="w-3.5 h-3.5" />
                     取消
                   </Button>
-                  <Button size="sm" onClick={handleConfirmUpload} className="gap-1.5">
+                  <Button type="button" size="sm" onClick={handleConfirmUpload} className="gap-1.5">
                     确认上传
                     <Check className="w-3.5 h-3.5" />
                   </Button>
@@ -476,24 +595,43 @@ function UploadWizard() {
         )}
 
         {/* Step 5: Confirm */}
-        {step === "confirm" && (
+        {visibleStep === "confirm" && (
           <div className="flex flex-col items-center justify-center py-10">
             <div className="w-14 h-14 rounded-full bg-green-100 flex items-center justify-center mb-4">
               <Check className="w-7 h-7 text-green-600" />
             </div>
             <h3 className="text-lg font-semibold text-gray-900">上传成功！</h3>
             <p className="text-sm text-gray-500 mt-1">
-              {uploadedFileName} 已上线，全员可搜索使用
+              {isAdataclawMode
+                ? `${uploadedFileName} 已作为 adataclaw Skill 登记`
+                : `${uploadedFileName} 已上线，全员可搜索使用`}
             </p>
+            {isAdataclawMode && (
+              <div className="mt-4 rounded-lg border border-fuchsia-100 bg-fuchsia-50 px-4 py-3 text-center">
+                <p className="text-xs font-medium text-fuchsia-700">已跳过 AI 评分和埋点注入</p>
+                {registeredAdataclawSkill && (
+                  <p className="mt-1 text-xs text-gray-500">
+                    Owner：{registeredAdataclawSkill.owner} · 数据源：manual / 0
+                  </p>
+                )}
+                <a
+                  href={ADATACLAW_SKILL_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-1 inline-flex items-center gap-1 text-xs text-fuchsia-700 hover:text-fuchsia-800"
+                >
+                  adataclaw 试用入口
+                  <ArrowRight className="w-3 h-3" />
+                </a>
+              </div>
+            )}
             <div className="flex items-center gap-3 mt-6">
-              <Button variant="outline" size="sm" onClick={handleReset}>
+              <Button type="button" variant="outline" size="sm" onClick={handleReset}>
                 继续上传
               </Button>
-              <Link href="/skills">
-                <Button size="sm" className="gap-1.5">
-                  查看 Skill 库
-                  <ArrowRight className="w-3.5 h-3.5" />
-                </Button>
+              <Link href="/skills" className={buttonVariants({ size: "sm", className: "gap-1.5" })}>
+                查看 Skill 库
+                <ArrowRight className="w-3.5 h-3.5" />
               </Link>
             </div>
             <p className="text-xs text-gray-400 mt-6">

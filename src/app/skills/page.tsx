@@ -7,7 +7,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { getSkills, getSkillStage } from "@/lib/data";
 import type { Skill, SkillDomain, Workstream } from "@/lib/types";
-import { Download, Search, ShieldCheck } from "lucide-react";
+import { Download, ExternalLink, Search, ShieldCheck } from "lucide-react";
 
 const domainOptions: Array<SkillDomain | "全部"> = ["全部", "APP流量", "平台", "预算", "厂商"];
 const workstreamOptions: Array<Workstream | "全部"> = ["全部", "流量侧", "预算侧"];
@@ -29,6 +29,18 @@ const domainStyles: Record<SkillDomain, string> = {
   "平台": "bg-violet-100 text-violet-700",
   "预算": "bg-amber-100 text-amber-700",
   "厂商": "bg-emerald-100 text-emerald-700",
+};
+
+const sourceLabels: Record<NonNullable<Skill["source"]>, string> = {
+  knot: "Knot",
+  adataclaw: "adataclaw",
+  manual: "手动登记",
+};
+
+const sourceStyles: Record<NonNullable<Skill["source"]>, string> = {
+  knot: "bg-blue-50 text-blue-700 border-blue-100",
+  adataclaw: "bg-fuchsia-50 text-fuchsia-700 border-fuchsia-100",
+  manual: "bg-gray-50 text-gray-600 border-gray-200",
 };
 
 export default function SkillsPage() {
@@ -170,7 +182,10 @@ export default function SkillsPage() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
-        {filtered.map((skill) => (
+        {filtered.map((skill) => {
+          const source = skill.source ?? "manual";
+          const isAdataclaw = source === "adataclaw";
+          return (
           <Link key={skill.id} href={`/skills/${skill.id}`}>
             <Card className="h-full border-gray-100 hover:shadow-md transition-shadow">
               <CardContent className="p-5 space-y-4">
@@ -182,6 +197,9 @@ export default function SkillsPage() {
                   <div className="flex flex-col items-end gap-1 shrink-0">
                     <Badge variant="secondary" className={statusColors[skill.status]}>
                       {statusLabels[skill.status]}
+                    </Badge>
+                    <Badge variant="outline" className={`text-xs ${sourceStyles[source]}`}>
+                      {sourceLabels[source]}
                     </Badge>
                     {skill.official?.status === "official" && (
                       <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200 gap-1">
@@ -216,10 +234,20 @@ export default function SkillsPage() {
                 </div>
 
                 <div className="flex items-center justify-between pt-3 border-t border-gray-100 text-sm">
-                  <div className="text-gray-500">
-                    下载量 <span className="font-semibold text-gray-900">{skill.metrics.invokeCount}</span>
-                  </div>
-                  {skill.downloadUrl && (
+                  {isAdataclaw ? (
+                    <>
+                      <div className="text-gray-500">外部托管</div>
+                      <span className="inline-flex items-center gap-1 text-fuchsia-700">
+                        <ExternalLink className="w-3.5 h-3.5" />
+                        去 adataclaw
+                      </span>
+                    </>
+                  ) : (
+                    <div className="text-gray-500">
+                      下载量 <span className="font-semibold text-gray-900">{skill.metrics.invokeCount}</span>
+                    </div>
+                  )}
+                  {!isAdataclaw && skill.downloadUrl && (
                     <span className="inline-flex items-center gap-1 text-gray-600">
                       <Download className="w-3.5 h-3.5" />
                       查看详情
@@ -229,7 +257,8 @@ export default function SkillsPage() {
               </CardContent>
             </Card>
           </Link>
-        ))}
+          );
+        })}
       </div>
     </div>
   );

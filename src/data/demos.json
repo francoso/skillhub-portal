@@ -67,10 +67,11 @@
     "status": "completed",
     "skills": [
       {
-        "skillId": "vendor-visit",
+        "skillId": "vendor-trip-material",
         "presenter": "ymzhao,kenhlzhong",
         "summary": "厂商拜访材料自动生成（厂商组可直接在adataclaw上下载，其他组需联系kenhlzhong打开访问权限）",
-        "docUrl": "厂拜材料skill介绍"
+        "docUrl": "厂拜材料skill介绍",
+        "skillUrl": "https://adata.woa.com/bi/skill"
       },
       {
         "skillId": "game-budget-monitor",

@@ -251,11 +251,14 @@
     "status": "active",
     "createdAt": "2026-04-10",
     "updatedAt": "2026-05-20",
+    "source": "adataclaw",
+    "platform": "adataclaw",
+    "externalUrl": "https://adata.woa.com/bi/skill",
     "metrics": {
-      "_source": "mock_beacon",
-      "invokeCount": 6,
-      "completionRate": 0.88,
-      "activeUsers": 4
+      "_source": "manual",
+      "invokeCount": 0,
+      "completionRate": 0,
+      "activeUsers": 0
     },
     "readme": "# 厂商出差材料自动化\n\n输入厂商名称和周期，自动按商店场景和流量维度输出完整出差报告材料。\n\n## 核心能力\n- 分商店场景数据汇总\n- 分流量维度多角度分析\n- 自动生成结构化出差报告\n\n## 使用方式\n输入厂商名+时间周期，一键生成包含各场景数据的完整出差材料。\n\n## 注意事项\n- 报告包含：场景概览、流量趋势、收入对比、沟通建议\n- 支持导出PPT格式"
   },

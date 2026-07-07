@@ -76,7 +76,7 @@ export default function CertificationPage() {
             </div>
             <div className="space-y-1.5">
               <p>官方 Skill 会在 Skill 市场、能力地图、详情页里同步展示。</p>
-              <p>认证记录会反向驱动能力卡阶段，目前已带动 {officialCapabilityCount} 张能力卡进入官方认证。</p>
+              <p>能力地图阶段由 PM 认证配置驱动，目前有 {officialCapabilityCount} 张能力卡处于官方认证。</p>
             </div>
           </div>
         </CardContent>

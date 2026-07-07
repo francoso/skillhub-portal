@@ -24,6 +24,7 @@ import {
   getCapabilityCards,
   getSkills,
   PLATFORM_WORKFLOW_TAGS,
+  resolveCapabilityStage,
   TRAFFIC_WORKFLOW_TAGS,
 } from "@/lib/data";
 import type {
@@ -80,7 +81,7 @@ const trafficCardModules: Record<string, CapabilityModule[]> = {
   "traffic-sdk-performance": ["APP运营"],
   "traffic-material-experience": ["APP运营"],
   "traffic-budget-blocking": ["APP运营", "厂商"],
-  "traffic-visit-docs": ["APP运营"],
+  "traffic-visit-docs": ["APP运营", "厂商"],
   "traffic-visit-followup": ["APP运营"],
   "traffic-daily-qa": ["APP运营"],
   "traffic-salon-ops": ["APP运营"],
@@ -102,10 +103,8 @@ function moduleOwnerDomain(module: CapabilityModule): BusinessDomain {
   return module;
 }
 
-function deriveStage(card: Pick<CapabilityCard, "skillIds" | "officialSkillIds">): CapabilityStage {
-  if (card.officialSkillIds.length > 0) return "官方认证";
-  if (card.skillIds.length > 0) return "建设中";
-  return "缺口";
+function deriveStage(card: Pick<CapabilityCard, "stage" | "ownerPm">): CapabilityStage {
+  return resolveCapabilityStage(card);
 }
 
 function normalizeCard(card: CapabilityCard): CapabilityCard {
@@ -158,10 +157,11 @@ function getPrimarySkill(card: CapabilityCard, skills: Map<string, Skill>) {
 }
 
 function getBuilders(card: CapabilityCard, skills: Map<string, Skill>) {
+  if (card.ownerPm?.trim()) return card.ownerPm;
   const owners = card.skillIds
     .map((skillId) => skills.get(skillId)?.owner)
     .filter((owner): owner is string => Boolean(owner));
-  return Array.from(new Set(owners)).join(" / ") || card.ownerPm || "待分配";
+  return Array.from(new Set(owners)).join(" / ") || "待分配";
 }
 
 function today() {
@@ -242,15 +242,15 @@ function CapabilityTile({
       <div className="mt-2 space-y-1 text-xs">
         {isOfficial ? (
           <p className="font-medium text-emerald-700">
-            已认证：{officialSkill?.name ?? `${card.officialSkillIds.length} 个官方 Skill`}
+            PM认证：{officialSkill?.name ?? card.ownerPm ?? "能力点已认证"}
           </p>
         ) : card.stage === "建设中" ? (
-          <p className="text-orange-700">建设人：{builders}</p>
+          <p className="text-orange-700">负责人：{builders}</p>
         ) : (
-          <p className="text-gray-500">待补 Skill</p>
+          <p className="text-gray-500">待分配负责人</p>
         )}
         <p className="text-gray-400">
-          {card.officialSkillIds.length} 官方 / {card.skillIds.length} Skill
+          {card.officialSkillIds.length} 认证证据 / {card.skillIds.length} Skill
         </p>
       </div>
     </>
@@ -658,6 +658,23 @@ function CapabilityManagePanel({
                         className="mt-1 w-full rounded-lg border border-gray-200 px-3 py-2 text-sm text-gray-900 outline-none focus:border-blue-300"
                       />
                     </label>
+                    <label className="flex items-center justify-between gap-3 rounded-lg border border-gray-200 px-3 py-2 text-xs font-medium text-gray-500">
+                      <span>
+                        PM 已认证
+                        <span className="mt-0.5 block text-[11px] font-normal text-gray-400">
+                          仅 PM 配置会改变认证阶段
+                        </span>
+                      </span>
+                      <input
+                        type="checkbox"
+                        checked={selectedCard.stage === "官方认证"}
+                        onChange={(event) =>
+                          onPatchCard(selectedCard.id, {
+                            stage: event.target.checked ? "官方认证" : "建设中",
+                          })
+                        }
+                      />
+                    </label>
                     <label className="text-xs font-medium text-gray-500">
                       优先级
                       <select
@@ -699,9 +716,9 @@ function CapabilityManagePanel({
               <div>
                 <div className="mb-2 flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
                   <p className="text-xs font-medium text-gray-500">关联 Skill</p>
-                  {!isPm && (
-                    <p className="text-[11px] text-gray-400">仅可关联自己的 Skill</p>
-                  )}
+                  <p className="text-[11px] text-gray-400">
+                    {isPm ? "关联只作为证据，不自动改变阶段" : "仅可关联自己的 Skill"}
+                  </p>
                 </div>
                 <div className="max-h-64 space-y-1 overflow-auto rounded-xl border border-gray-100 p-2">
                   {visibleSkills.length === 0 && (
@@ -733,7 +750,7 @@ function CapabilityManagePanel({
                               disabled={!linked}
                               onChange={() => onToggleOfficialSkill(selectedCard.id, skill.id)}
                             />
-                            官方认证
+                            认证证据
                           </label>
                         )}
                       </div>
