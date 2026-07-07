@@ -7,7 +7,7 @@ export interface SkillMetrics {
   lastSyncAt?: string;
 }
 
-export type SkillSource = "knot" | "adataclaw" | "manual";
+export type SkillSource = "knot" | "adataclaw";
 
 export interface Skill {
   id: string;
@@ -28,7 +28,7 @@ export interface Skill {
   downloadUrl?: string;
   externalUrl?: string;
   source?: SkillSource;
-  platform?: "Knot" | "adataclaw" | "manual";
+  platform?: "Knot" | "adataclaw";
   demoSessionId?: number;
   metrics: SkillMetrics;
   score?: number;

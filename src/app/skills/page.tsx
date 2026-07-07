@@ -34,13 +34,11 @@ const domainStyles: Record<SkillDomain, string> = {
 const sourceLabels: Record<NonNullable<Skill["source"]>, string> = {
   knot: "Knot",
   adataclaw: "adataclaw",
-  manual: "手动登记",
 };
 
 const sourceStyles: Record<NonNullable<Skill["source"]>, string> = {
   knot: "bg-blue-50 text-blue-700 border-blue-100",
   adataclaw: "bg-fuchsia-50 text-fuchsia-700 border-fuchsia-100",
-  manual: "bg-gray-50 text-gray-600 border-gray-200",
 };
 
 export default function SkillsPage() {
@@ -183,7 +181,7 @@ export default function SkillsPage() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
         {filtered.map((skill) => {
-          const source = skill.source ?? "manual";
+          const source = skill.source ?? "knot";
           const isAdataclaw = source === "adataclaw";
           return (
           <Link key={skill.id} href={`/skills/${skill.id}`}>

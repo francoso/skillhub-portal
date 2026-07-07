@@ -32,13 +32,11 @@ const teamColors: Record<string, string> = {
 const sourceLabels: Record<NonNullable<Skill["source"]>, string> = {
   knot: "Knot",
   adataclaw: "adataclaw",
-  manual: "手动登记",
 };
 
 const sourceStyles: Record<NonNullable<Skill["source"]>, string> = {
   knot: "bg-blue-50 text-blue-700 border-blue-100",
   adataclaw: "bg-fuchsia-50 text-fuchsia-700 border-fuchsia-100",
-  manual: "bg-gray-50 text-gray-600 border-gray-200",
 };
 
 export function generateStaticParams() {
@@ -204,7 +202,7 @@ export default async function SkillDetailPage({
 
   const radarData = getRadarData(skill);
   const stage = getSkillStage(skill.id);
-  const source = skill.source ?? "manual";
+  const source = skill.source ?? "knot";
   const isAdataclaw = source === "adataclaw";
   const primaryUrl = isAdataclaw ? skill.externalUrl ?? ADATACLAW_SKILL_URL : skill.downloadUrl;
 

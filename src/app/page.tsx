@@ -611,7 +611,7 @@ function UploadWizard() {
                 <p className="text-xs font-medium text-fuchsia-700">已跳过 AI 评分和埋点注入</p>
                 {registeredAdataclawSkill && (
                   <p className="mt-1 text-xs text-gray-500">
-                    Owner：{registeredAdataclawSkill.owner} · 数据源：manual / 0
+                    Owner：{registeredAdataclawSkill.owner} · 来源：adataclaw 登记
                   </p>
                 )}
                 <a

@@ -81,8 +81,7 @@ export const ADATACLAW_SKILL_URL = "https://adata.woa.com/bi/skill";
 export function resolveSkillSource(skill: Pick<Skill, "source" | "downloadUrl" | "externalUrl">): SkillSource {
   if (skill.source) return skill.source;
   if (skill.externalUrl?.includes("adata.woa.com")) return "adataclaw";
-  if (skill.downloadUrl?.includes("knot.woa.com")) return "knot";
-  return "manual";
+  return "knot";
 }
 
 function platformForSource(source: SkillSource): Skill["platform"] {
